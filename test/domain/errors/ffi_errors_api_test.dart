@@ -1,0 +1,42 @@
+import 'dart:ffi' as ffi;
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:tagion_dart_api/domain/errors/ffi_errors_api.dart';
+import 'package:tagion_dart_api/ffi/errors/errors_ffi.dart';
+
+class MockErrorsFfi extends Mock implements ErrorsFfi {}
+
+void main() {
+  group('FFIErrorsApi', () {
+    late MockErrorsFfi mockErrorsFfi;
+    late FFIError ffiError;
+
+    setUp(() {
+      registerFallbackValue(ffi.Pointer<ffi.Char>.fromAddress(0));
+      registerFallbackValue(ffi.Pointer<ffi.Uint64>.fromAddress(0));
+      mockErrorsFfi = MockErrorsFfi();
+      ffiError = FFIError(mockErrorsFfi);
+    });
+
+    test('getErrorMessage returns the correct error message', () {
+      // Allocate memory for the mocked error message
+      const msg = 'Mocked error message';
+
+      // Mock the FFI function call
+      when(() => mockErrorsFfi.tagion_error_text(any(), any())).thenAnswer((invocation) {
+        final ffi.Pointer<ffi.Char> charPtr = invocation.positionalArguments[0];
+        final ffi.Pointer<ffi.Uint64> lengthPtr = invocation.positionalArguments[1];
+        for (var i = 0; i < msg.length; i++) {
+          charPtr.elementAt(i).value = msg.codeUnitAt(i);
+        }
+        lengthPtr.value = msg.length;
+      });
+
+      // Call the method
+      final errorMessage = ffiError.getErrorMessage();
+
+      // Check the result
+      expect(errorMessage, msg);
+    });
+  });
+}
