@@ -5,7 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:tagion_dart_api/error/error.dart';
 import 'package:tagion_dart_api/error/ffi/error_ffi.dart';
 
-class MockErrorsFfi extends Mock implements ErrorsFfi {}
+class MockErrorsFfi extends Mock implements ErrorFfi {}
 
 void main() {
   group('FFIErrorsApi', () {
@@ -28,7 +28,7 @@ void main() {
         final ffi.Pointer<ffi.Char> charPtr = invocation.positionalArguments[0];
         final ffi.Pointer<ffi.Uint64> lengthPtr = invocation.positionalArguments[1];
         for (var i = 0; i < msg.length; i++) {
-          charPtr.elementAt(i).value = msg.codeUnitAt(i);
+          charPtr[i] = msg.codeUnitAt(i);
         }
         lengthPtr.value = msg.length;
       });
