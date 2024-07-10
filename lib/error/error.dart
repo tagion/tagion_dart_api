@@ -33,8 +33,6 @@ class Error implements IError {
     malloc.free(msgPtr);
     malloc.free(msgLenPtr);
 
-    malloc<Uint8>().cast;
-
     return result;
   }
 }
