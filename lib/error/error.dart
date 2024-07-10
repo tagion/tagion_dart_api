@@ -7,7 +7,7 @@ import 'package:tagion_dart_api/extension/char_pointer.dart';
 
 /// FFI version implementation of the IError interface
 class Error implements IError {
-  final ErrorsFfi _errorsFfi;
+  final ErrorFfi _errorsFfi;
 
   const Error(this._errorsFfi);
 
