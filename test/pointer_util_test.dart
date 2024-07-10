@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'package:ffi/ffi.dart';
 import 'package:tagion_dart_api/pointer_util.dart';
 import 'package:test/test.dart';
 
@@ -290,6 +291,32 @@ void main() {
       }
 
       PointerUtil.free(pointer);
+    });
+
+    test('zeroing', () {
+      const size = 10;
+      const typeSize = 4;
+      final Pointer<Int32> bytePointer = malloc<Int32>(size);
+
+      for (var i = 0; i < size; i++) {
+        bytePointer[i] = 42;
+      }
+
+      String printOut1 = '';
+      for (var i = 0; i < size * typeSize; i++) {
+        printOut1 += bytePointer.elementAt(i).value.toString();
+      }
+      print(printOut1);
+
+      for (var i = 0; i < size * typeSize; i++) {
+        bytePointer[i] = 0;
+      }
+
+      String printOut2 = '';
+      for (var i = 0; i < size * typeSize; i++) {
+        printOut2 += bytePointer.elementAt(i).value.toString();
+      }
+      print(printOut2);
     });
   });
 }

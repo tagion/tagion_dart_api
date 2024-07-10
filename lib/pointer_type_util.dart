@@ -1,9 +1,11 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:tagion_dart_api/pointer_util.dart';
 
-extension PointerHelper on PointerUtil {
+class PointerTypeUtil {
+
+  PointerTypeUtil._();
+
   /// Helper method to allocate memory for the type.
   static Pointer<T> allocateType<T extends NativeType>(int size) {
     switch (T) {
