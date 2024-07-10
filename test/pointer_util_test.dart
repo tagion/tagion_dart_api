@@ -7,84 +7,84 @@ void main() {
     test('allocate should allocate Uint8 memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Uint8>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate Int8 memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Int8>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate Uint16 memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Uint16>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate Int16 memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Int16>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate Uint32 memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Uint32>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate Int32 memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Int32>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate Uint64 memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Uint64>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate Int64 memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Int64>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate Float memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Float>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate Double memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Double>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate IntPtr memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<IntPtr>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
     test('allocate should allocate Char memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Char>(size);
-      expect(pointer, isNotNull);
+      expect(pointer.address, isNot(0));
       PointerUtil.free(pointer);
     });
 
