@@ -4,7 +4,7 @@ import 'package:ffi/ffi.dart';
 import 'package:tagion_dart_api/pointer_util.dart';
 
 extension PointerHelper on PointerUtil {
-  // Helper method to allocate memory for the type.
+  /// Helper method to allocate memory for the type.
   static Pointer<T> allocateType<T extends NativeType>(int size) {
     switch (T) {
       case Uint8:
@@ -36,7 +36,7 @@ extension PointerHelper on PointerUtil {
     }
   }
 
-  // Helper method to get the size of the type.
+  /// Helper method to get the size of the type.
   static int sizeOfType<T extends NativeType>() {
     switch (T) {
       case Uint8:
