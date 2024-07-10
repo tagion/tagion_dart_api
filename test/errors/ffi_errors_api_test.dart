@@ -1,21 +1,22 @@
 import 'dart:ffi' as ffi;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:tagion_dart_api/domain/errors/ffi_errors_api.dart';
-import 'package:tagion_dart_api/ffi/errors/errors_ffi.dart';
+import 'package:tagion_dart_api/error/error.dart';
+import 'package:tagion_dart_api/error/ffi/error_ffi.dart';
 
 class MockErrorsFfi extends Mock implements ErrorsFfi {}
 
 void main() {
   group('FFIErrorsApi', () {
     late MockErrorsFfi mockErrorsFfi;
-    late FFIError ffiError;
+    late Error ffiError;
 
     setUp(() {
       registerFallbackValue(ffi.Pointer<ffi.Char>.fromAddress(0));
       registerFallbackValue(ffi.Pointer<ffi.Uint64>.fromAddress(0));
       mockErrorsFfi = MockErrorsFfi();
-      ffiError = FFIError(mockErrorsFfi);
+      ffiError = Error(mockErrorsFfi);
     });
 
     test('getErrorMessage returns the correct error message', () {

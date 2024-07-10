@@ -1,0 +1,6 @@
+output: '../lib/error/ffi/errors_ffi.dart'
+headers:
+  entry-points:
+    - '../lib/error/ffi/error.h'
+name: 'ErrorFfi'
+description: 'Dart API for retrieving Error messages from D binary'
