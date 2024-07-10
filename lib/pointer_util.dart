@@ -3,6 +3,9 @@ import 'package:ffi/ffi.dart';
 import 'package:tagion_dart_api/extension/pointer_helper.dart';
 
 class PointerUtil {
+
+  PointerUtil._();
+
   /// Method to allocate and initialize memory.
   static Pointer<T> allocate<T extends NativeType>(int size) {
     return PointerHelper.allocateType<T>(size);
