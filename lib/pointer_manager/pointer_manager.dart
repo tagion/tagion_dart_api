@@ -1,6 +1,6 @@
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
-import 'ipointer_manager.dart';
+import 'pointer_manager_interface.dart';
 
 /// Object class providing methods to allocate, zero out, and free memory.
 class PointerManager implements IPointerManager {
