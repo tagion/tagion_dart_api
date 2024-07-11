@@ -7,14 +7,14 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 // FFI version implementation of the IError interface
 class ErrorMessage implements IErrorMessage {
-  final ErrorMessageFfi _errorsFfi;
+  final ErrorMessageFfi _errorsMessageFfi;
   final IPointerManager _pointerManager; // Use the interface
 
-  ErrorMessage(this._errorsFfi, this._pointerManager);
+  ErrorMessage(this._errorsMessageFfi, this._pointerManager);
 
   @override
   void clearErrors() {
-    _errorsFfi.tagion_clear_error();
+    _errorsMessageFfi.tagion_clear_error();
   }
 
   @override
@@ -22,7 +22,7 @@ class ErrorMessage implements IErrorMessage {
     final msgPtr = _pointerManager.allocate<Char>(sizeOf<Char>());
     final msgLenPtr = _pointerManager.allocate<Uint64>(sizeOf<Uint64>());
     // Call the FFI function
-    _errorsFfi.tagion_error_text(msgPtr, msgLenPtr);
+    _errorsMessageFfi.tagion_error_text(msgPtr, msgLenPtr);
     final int length = msgLenPtr.value;
     final String result = msgPtr.toDartString(length: length);
     _pointerManager.zeroOutAndFree(msgPtr, length);
