@@ -4,7 +4,7 @@ import 'package:tagion_dart_api/pointer_util.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('PointerUtils', () {
+  group('PointerUtil', () {
     test('allocate should allocate Uint8 memory', () {
       const size = 10;
       final pointer = PointerUtil.allocate<Uint8>(size);

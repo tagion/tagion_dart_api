@@ -1,15 +1,15 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:tagion_dart_api/domain/errors/errors_api.dart';
+import 'package:tagion_dart_api/error/error_interface.dart';
+import 'package:tagion_dart_api/error/ffi/error_ffi.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
-import 'package:tagion_dart_api/ffi/errors/errors_ffi.dart';
 
-// FFI version implementation of the IError interface
-class FFIError implements IError {
-  final ErrorsFfi _errorsFfi;
+/// FFI version implementation of the IError interface
+class Error implements IError {
+  final ErrorFfi _errorsFfi;
 
-  const FFIError(this._errorsFfi);
+  const Error(this._errorsFfi);
 
   @override
   void clearErrors() {

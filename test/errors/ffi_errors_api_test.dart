@@ -1,21 +1,22 @@
 import 'dart:ffi' as ffi;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:tagion_dart_api/domain/errors/ffi_errors_api.dart';
-import 'package:tagion_dart_api/ffi/errors/errors_ffi.dart';
+import 'package:tagion_dart_api/error/error.dart';
+import 'package:tagion_dart_api/error/ffi/error_ffi.dart';
 
-class MockErrorsFfi extends Mock implements ErrorsFfi {}
+class MockErrorsFfi extends Mock implements ErrorFfi {}
 
 void main() {
   group('FFIErrorsApi', () {
     late MockErrorsFfi mockErrorsFfi;
-    late FFIError ffiError;
+    late Error ffiError;
 
     setUp(() {
       registerFallbackValue(ffi.Pointer<ffi.Char>.fromAddress(0));
       registerFallbackValue(ffi.Pointer<ffi.Uint64>.fromAddress(0));
       mockErrorsFfi = MockErrorsFfi();
-      ffiError = FFIError(mockErrorsFfi);
+      ffiError = Error(mockErrorsFfi);
     });
 
     test('getErrorMessage returns the correct error message', () {
@@ -27,7 +28,7 @@ void main() {
         final ffi.Pointer<ffi.Char> charPtr = invocation.positionalArguments[0];
         final ffi.Pointer<ffi.Uint64> lengthPtr = invocation.positionalArguments[1];
         for (var i = 0; i < msg.length; i++) {
-          charPtr.elementAt(i).value = msg.codeUnitAt(i);
+          charPtr[i] = msg.codeUnitAt(i);
         }
         lengthPtr.value = msg.length;
       });
