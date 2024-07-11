@@ -9,23 +9,23 @@ import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart'; // Import the interface and implementation
 
 // Mock classes
-class MockErrorsFfi extends Mock implements ErrorMessageFfi {}
+class MockErrorsMessageFfi extends Mock implements ErrorMessageFfi {}
 
 class MockPointerManager extends Mock implements IPointerManager {}
 
 void main() {
   group('ErrorMessage', () {
-    late MockErrorsFfi mockErrorsFfi;
+    late MockErrorsMessageFfi mockErrorMessageFfi;
     late MockPointerManager mockPointerManager;
-    late IErrorMessage ffiError;
+    late IErrorMessage errorMessage;
 
     setUp(() {
       registerFallbackValue(ffi.Pointer<ffi.Char>.fromAddress(0));
       registerFallbackValue(ffi.Pointer<ffi.Uint64>.fromAddress(0));
       registerFallbackValue(0);
-      mockErrorsFfi = MockErrorsFfi();
+      mockErrorMessageFfi = MockErrorsMessageFfi();
       mockPointerManager = MockPointerManager();
-      ffiError = ErrorMessage(mockErrorsFfi, mockPointerManager);
+      errorMessage = ErrorMessage(mockErrorMessageFfi, mockPointerManager);
     });
 
     test('getErrorText returns the correct error text', () {
@@ -41,7 +41,7 @@ void main() {
       when(() => mockPointerManager.free<ffi.Uint64>(any())).thenReturn(null);
 
       // Mock the FFI function call
-      when(() => mockErrorsFfi.tagion_error_text(any(), any())).thenAnswer((invocation) {
+      when(() => mockErrorMessageFfi.tagion_error_text(any(), any())).thenAnswer((invocation) {
         final ffi.Pointer<ffi.Char> charPtr = invocation.positionalArguments[0];
         final ffi.Pointer<ffi.Uint64> lengthPtr = invocation.positionalArguments[1];
         for (var i = 0; i < msg.length; i++) {
@@ -51,10 +51,10 @@ void main() {
       });
 
       // Call the method
-      final errorMessage = ffiError.getErrorText();
+      final result = errorMessage.getErrorText();
 
       // Check the result
-      expect(errorMessage, msg);
+      expect(result, msg);
 
       // Verify the interactions
       verify(() => mockPointerManager.allocate<ffi.Char>(any())).called(1);
