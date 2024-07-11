@@ -2,8 +2,8 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:tagion_dart_api/pointer_manager_interface.dart';
-import 'package:tagion_dart_api/pointer_manager.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 
 class MockAllocator extends Mock implements Allocator {}
 
