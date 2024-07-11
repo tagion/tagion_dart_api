@@ -37,7 +37,7 @@ void main() {
       // Mock the PointerManager methods
       when(() => mockPointerManager.allocate<ffi.Char>(any())).thenReturn(msgPtr);
       when(() => mockPointerManager.allocate<ffi.Uint64>(any())).thenReturn(msgLenPtr);
-      when(() => mockPointerManager.zeroOutAndFree<ffi.Char>(any(), any())).thenReturn(null);
+      when(() => mockPointerManager.free<ffi.Char>(any())).thenReturn(null);
       when(() => mockPointerManager.free<ffi.Uint64>(any())).thenReturn(null);
 
       // Mock the FFI function call
@@ -59,7 +59,7 @@ void main() {
       // Verify the interactions
       verify(() => mockPointerManager.allocate<ffi.Char>(any())).called(1);
       verify(() => mockPointerManager.allocate<ffi.Uint64>(any())).called(1);
-      verify(() => mockPointerManager.zeroOutAndFree<ffi.Char>(msgPtr, any())).called(1);
+      verify(() => mockPointerManager.free<ffi.Char>(msgPtr)).called(1);
       verify(() => mockPointerManager.free<ffi.Uint64>(msgLenPtr)).called(1);
     });
   });

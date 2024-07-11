@@ -25,7 +25,7 @@ class ErrorMessage implements IErrorMessage {
     _errorsMessageFfi.tagion_error_text(msgPtr, msgLenPtr);
     final int length = msgLenPtr.value;
     final String result = msgPtr.toDartString(length: length);
-    _pointerManager.zeroOutAndFree(msgPtr, length);
+    _pointerManager.free(msgPtr);
     _pointerManager.free(msgLenPtr);
     return result;
   }
