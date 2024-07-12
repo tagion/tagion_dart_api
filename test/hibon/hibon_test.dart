@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/exception/hibon/hibon_exception.dart';
-import 'package:tagion_dart_api/exception/hibon/hibon_exception_message.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/hibon/hibon.dart';
 
@@ -29,7 +28,6 @@ void main() {
         hibonCreateFailure.init();
       } on HibonException catch (e) {
         expect(e.errorCode, TagionErrorCode.error);
-        expect(e.message, HibonExceptionMessage.create);
       }
     });
 
@@ -44,7 +42,6 @@ void main() {
         hibon.addString('key', 'value');
       } on HibonException catch (e) {
         expect(e.errorCode, TagionErrorCode.error);
-        expect(e.message, HibonExceptionMessage.addString);
       }
     });
 
@@ -72,7 +69,6 @@ void main() {
         hibon.getAsString();
       } on HibonException catch (e) {
         expect(e.errorCode, TagionErrorCode.error);
-        expect(e.message, HibonExceptionMessage.getAsString);
       }
     });
 

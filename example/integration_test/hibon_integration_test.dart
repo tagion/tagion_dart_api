@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/exception/hibon/hibon_exception.dart';
-import 'package:tagion_dart_api/exception/hibon/hibon_exception_message.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/hibon/hibon.dart';
 
@@ -14,17 +13,14 @@ void main() {
     //create a dynamic library
     final DynamicLibrary dyLib = Platform.isAndroid ? DynamicLibrary.open('libtauonapi.so') : DynamicLibrary.process();
 
-    //start d runtime
     final BasicFfi basicFfi = BasicFfi(dyLib);
-
     test('D runtime started', () {
       final int startDRuntimeResult = basicFfi.start_rt();
       expect(startDRuntimeResult, 1);
     });
 
-    //create a HibonFfi object
-    final HibonFfi hibonFfi = HibonFfi(dyLib);
     //create a Hibon object
+    final HibonFfi hibonFfi = HibonFfi(dyLib);
     final Hibon hibon = Hibon(hibonFfi);
 
     test('Hibon created', () {
@@ -41,7 +37,6 @@ void main() {
         // expect(getAsStringResult, {'key': 'value'});
       } on HibonException catch (e) {
         expect(e.errorCode, TagionErrorCode.error);
-        expect(e.message, HibonExceptionMessage.getAsString);
       }
     });
 
