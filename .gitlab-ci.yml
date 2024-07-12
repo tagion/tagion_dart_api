@@ -9,6 +9,6 @@ first_stage:
   only:
     - ms/hibon
   script:
-    - fvm flutter test test/hibon_test.dart
+    - fvm flutter test test/hibon/hibon_test.dart
     - cd example
     - fvm flutter test integration_test/hibon_integration_test.dart
