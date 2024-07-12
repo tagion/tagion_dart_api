@@ -1,0 +1,6 @@
+output: '../lib/hibon/ffi/hibon_ffi.dart'
+headers:
+  entry-points:
+    - '../lib/hibon/ffi/hibon.h'
+name: 'HibonFfi'
+description: 'Dart API for using Hibon'

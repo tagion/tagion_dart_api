@@ -1,0 +1,6 @@
+output: '../lib/basic/ffi/basic_ffi.dart'
+headers:
+  entry-points:
+  - '../lib/basic/ffi/basic.h'
+name: 'BasicFfi'
+description: 'Dart API for using basic Tagion functions'

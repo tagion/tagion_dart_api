@@ -1,5 +1,5 @@
 /// An interface for error functions.
-abstract class IErrorMessage {
+abstract interface class IErrorMessage {
   /// Get the last error message.
   String getErrorText();
 

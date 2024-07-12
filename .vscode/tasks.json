@@ -5,7 +5,7 @@
             "label": "FFIGEN_RUN",
             "type": "shell",
             "group": "build",
-            "command": "dart run ffigen --config ffigen_config/error.yaml",
+            "command": "dart run ffigen --config ffigen_config/error_message.yaml && dart run ffigen --config ffigen_config/hibon.yaml && dart run ffigen --config ffigen_config/basic.yaml",
         },
     ]
 }
