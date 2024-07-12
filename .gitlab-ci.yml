@@ -11,4 +11,5 @@ first_stage:
   script:
     - fvm flutter test test/hibon/hibon_test.dart
     - cd example
-    - fvm flutter test integration_test/hibon_integration_test.dart -d all
+    - fvm flutter test integration_test/hibon_integration_test.dart -d emulator-5554
+    # - fvm flutter test integration_test/hibon_integration_test.dart -d F88A2BC9-E730-49D9-9015-8245583D3877
