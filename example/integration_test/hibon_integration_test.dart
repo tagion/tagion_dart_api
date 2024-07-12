@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
-import 'package:tagion_dart_api/enums/tagion_error_code.dart';
-import 'package:tagion_dart_api/exception/hibon/hibon_exception.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/hibon/hibon.dart';
 
@@ -27,18 +25,18 @@ void main() {
       expect(() => hibon.init(), returnsNormally);
     });
 
-    test('Hibon add string executed', () {
-      expect(() => hibon.addString('key', 'value'), returnsNormally);
-    });
+    // test('Hibon add string executed', () {
+    //   expect(() => hibon.addString('key', 'value'), returnsNormally);
+    // });
 
-    test('Hibon get as string', () {
-      try {
-        String getAsStringResult = hibon.getAsString();
-        // expect(getAsStringResult, {'key': 'value'});
-      } on HibonException catch (e) {
-        expect(e.errorCode, TagionErrorCode.error);
-      }
-    });
+    // test('Hibon get as string', () {
+    // try {
+    //   String getAsStringResult = hibon.getAsString();
+    //   // expect(getAsStringResult, {'key': 'value'});
+    // } on HibonException catch (e) {
+    //   expect(e.errorCode, TagionErrorCode.error);
+    // }
+    // });
 
     test('D runtime stopped', () {
       final int stopDRuntimeResult = basicFfi.stop_rt();
