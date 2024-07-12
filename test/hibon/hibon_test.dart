@@ -47,16 +47,14 @@ void main() {
 
     test('Get hibon as string', () {
       String mockResponseString = 'mockResponseString';
-      List<String> mockResponseStringArray = 'mockResponseString'.split('');
+      final Pointer<Utf8> mockResponseUtf8Pointer = mockResponseString.toNativeUtf8();
 
       when(() => hibonFfi.tagion_hibon_get_text(any(), any(), any(), any())).thenAnswer((invocation) {
         final Pointer<Pointer<ffi.Char>> charArrayPtr = invocation.positionalArguments[2];
         final Pointer<ffi.Uint64> charArrayLenPtr = invocation.positionalArguments[3];
 
-        for (int i = 0; i < mockResponseStringArray.length; i++) {
-          charArrayPtr[i] = mockResponseStringArray[i].toNativeUtf8().cast<ffi.Char>();
-        }
-        charArrayLenPtr.value = mockResponseStringArray.length;
+        charArrayPtr.value = mockResponseUtf8Pointer.cast<ffi.Char>();
+        charArrayLenPtr.value = mockResponseString.length;
 
         return TagionErrorCode.none.value;
       });

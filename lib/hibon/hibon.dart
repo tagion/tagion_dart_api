@@ -6,6 +6,7 @@ import 'package:tagion_dart_api/enums/hibon_string_format.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/exception/hibon/hibon_exception.dart';
 import 'package:tagion_dart_api/exception/hibon/hibon_exception_message.dart';
+import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/hibon/hibon_interface.dart';
 
@@ -52,15 +53,12 @@ class Hibon implements IHibon {
       throw HibonException(TagionErrorCode.fromInt(getTextResult), HibonExceptionMessage.getAsString);
     }
 
-    final List<String> resultStringArray = [];
-    for (int i = 0; i < charArrayLenPtr.value; i++) {
-      resultStringArray.add(charArrayPtr[i].cast<Utf8>().toDartString());
-    }
+    final resultString = charArrayPtr[0].toDartString(length: charArrayLenPtr.value);
 
     malloc.free(charArrayPtr);
     malloc.free(charArrayLenPtr);
 
-    return resultStringArray.join();
+    return resultString;
   }
 
   @override
