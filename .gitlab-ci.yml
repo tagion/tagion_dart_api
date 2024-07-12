@@ -11,4 +11,4 @@ first_stage:
   script:
     - fvm flutter test test/hibon/hibon_test.dart
     - cd example
-    - fvm flutter test integration_test/hibon_integration_test.dart
+    - fvm flutter test integration_test/hibon_integration_test.dart -d all
