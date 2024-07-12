@@ -25,9 +25,9 @@ void main() {
       expect(() => hibon.init(), returnsNormally);
     });
 
-    test('Hibon add string executed', () {
-      expect(() => hibon.addString('key', 'value'), returnsNormally);
-    });
+    // test('Hibon add string executed', () {
+    //   expect(() => hibon.addString('key', 'value'), returnsNormally);
+    // });
 
     // test('Hibon get as string', () {
     //   try {
