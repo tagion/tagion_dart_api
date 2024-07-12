@@ -62,5 +62,11 @@ void main() {
       verify(() => mockPointerManager.free<ffi.Char>(msgPtr)).called(1);
       verify(() => mockPointerManager.free<ffi.Uint64>(msgLenPtr)).called(1);
     });
+
+    test('clearErrors calls the correct FFI function', () {
+      when(() => mockErrorMessageFfi.tagion_clear_error()).thenReturn(null);
+      errorMessage.clearErrors();
+      verify(() => mockErrorMessageFfi.tagion_clear_error()).called(1);
+    });
   });
 }
