@@ -1,0 +1,14 @@
+variables:
+  GIT_CLEAN_FLAGS: none
+
+stages:
+  - first_stage
+
+first_stage:
+  stage: first_stage
+  only:
+    - ms/hibon
+  script:
+    - fvm flutter test test/hibon_test.dart
+    - cd example
+    - fvm flutter test integration_test/hibon_integration_test.dart
