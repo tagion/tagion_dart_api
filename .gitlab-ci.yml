@@ -12,3 +12,4 @@ first_stage:
     - fvm flutter test test/hibon/hibon_test.dart
     - cd example
     - fvm flutter test integration_test/hibon_integration_test.dart
+#run
