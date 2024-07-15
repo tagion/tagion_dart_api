@@ -1,9 +1,11 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-abstract interface class ITagionDocument {
+import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
+
+abstract interface class IDocument {
   /// Get a Document element.
-  Element getElement(Uint8List buffer, String key);
+  Element getDocument(Uint8List buffer, String key);
 
   /// Return the version of the document.
   int getVersion(Uint8List buffer);
@@ -21,7 +23,7 @@ abstract interface class ITagionDocument {
   String getText(Uint8List buffer, int textFormat);
 
   /// Get a sub doc from a document.
-  Uint8List getDocument(Element element);
+  Uint8List getSubDocument(Element element);
 
   /// Get a string from a document
   String getString(Element element);
@@ -55,10 +57,4 @@ abstract interface class ITagionDocument {
 
   /// Get an f64 from a document element.
   Double getFloat64(Element element);
-}
-
-class Element {
-  Uint8List buffer;
-  String key;
-  Element(this.buffer, this.key);
 }
