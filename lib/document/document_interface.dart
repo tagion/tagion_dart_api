@@ -1,11 +1,11 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
+import 'package:tagion_dart_api/document/document_element.dart';
 
 abstract interface class IDocument {
   /// Get a Document element.
-  Element getDocument(Uint8List buffer, String key);
+  DocumentElement getDocument(String key);
 
   /// Return the version of the document.
   int getVersion(Uint8List buffer);
@@ -17,44 +17,44 @@ abstract interface class IDocument {
   int validate(Uint8List buffer);
 
   /// Get a document element from index.
-  Element getArray(Uint8List buffer, int index);
+  DocumentElement getArray(Uint8List buffer, int index);
 
   /// Get document as string.
   String getText(Uint8List buffer, int textFormat);
 
   /// Get a sub doc from a document.
-  Uint8List getSubDocument(Element element);
+  Uint8List getSubDocument(DocumentElement element);
 
   /// Get a string from a document
-  String getString(Element element);
+  String getString(DocumentElement element);
 
   /// Get binary from a document.
-  Uint8List getBinary(Element element);
+  Uint8List getBinary(DocumentElement element);
 
   /// Get time from a document element.
-  int getTime(Element element);
+  int getTime(DocumentElement element);
 
   /// Get bigint from a document. Returned as serialized leb128 ubyte buffer.
-  BigInt getBigint(Element element);
+  BigInt getBigint(DocumentElement element);
 
   /// Get a bool from a document element.
-  bool getBool(Element element);
+  bool getBool(DocumentElement element);
 
   /// Get a int32 from a document element.
-  Int32 getInt32(Element element);
+  Int32 getInt32(DocumentElement element);
 
   /// Get a int64 from a document element.
-  Int64 getInt64(Element element);
+  Int64 getInt64(DocumentElement element);
 
   /// Get a Uint32 from a document element.
-  Uint32 getUint32(Element element);
+  Uint32 getUint32(DocumentElement element);
 
   /// Get a Uint64 from a document element.
-  Uint64 getUint64(Element element);
+  Uint64 getUint64(DocumentElement element);
 
   /// Get a f32 from a document element.
-  Float getFloat32(Element element);
+  Float getFloat32(DocumentElement element);
 
   /// Get an f64 from a document element.
-  Double getFloat64(Element element);
+  Double getFloat64(DocumentElement element);
 }
