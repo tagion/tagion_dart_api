@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -65,6 +67,27 @@ void main() {
         expect(pointer[i], 0);
       }
       verify(() => mockAllocator.free(pointer)).called(1);
+    });
+
+    test('fills pointer with values from list', () {
+      final Uint8List list = Uint8List.fromList([1, 2, 3]);
+      final Pointer<Uint8> pointer = malloc.allocate(list.length);
+      pointerManager.uint8ListToPointer(pointer, list);
+      expect(pointer[0], 1);
+      expect(pointer[1], 2);
+      expect(pointer[2], 3);
+      malloc.free(pointer);
+    });
+
+    test('fills pointer with string', () {
+      final String data = 'hello';
+      final Pointer<Uint8> pointer = malloc.allocate(data.length);
+      pointerManager.stringToPointer(pointer, data);
+      expect(pointer[0], utf8.encode(data[0])[0]);
+      expect(pointer[1], utf8.encode(data[1])[0]);
+      expect(pointer[2], utf8.encode(data[2])[0]);
+      expect(pointer[3], utf8.encode(data[3])[0]);
+      malloc.free(pointer);
     });
   });
 }
