@@ -35,8 +35,8 @@ void main() {
       final ffi.Pointer<ffi.Uint64> msgLenPtr = malloc<ffi.Uint64>(ffi.sizeOf<ffi.Uint64>());
 
       // Mock the PointerManager methods
-      when(() => mockPointerManager.allocate<ffi.Char>(any())).thenReturn(msgPtr);
-      when(() => mockPointerManager.allocate<ffi.Uint64>(any())).thenReturn(msgLenPtr);
+      when(() => mockPointerManager.allocate<ffi.Char>()).thenReturn(msgPtr);
+      when(() => mockPointerManager.allocate<ffi.Uint64>()).thenReturn(msgLenPtr);
       when(() => mockPointerManager.free<ffi.Char>(any())).thenReturn(null);
       when(() => mockPointerManager.free<ffi.Uint64>(any())).thenReturn(null);
 
@@ -57,8 +57,8 @@ void main() {
       expect(result, msg);
 
       // Verify the interactions
-      verify(() => mockPointerManager.allocate<ffi.Char>(any())).called(1);
-      verify(() => mockPointerManager.allocate<ffi.Uint64>(any())).called(1);
+      verify(() => mockPointerManager.allocate<ffi.Char>()).called(1);
+      verify(() => mockPointerManager.allocate<ffi.Uint64>()).called(1);
       verify(() => mockPointerManager.free<ffi.Char>(msgPtr)).called(1);
       verify(() => mockPointerManager.free<ffi.Uint64>(msgLenPtr)).called(1);
     });

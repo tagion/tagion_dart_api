@@ -19,8 +19,8 @@ class ErrorMessage implements IErrorMessage {
 
   @override
   String getErrorText() {
-    final msgPtr = _pointerManager.allocate<Char>(sizeOf<Char>());
-    final msgLenPtr = _pointerManager.allocate<Uint64>(sizeOf<Uint64>());
+    final msgPtr = _pointerManager.allocate<Char>();
+    final msgLenPtr = _pointerManager.allocate<Uint64>();
     // Call the FFI function
     _errorsMessageFfi.tagion_error_text(msgPtr, msgLenPtr);
     final int length = msgLenPtr.value;
