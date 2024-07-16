@@ -22,7 +22,7 @@ void main() {
       final expectedPointer = malloc<Uint8>(10).cast<Uint8>();
       when(() => mockAllocator<Uint8>(10)).thenReturn(expectedPointer);
 
-      final result = pointerManager.allocate<Uint8>(10, allocator: mockAllocator);
+      final result = pointerManager.allocate<Uint8>(10, mockAllocator);
 
       expect(result, expectedPointer);
       verify(() => mockAllocator<Uint8>(10)).called(1);
@@ -47,7 +47,7 @@ void main() {
       final pointer = malloc<Uint8>(10).cast<Uint8>();
       when(() => mockAllocator.free(pointer)).thenReturn(null);
 
-      pointerManager.free(pointer, allocator: mockAllocator);
+      pointerManager.free(pointer, mockAllocator);
 
       verify(() => mockAllocator.free(pointer)).called(1);
     });
