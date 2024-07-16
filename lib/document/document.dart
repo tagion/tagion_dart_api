@@ -49,7 +49,11 @@ class Document implements IDocument {
     );
 
     if (status != TagionErrorCode.none.value) {
-      throw DocumentException(TagionErrorCode.values[status], _errorMessage.getErrorText());
+      /// Free the memory.
+      _pointerManager.free(dataPtr);
+      _pointerManager.free(keyPtr);
+      _pointerManager.free(elementPtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     final element = elementPtr.ref.data.asTypedList(_data.lengthInBytes);
