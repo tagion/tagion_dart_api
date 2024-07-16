@@ -33,12 +33,12 @@ class Document implements IDocument {
 
     /// Allocate memory for the data and key.
     final dataPtr = _pointerManager.allocate<Uint8>(dataLen);
-    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _data);
     final keyPtr = _pointerManager.allocate<Char>(keyLen);
-    _pointerManager.stringToPointer<Char>(keyPtr, key);
-
-    /// Allocate memory for the element.
     final elementPtr = _pointerManager.allocate<Element>();
+
+    /// Fill necessary pointers with data.
+    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _data);
+    _pointerManager.stringToPointer<Char>(keyPtr, key);
 
     int status = _documentFfi.tagion_document(
       dataPtr,
@@ -56,6 +56,7 @@ class Document implements IDocument {
       throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
+    /// Get the element data.
     final element = elementPtr.ref.data.asTypedList(_data.lengthInBytes);
 
     /// Free the memory.
