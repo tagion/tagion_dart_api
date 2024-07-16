@@ -1,6 +1,10 @@
 variables:
   GIT_CLEAN_FLAGS: none
 
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
 stages:
   - unit_test
   - integration_test_android_emulator
@@ -8,23 +12,17 @@ stages:
 
 unit_test:
   stage: unit_test
-  only:
-    - merge_request
   script:
     - 'flutter test test/ --reporter expanded | sed -E ''s/([0-9]{2}:[0-9]{2}) \+([0-9]+): ([^:]+): (.+)/\1 \4/'''
 
 integration_test_android_emulator:
   stage: integration_test_android_emulator
-  only:
-    - merge_request
   script:
     - cd example
     - 'fvm flutter test integration_test/ -d emulator-5554 --reporter expanded | sed -E ''s/([0-9]{2}:[0-9]{2}) \+[0-9]+: (.+)/\1 \2/'''
 
 integration_test_ios_simulator:
   stage: integration_test_ios_simulator
-  only:
-    - merge_request
   script:
     - cd example
     - 'fvm flutter test integration_test/ -d F88A2BC9-E730-49D9-9015-8245583D3877 --reporter expanded | sed -E ''s/([0-9]{2}:[0-9]{2}) \+[0-9]+: (.+)/\1 \2/'''
