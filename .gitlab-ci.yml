@@ -13,7 +13,7 @@ stages:
 unit_test:
   stage: unit_test
   script:
-    - 'flutter test test/ --reporter expanded | sed -E ''s/([0-9]{2}:[0-9]{2}) \+([0-9]+): ([^:]+): (.+)/\1 \4/'''
+    - 'fvm flutter test test/ --reporter expanded | sed -E ''s/([0-9]{2}:[0-9]{2}) \+([0-9]+): ([^:]+): (.+)/\1 \4/'''
 
 integration_test_android_emulator:
   stage: integration_test_android_emulator
