@@ -2,14 +2,16 @@ variables:
   GIT_CLEAN_FLAGS: none
 
 stages:
-  - first_stage
+  - unit_test
+  - integration_test_android_emulator
+  - integration_test_ios_simulator
 
-first_stage:
-  stage: first_stage
+unit_test:
+  stage: unit_test
   only:
-    - ms/hibon
+    - merge_request
   script:
     - fvm flutter test test/hibon/hibon_test.dart
     - cd example
-    - fvm flutter test integration_test/hibon_integration_test.dart -d emulator-5554
+    # - fvm flutter test integration_test/hibon_integration_test.dart -d emulator-5554
     # - fvm flutter test integration_test/hibon_integration_test.dart -d F88A2BC9-E730-49D9-9015-8245583D3877
