@@ -80,13 +80,14 @@ void main() {
     });
 
     test('fills pointer with string', () {
-      final String data = 'hello';
+      const String data = 'hello';
       final Pointer<Uint8> pointer = malloc.allocate(data.length);
       pointerManager.stringToPointer(pointer, data);
       expect(pointer[0], utf8.encode(data[0])[0]);
       expect(pointer[1], utf8.encode(data[1])[0]);
       expect(pointer[2], utf8.encode(data[2])[0]);
       expect(pointer[3], utf8.encode(data[3])[0]);
+      expect(pointer[4], utf8.encode(data[4])[0]);
       malloc.free(pointer);
     });
   });
