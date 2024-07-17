@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:ffi';
+import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'pointer_manager_interface.dart';
 
@@ -7,7 +9,7 @@ class PointerManager implements IPointerManager {
   const PointerManager();
 
   @override
-  Pointer<T> allocate<T extends NativeType>(int size, {Allocator allocator = malloc}) {
+  Pointer<T> allocate<T extends NativeType>([int size = 0, Allocator allocator = malloc]) {
     switch (T) {
       case Uint8:
         return allocator<Uint8>(size).cast<T>();
@@ -48,14 +50,14 @@ class PointerManager implements IPointerManager {
   }
 
   @override
-  void free<T extends NativeType>(Pointer<T> pointer, {Allocator allocator = malloc}) {
+  void free<T extends NativeType>(Pointer<T> pointer, [Allocator allocator = malloc]) {
     allocator.free(pointer);
   }
 
   @override
   void zeroOutAndFree<T extends NativeType>(Pointer<T> pointer, int size, {Allocator allocator = malloc}) {
     zeroOutPointer(pointer, size);
-    free(pointer, allocator: allocator);
+    free(pointer, allocator);
   }
 
   int _sizeOf<T extends NativeType>() {
@@ -89,5 +91,19 @@ class PointerManager implements IPointerManager {
       default:
         throw UnsupportedError('Unsupported type');
     }
+  }
+
+  @override
+  void uint8ListToPointer<T extends NativeType>(Pointer<T> pointer, Uint8List data) {
+    final result = pointer.cast<Uint8>();
+
+    for (var i = 0; i < data.length; i++) {
+      result[i] = data[i];
+    }
+  }
+
+  @override
+  void stringToPointer<T extends NativeType>(Pointer<T> pointer, String data) {
+    uint8ListToPointer<T>(pointer, Uint8List.fromList(utf8.encode(data)));
   }
 }

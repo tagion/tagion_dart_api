@@ -1,0 +1,6 @@
+output: '../lib/document/ffi/document_ffi.dart'
+headers:
+  entry-points:
+    - '../lib/document/ffi/document.h'
+name: 'DocumentFfi'
+description: 'Dart API for using Document'
