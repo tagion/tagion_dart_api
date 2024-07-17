@@ -14,7 +14,7 @@ class MockErrorsMessageFfi extends Mock implements ErrorMessageFfi {}
 class MockPointerManager extends Mock implements IPointerManager {}
 
 void main() {
-  group('ErrorMessage.', () {
+  group('ErrorMessage Unit.', () {
     late MockErrorsMessageFfi mockErrorMessageFfi;
     late MockPointerManager mockPointerManager;
     late IErrorMessage errorMessage;

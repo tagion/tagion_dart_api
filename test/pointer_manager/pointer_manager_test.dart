@@ -11,7 +11,7 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 class MockAllocator extends Mock implements Allocator {}
 
 void main() {
-  group('PointerManager.', () {
+  group('PointerManager Unit.', () {
     late IPointerManager pointerManager;
     late MockAllocator mockAllocator;
 

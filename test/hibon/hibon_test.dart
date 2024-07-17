@@ -14,7 +14,7 @@ class HibonFfiMock extends Mock implements HibonFfi {}
 void main() {
   registerFallbackValue(malloc<HiBONT>());
 
-  group('Hibon unit test.', () {
+  group('Hibon Unit.', () {
     final HibonFfiMock hibonFfi = HibonFfiMock();
     final Hibon hibon = Hibon(hibonFfi);
 
