@@ -14,7 +14,7 @@ class MockErrorsMessageFfi extends Mock implements ErrorMessageFfi {}
 class MockPointerManager extends Mock implements IPointerManager {}
 
 void main() {
-  group('ErrorMessage.', () {
+  group('ErrorMessage Unit.', () {
     late MockErrorsMessageFfi mockErrorMessageFfi;
     late MockPointerManager mockPointerManager;
     late IErrorMessage errorMessage;
@@ -61,6 +61,12 @@ void main() {
       verify(() => mockPointerManager.allocate<ffi.Uint64>()).called(1);
       verify(() => mockPointerManager.free<ffi.Char>(msgPtr)).called(1);
       verify(() => mockPointerManager.free<ffi.Uint64>(msgLenPtr)).called(1);
+    });
+
+    test('clearErrors calls the correct FFI function', () {
+      when(() => mockErrorMessageFfi.tagion_clear_error()).thenReturn(null);
+      errorMessage.clearErrors();
+      verify(() => mockErrorMessageFfi.tagion_clear_error()).called(1);
     });
   });
 }
