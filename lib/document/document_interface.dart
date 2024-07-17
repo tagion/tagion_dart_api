@@ -2,6 +2,8 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:tagion_dart_api/document/document_element.dart';
+import 'package:tagion_dart_api/enums/document_error_code.dart';
+import 'package:tagion_dart_api/enums/document_text_format.dart';
 
 abstract interface class IDocument {
   /// Get a Document element.
@@ -11,16 +13,16 @@ abstract interface class IDocument {
   int getVersion();
 
   /// Get document record type.
-  String getRecordName(Uint8List buffer);
+  String getRecordName();
 
   /// Get document error code.
-  int validate(Uint8List buffer);
+  DocumentErrorCode validate();
 
   /// Get a document element from index.
   DocumentElement getArray(int index);
 
-  /// Get document as string.
-  String getText(Uint8List buffer, int textFormat);
+  /// Get document as string by a format.
+  String getText(DocumentTextFormat textFormat);
 
   /// Get a sub doc from a document.
   Uint8List getSubDocument(DocumentElement element);

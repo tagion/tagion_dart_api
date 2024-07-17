@@ -5,9 +5,12 @@ import 'dart:typed_data';
 import 'package:tagion_dart_api/document/document_element.dart';
 import 'package:tagion_dart_api/document/document_interface.dart';
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
+import 'package:tagion_dart_api/enums/document_error_code.dart';
+import 'package:tagion_dart_api/enums/document_text_format.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/document/document_exception.dart';
+import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// Class representing a document.
@@ -122,9 +125,36 @@ class Document implements IDocument {
   }
 
   @override
-  String getRecordName(Uint8List buffer) {
-    // TODO: implement getRecordName
-    throw UnimplementedError();
+  String getRecordName() {
+    /// Allocate memory.
+    final dataPtr = _pointerManager.allocate<Uint8>(_data.lengthInBytes);
+    final recordNamePtr = _pointerManager.allocate<Pointer<Char>>();
+    final recordNameLenPtr = _pointerManager.allocate<Uint64>();
+
+    int status = _documentFfi.tagion_document_get_record_name(
+      dataPtr,
+      _data.lengthInBytes,
+      recordNamePtr,
+      recordNameLenPtr,
+    );
+
+    if (status != TagionErrorCode.none.value) {
+      /// Free the memory.
+      _pointerManager.free(dataPtr);
+      _pointerManager.free(recordNamePtr);
+      _pointerManager.free(recordNameLenPtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    /// Get the record name value.
+    final resultString = recordNamePtr[0].toDartString(length: recordNameLenPtr.value);
+
+    /// Free the memory.
+    _pointerManager.free(dataPtr);
+    _pointerManager.free(recordNamePtr);
+    _pointerManager.free(recordNameLenPtr);
+
+    return resultString;
   }
 
   @override
@@ -134,12 +164,37 @@ class Document implements IDocument {
   }
 
   @override
-  String getText(Uint8List buffer, int textFormat) {
-    // Format to use for tagion_document_get_text
-    // DocumentTextFormat
+  String getText(DocumentTextFormat textFormat) {
+    /// Allocate memory.
+    final dataPtr = _pointerManager.allocate<Uint8>(_data.lengthInBytes);
+    final textPtr = _pointerManager.allocate<Pointer<Char>>();
+    final textLenPtr = _pointerManager.allocate<Uint64>();
 
-    // TODO: implement getText
-    throw UnimplementedError();
+    int status = _documentFfi.tagion_document_get_text(
+      dataPtr,
+      _data.lengthInBytes,
+      textFormat.index,
+      textPtr,
+      textLenPtr,
+    );
+
+    if (status != TagionErrorCode.none.value) {
+      /// Free the memory.
+      _pointerManager.free(dataPtr);
+      _pointerManager.free(textPtr);
+      _pointerManager.free(textLenPtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    /// Get the text value.
+    final resultString = textPtr[0].toDartString(length: textLenPtr.value);
+
+    /// Free the memory.
+    _pointerManager.free(dataPtr);
+    _pointerManager.free(textPtr);
+    _pointerManager.free(textLenPtr);
+
+    return resultString;
   }
 
   @override
@@ -186,8 +241,27 @@ class Document implements IDocument {
   }
 
   @override
-  int validate(Uint8List buffer) {
-    // TODO: implement validate
-    throw UnimplementedError();
+  DocumentErrorCode validate() {
+    /// Allocate memory for the data and error code.
+    final dataPtr = _pointerManager.allocate<Uint8>(_data.lengthInBytes);
+    final errorCodePtr = _pointerManager.allocate<Int32>();
+
+    int status = _documentFfi.tagion_document_valid(dataPtr, _data.lengthInBytes, errorCodePtr);
+
+    if (status != TagionErrorCode.none.value) {
+      /// Free memory.
+      _pointerManager.free(dataPtr);
+      _pointerManager.free(errorCodePtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    /// Ghe the error code.
+    int errorCode = errorCodePtr.value;
+
+    /// Free memory.
+    _pointerManager.free(dataPtr);
+    _pointerManager.free(errorCodePtr);
+
+    return DocumentErrorCode.values[errorCode];
   }
 }
