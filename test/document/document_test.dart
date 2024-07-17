@@ -37,7 +37,7 @@ void main() {
     document = Document(mockDocumentFfi, mockPointerManager, mockErrorMessage, data: data);
   });
 
-  group('Document', () {
+  group('Document Unit', () {
     test('getDocument returns the correct DocumentElement and throws DocumentException when an error occurs', () {
       // Arrange
       const key = 'testKey';
