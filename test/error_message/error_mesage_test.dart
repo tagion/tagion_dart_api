@@ -14,7 +14,7 @@ class MockErrorsMessageFfi extends Mock implements ErrorMessageFfi {}
 class MockPointerManager extends Mock implements IPointerManager {}
 
 void main() {
-  group('ErrorMessage', () {
+  group('ErrorMessage.', () {
     late MockErrorsMessageFfi mockErrorMessageFfi;
     late MockPointerManager mockPointerManager;
     late IErrorMessage errorMessage;
@@ -28,7 +28,7 @@ void main() {
       errorMessage = ErrorMessage(mockErrorMessageFfi, mockPointerManager);
     });
 
-    test('getErrorText returns the correct error text', () {
+    test('GetErrorText returns the correct error text', () {
       // Allocate memory for the mocked error message
       const msg = 'Mocked error message';
       final ffi.Pointer<ffi.Char> msgPtr = malloc<ffi.Char>(msg.length);

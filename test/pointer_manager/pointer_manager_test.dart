@@ -1,14 +1,15 @@
 import 'dart:ffi';
+
 import 'package:ffi/ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 class MockAllocator extends Mock implements Allocator {}
 
 void main() {
-  group('PointerManager', () {
+  group('PointerManager.', () {
     late IPointerManager pointerManager;
     late MockAllocator mockAllocator;
 
@@ -17,7 +18,7 @@ void main() {
       mockAllocator = MockAllocator();
     });
 
-    test('allocate allocates memory correctly', () {
+    test('Allocate allocates memory correctly', () {
       final expectedPointer = malloc<Uint8>(10).cast<Uint8>();
       when(() => mockAllocator<Uint8>(10)).thenReturn(expectedPointer);
 
@@ -28,7 +29,7 @@ void main() {
       malloc.free(expectedPointer);
     });
 
-    test('zeroOutPointer sets all bytes to zero', () {
+    test('ZeroOutPointer sets all bytes to zero', () {
       final pointer = malloc<Uint8>(10).cast<Uint8>();
       for (var i = 0; i < 10; i++) {
         pointer[i] = 1;
@@ -42,7 +43,7 @@ void main() {
       malloc.free(pointer);
     });
 
-    test('free deallocates memory correctly', () {
+    test('Free deallocates memory correctly', () {
       final pointer = malloc<Uint8>(10).cast<Uint8>();
       when(() => mockAllocator.free(pointer)).thenReturn(null);
 
@@ -51,7 +52,7 @@ void main() {
       verify(() => mockAllocator.free(pointer)).called(1);
     });
 
-    test('zeroOutAndFree zeroes out and then frees memory', () {
+    test('ZeroOutAndFree zeroes out and then frees memory', () {
       final pointer = malloc<Uint8>(10).cast<Uint8>();
       for (var i = 0; i < 10; i++) {
         pointer[i] = 1;
