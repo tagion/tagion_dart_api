@@ -8,7 +8,7 @@ abstract interface class IDocument {
   DocumentElement getDocument(String key);
 
   /// Return the version of the document.
-  int getVersion(Uint8List buffer);
+  int getVersion();
 
   /// Get document record type.
   String getRecordName(Uint8List buffer);
@@ -17,7 +17,7 @@ abstract interface class IDocument {
   int validate(Uint8List buffer);
 
   /// Get a document element from index.
-  DocumentElement getArray(Uint8List buffer, int index);
+  DocumentElement getArray(int index);
 
   /// Get document as string.
   String getText(Uint8List buffer, int textFormat);

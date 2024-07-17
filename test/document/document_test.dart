@@ -126,11 +126,68 @@ void main() {
       verify(() => mockPointerManager.free(elementPtr)).called(1);
     });
 
-    test('', () {
+    test('getVersion return a correct version and throws DocumentException when an errpr occurs', () {
       // Arrange
+      const version = 1;
+      final dataLen = data.lengthInBytes;
+
+      final Pointer<Uint8> dataPtr = malloc<Uint8>(dataLen);
+      final Pointer<Uint32> versionPtr = malloc<Uint32>();
+      when(() => mockPointerManager.allocate<Uint8>(dataLen)).thenReturn(dataPtr);
+      when(() => mockPointerManager.allocate<Uint32>()).thenReturn(versionPtr);
+      when(() => mockDocumentFfi.tagion_document_get_version(any(), any(), any())).thenAnswer((invocation) {
+        final Pointer<Uint8> dataPtr = invocation.positionalArguments[0];
+        final Pointer<Uint32> versionPtr = invocation.positionalArguments[2];
+
+        for (var i = 0; i < data.length; i++) {
+          dataPtr[i] = data[i];
+        }
+
+        versionPtr.value = version;
+
+        return TagionErrorCode.none.value;
+      });
+
+      when(() => mockPointerManager.free(dataPtr)).thenReturn(null);
       // Act
+      final result = document.getVersion();
       // Assert
+      expect(result, equals(version));
       // Verify
+      verify(() => mockPointerManager.allocate<Uint8>(dataLen)).called(1);
+      verify(() => mockPointerManager.allocate<Uint32>()).called(1);
+      verify(() => mockDocumentFfi.tagion_document_get_version(dataPtr, dataLen, versionPtr)).called(1);
+      verify(() => mockPointerManager.free(dataPtr)).called(1);
+      verify(() => mockPointerManager.free(versionPtr)).called(1);
+
+      // Arrange
+      const errorCode = TagionErrorCode.error;
+      const errorMessage = "Error message";
+      when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
+
+      when(() => mockDocumentFfi.tagion_document_get_version(any(), any(), any())).thenAnswer((invocation) {
+        return TagionErrorCode.error.value;
+      });
+
+      // Act & Assert
+      expect(
+        () => document.getVersion(),
+        throwsA(isA<DocumentException>()
+            .having(
+              (e) => e.errorCode,
+              '',
+              equals(errorCode),
+            )
+            .having(
+              (e) => e.message,
+              '',
+              equals(errorMessage),
+            )),
+      );
+
+      // Verify
+      verify(() => mockPointerManager.free(dataPtr)).called(1);
+      verify(() => mockPointerManager.free(versionPtr)).called(1);
     });
   });
 }

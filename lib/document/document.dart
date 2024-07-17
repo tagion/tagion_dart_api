@@ -68,8 +68,7 @@ class Document implements IDocument {
   }
 
   @override
-  DocumentElement getArray(Uint8List buffer, int index) {
-    // TODO: implement getArray
+  DocumentElement getArray(int index) {
     throw UnimplementedError();
   }
 
@@ -162,9 +161,28 @@ class Document implements IDocument {
   }
 
   @override
-  int getVersion(Uint8List buffer) {
-    // TODO: implement getVersion
-    throw UnimplementedError();
+  int getVersion() {
+    /// Allocate memory for the data and version.
+    final dataPtr = _pointerManager.allocate<Uint8>(_data.lengthInBytes);
+    final versionPtr = _pointerManager.allocate<Uint32>();
+
+    int status = _documentFfi.tagion_document_get_version(dataPtr, _data.lengthInBytes, versionPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      /// Free the memory.
+      _pointerManager.free(dataPtr);
+      _pointerManager.free(versionPtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    /// Get the version.
+    final version = versionPtr.value;
+
+    /// Free the memory.
+    _pointerManager.free(dataPtr);
+    _pointerManager.free(versionPtr);
+
+    return version;
   }
 
   @override
