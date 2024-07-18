@@ -5,7 +5,6 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tagion_dart_api/document/document.dart';
-import 'package:tagion_dart_api/document/element/document_element.dart';
 import 'package:tagion_dart_api/document/element/document_element_interface.dart';
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
@@ -86,7 +85,7 @@ void main() {
       final result = document.getDocument(key);
 
       // Assert
-      expect(result, isA<DocumentElement>());
+      expect(result.ref.data.asTypedList(elementData.length), equals(Uint8List.fromList(elementData)));
 
       // Verify
       verify(() => mockPointerManager.allocate<Uint8>(dataLen)).called(1);
@@ -125,6 +124,80 @@ void main() {
       // Verify
       verify(() => mockPointerManager.free(dataPtr)).called(1);
       verify(() => mockPointerManager.free(keyPtr)).called(1);
+      verify(() => mockPointerManager.free(elementPtr)).called(1);
+    });
+
+    test('getArray returns the correct DocumentElement and throws DocumentException when an error occurs', () {
+      // Arrange
+      const int index = 1;
+      final dataLen = data.lengthInBytes;
+
+      final elementData = Uint8List.fromList([3, 4, 5]);
+
+      final Pointer<Uint8> dataPtr = malloc<Uint8>(dataLen);
+      final Pointer<Element> elementPtr = malloc<Element>();
+
+      when(() => mockPointerManager.allocate<Uint8>(dataLen)).thenReturn(dataPtr);
+      when(() => mockPointerManager.allocate<Element>()).thenReturn(elementPtr);
+
+      when(() => mockDocumentFfi.tagion_document_array(any(), any(), any(), any())).thenAnswer((invocation) {
+        final Pointer<Uint8> dataPtr = invocation.positionalArguments[0];
+        final Pointer<Element> elementPtr = invocation.positionalArguments[3];
+
+        for (var i = 0; i < data.length; i++) {
+          dataPtr[i] = data[i];
+        }
+
+        elementPtr.ref.data = malloc<Uint8>(elementData.length);
+        for (var i = 0; i < elementData.length; i++) {
+          elementPtr.ref.data[i] = elementData[i];
+        }
+
+        return TagionErrorCode.none.value;
+      });
+
+      when(() => mockPointerManager.free(dataPtr)).thenReturn(null);
+      when(() => mockPointerManager.free(elementPtr)).thenReturn(null);
+
+      // Act
+      final result = document.getArray(index);
+
+      // Assert
+      expect(result.ref.data.asTypedList(elementData.length), equals(Uint8List.fromList(elementData)));
+
+      // Verify
+      verify(() => mockPointerManager.allocate<Uint8>(dataLen)).called(1);
+      verify(() => mockPointerManager.uint8ListToPointer<Uint8>(dataPtr, data)).called(1);
+      verify(() => mockDocumentFfi.tagion_document_array(dataPtr, dataLen, index, elementPtr)).called(1);
+      verify(() => mockPointerManager.free(dataPtr)).called(1);
+
+      // Arrange
+      const errorCode = TagionErrorCode.error;
+      const errorMessage = "Error message";
+      when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
+
+      when(() => mockDocumentFfi.tagion_document_array(any(), any(), any(), any())).thenAnswer((_) {
+        return TagionErrorCode.error.value;
+      });
+
+      // Act & Assert
+      expect(
+        () => document.getArray(index),
+        throwsA(isA<DocumentException>()
+            .having(
+              (e) => e.errorCode,
+              '',
+              equals(errorCode),
+            )
+            .having(
+              (e) => e.message,
+              '',
+              equals(errorMessage),
+            )),
+      );
+
+      // Verify
+      verify(() => mockPointerManager.free(dataPtr)).called(1);
       verify(() => mockPointerManager.free(elementPtr)).called(1);
     });
 

@@ -1,10 +1,7 @@
 import 'dart:ffi';
-
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/document/element/document_element.dart';
 import 'package:tagion_dart_api/document/document_interface.dart';
-import 'package:tagion_dart_api/document/element/document_element_interface.dart';
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
 import 'package:tagion_dart_api/enums/document_text_format.dart';
@@ -31,7 +28,7 @@ class Document implements IDocument {
   }) : _data = data ?? Uint8List(0);
 
   @override
-  IDocumentElement getDocument(String key) {
+  Pointer<Element> getDocument(String key) {
     final dataLen = _data.lengthInBytes;
     final keyLen = key.length;
 
@@ -64,12 +61,39 @@ class Document implements IDocument {
     _pointerManager.free(dataPtr);
     _pointerManager.free(keyPtr);
 
-    return DocumentElement(elementPtr);
+    return elementPtr;
   }
 
   @override
-  IDocumentElement getArray(int index) {
-    throw UnimplementedError();
+  Pointer<Element> getArray(int index) {
+    final dataLen = _data.lengthInBytes;
+
+    /// Allocate memory for the data and key.
+    final dataPtr = _pointerManager.allocate<Uint8>(dataLen);
+    final elementPtr = _pointerManager.allocate<Element>();
+
+    /// Fill necessary pointers with data.
+    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _data);
+
+    int status = _documentFfi.tagion_document_array(
+      dataPtr,
+      dataLen,
+      index,
+      elementPtr,
+    );
+
+    if (status != TagionErrorCode.none.value) {
+      /// Free the memory.
+      _pointerManager.free(dataPtr);
+
+      _pointerManager.free(elementPtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    /// Free the memory.
+    _pointerManager.free(dataPtr);
+
+    return elementPtr;
   }
 
   @override
