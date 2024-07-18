@@ -2,8 +2,9 @@ import 'dart:ffi';
 
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/document/document_element.dart';
+import 'package:tagion_dart_api/document/element/document_element.dart';
 import 'package:tagion_dart_api/document/document_interface.dart';
+import 'package:tagion_dart_api/document/element/document_element_interface.dart';
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
 import 'package:tagion_dart_api/enums/document_text_format.dart';
@@ -30,7 +31,7 @@ class Document implements IDocument {
   }) : _data = data ?? Uint8List(0);
 
   @override
-  DocumentElement getDocument(String key) {
+  IDocumentElement getDocument(String key) {
     final dataLen = _data.lengthInBytes;
     final keyLen = key.length;
 
@@ -59,68 +60,15 @@ class Document implements IDocument {
       throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
-    /// Get the element data.
-    final element = elementPtr.ref.data.asTypedList(_data.lengthInBytes);
-
     /// Free the memory.
     _pointerManager.free(dataPtr);
     _pointerManager.free(keyPtr);
-    _pointerManager.free(elementPtr);
 
-    return DocumentElement(element, key);
+    return DocumentElement(elementPtr);
   }
 
   @override
-  DocumentElement getArray(int index) {
-    throw UnimplementedError();
-  }
-
-  @override
-  BigInt getBigint(DocumentElement element) {
-    // TODO: implement getBigint
-    throw UnimplementedError();
-  }
-
-  @override
-  Uint8List getBinary(DocumentElement element) {
-    // TODO: implement getBinary
-    throw UnimplementedError();
-  }
-
-  @override
-  bool getBool(DocumentElement element) {
-    // _documentFfi.tagion_document_get_bool(element, value)
-    // TODO: implement getBool
-    throw UnimplementedError();
-  }
-
-  @override
-  Uint8List getSubDocument(DocumentElement element) {
-    // TODO: implement getDocument
-    throw UnimplementedError();
-  }
-
-  @override
-  Float getFloat32(DocumentElement element) {
-    // TODO: implement getFloat32
-    throw UnimplementedError();
-  }
-
-  @override
-  Double getFloat64(DocumentElement element) {
-    // TODO: implement getFloat64
-    throw UnimplementedError();
-  }
-
-  @override
-  Int32 getInt32(DocumentElement element) {
-    // TODO: implement getInt32
-    throw UnimplementedError();
-  }
-
-  @override
-  Int64 getInt64(DocumentElement element) {
-    // TODO: implement getInt64
+  IDocumentElement getArray(int index) {
     throw UnimplementedError();
   }
 
@@ -158,12 +106,6 @@ class Document implements IDocument {
   }
 
   @override
-  String getString(DocumentElement element) {
-    // TODO: implement getString
-    throw UnimplementedError();
-  }
-
-  @override
   String getText(DocumentTextFormat textFormat) {
     /// Allocate memory.
     final dataPtr = _pointerManager.allocate<Uint8>(_data.lengthInBytes);
@@ -195,24 +137,6 @@ class Document implements IDocument {
     _pointerManager.free(textLenPtr);
 
     return resultString;
-  }
-
-  @override
-  int getTime(DocumentElement element) {
-    // TODO: implement getTime
-    throw UnimplementedError();
-  }
-
-  @override
-  Uint32 getUint32(DocumentElement element) {
-    // TODO: implement getUint32
-    throw UnimplementedError();
-  }
-
-  @override
-  Uint64 getUint64(DocumentElement element) {
-    // TODO: implement getUint64
-    throw UnimplementedError();
   }
 
   @override

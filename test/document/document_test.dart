@@ -5,7 +5,8 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tagion_dart_api/document/document.dart';
-import 'package:tagion_dart_api/document/document_element.dart';
+import 'package:tagion_dart_api/document/element/document_element.dart';
+import 'package:tagion_dart_api/document/element/document_element_interface.dart';
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
 import 'package:tagion_dart_api/enums/document_text_format.dart';
@@ -19,6 +20,8 @@ class MockDocumentFfi extends Mock implements DocumentFfi {}
 class MockPointerManager extends Mock implements IPointerManager {}
 
 class MockErrorMessage extends Mock implements IErrorMessage {}
+
+class MockDocumentElement extends Mock implements IDocumentElement {}
 
 void main() {
   late MockDocumentFfi mockDocumentFfi;
@@ -47,7 +50,6 @@ void main() {
       const keyLen = key.length;
 
       final elementData = Uint8List.fromList([3, 4, 5]);
-      final element = DocumentElement(elementData, key);
 
       final Pointer<Uint8> dataPtr = malloc<Uint8>(dataLen);
       final Pointer<Char> keyPtr = malloc<Char>(keyLen);
@@ -84,8 +86,7 @@ void main() {
       final result = document.getDocument(key);
 
       // Assert
-      expect(result.buffer, equals(element.buffer));
-      expect(result.key, equals(element.key));
+      expect(result, isA<DocumentElement>());
 
       // Verify
       verify(() => mockPointerManager.allocate<Uint8>(dataLen)).called(1);
@@ -95,7 +96,6 @@ void main() {
       verify(() => mockDocumentFfi.tagion_document(dataPtr, dataLen, keyPtr, keyLen, elementPtr)).called(1);
       verify(() => mockPointerManager.free(dataPtr)).called(1);
       verify(() => mockPointerManager.free(keyPtr)).called(1);
-      verify(() => mockPointerManager.free(elementPtr)).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
