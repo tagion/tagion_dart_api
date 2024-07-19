@@ -1,60 +1,23 @@
-import 'dart:ffi';
-import 'dart:typed_data';
-
-import 'package:tagion_dart_api/document/document_element.dart';
+import 'package:tagion_dart_api/document/element/document_element_interface.dart';
+import 'package:tagion_dart_api/enums/document_error_code.dart';
+import 'package:tagion_dart_api/enums/document_text_format.dart';
 
 abstract interface class IDocument {
   /// Get a Document element.
-  DocumentElement getDocument(String key);
+  IDocumentElement getElementByKey(String key);
+
+  /// Get a document element from index.
+  IDocumentElement getElementByIndex(int index);
 
   /// Return the version of the document.
   int getVersion();
 
   /// Get document record type.
-  String getRecordName(Uint8List buffer);
+  String getRecordName();
 
   /// Get document error code.
-  int validate(Uint8List buffer);
+  DocumentErrorCode validate();
 
-  /// Get a document element from index.
-  DocumentElement getArray(int index);
-
-  /// Get document as string.
-  String getText(Uint8List buffer, int textFormat);
-
-  /// Get a sub doc from a document.
-  Uint8List getSubDocument(DocumentElement element);
-
-  /// Get a string from a document
-  String getString(DocumentElement element);
-
-  /// Get binary from a document.
-  Uint8List getBinary(DocumentElement element);
-
-  /// Get time from a document element.
-  int getTime(DocumentElement element);
-
-  /// Get bigint from a document. Returned as serialized leb128 ubyte buffer.
-  BigInt getBigint(DocumentElement element);
-
-  /// Get a bool from a document element.
-  bool getBool(DocumentElement element);
-
-  /// Get a int32 from a document element.
-  Int32 getInt32(DocumentElement element);
-
-  /// Get a int64 from a document element.
-  Int64 getInt64(DocumentElement element);
-
-  /// Get a Uint32 from a document element.
-  Uint32 getUint32(DocumentElement element);
-
-  /// Get a Uint64 from a document element.
-  Uint64 getUint64(DocumentElement element);
-
-  /// Get a f32 from a document element.
-  Float getFloat32(DocumentElement element);
-
-  /// Get an f64 from a document element.
-  Double getFloat64(DocumentElement element);
+  /// Get document as string by a format.
+  String getAsString(DocumentTextFormat textFormat);
 }
