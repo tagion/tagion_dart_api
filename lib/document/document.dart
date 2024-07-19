@@ -13,28 +13,27 @@ import 'package:tagion_dart_api/exception/document/document_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
-/*  Class represents a document.
-    Document is a lazy handler of HiBON serialized buffer.
-    Guarantees data immutability.
-*/
+/// Document’s purpose is to get data from a serialized HiBON.
+/// [_hibonBuffer] is HiBON in form of byte array.
+/// HiBON’s byte array can be obtained from HiBON.getDocument().
+/// Document guarantees immutability of HiBON.
 class Document implements IDocument {
   final DocumentFfi _documentFfi;
   final IPointerManager _pointerManager;
   final IErrorMessage _errorMessage;
 
-  /// The buffer of the HiBON document.
-  final Uint8List _data;
+  final Uint8List _hibonBuffer;
 
   Document(
     this._documentFfi,
     this._pointerManager,
     this._errorMessage, {
-    Uint8List? data,
-  }) : _data = data ?? Uint8List(0);
+    Uint8List? hibonBuffer,
+  }) : _hibonBuffer = hibonBuffer ?? Uint8List(0);
 
   @override
   IDocumentElement getElementByKey(String key) {
-    final dataLen = _data.lengthInBytes;
+    final dataLen = _hibonBuffer.lengthInBytes;
     final keyLen = key.length;
 
     /// Allocate memory for the data and key.
@@ -43,7 +42,7 @@ class Document implements IDocument {
     final elementPtr = _pointerManager.allocate<Element>();
 
     /// Fill necessary pointers with data.
-    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _data);
+    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
     _pointerManager.stringToPointer<Char>(keyPtr, key);
 
     int status = _documentFfi.tagion_document(
@@ -71,14 +70,14 @@ class Document implements IDocument {
 
   @override
   IDocumentElement getElementByIndex(int index) {
-    final dataLen = _data.lengthInBytes;
+    final dataLen = _hibonBuffer.lengthInBytes;
 
     /// Allocate memory for the data and key.
     final dataPtr = _pointerManager.allocate<Uint8>(dataLen);
     final elementPtr = _pointerManager.allocate<Element>();
 
     /// Fill necessary pointers with data.
-    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _data);
+    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
 
     int status = _documentFfi.tagion_document_array(
       dataPtr,
@@ -104,13 +103,13 @@ class Document implements IDocument {
   @override
   String getRecordName() {
     /// Allocate memory.
-    final dataPtr = _pointerManager.allocate<Uint8>(_data.lengthInBytes);
+    final dataPtr = _pointerManager.allocate<Uint8>(_hibonBuffer.lengthInBytes);
     final recordNamePtr = _pointerManager.allocate<Pointer<Char>>();
     final recordNameLenPtr = _pointerManager.allocate<Uint64>();
 
     int status = _documentFfi.tagion_document_get_record_name(
       dataPtr,
-      _data.lengthInBytes,
+      _hibonBuffer.lengthInBytes,
       recordNamePtr,
       recordNameLenPtr,
     );
@@ -137,13 +136,13 @@ class Document implements IDocument {
   @override
   String getText(DocumentTextFormat textFormat) {
     /// Allocate memory.
-    final dataPtr = _pointerManager.allocate<Uint8>(_data.lengthInBytes);
+    final dataPtr = _pointerManager.allocate<Uint8>(_hibonBuffer.lengthInBytes);
     final textPtr = _pointerManager.allocate<Pointer<Char>>();
     final textLenPtr = _pointerManager.allocate<Uint64>();
 
     int status = _documentFfi.tagion_document_get_text(
       dataPtr,
-      _data.lengthInBytes,
+      _hibonBuffer.lengthInBytes,
       textFormat.index,
       textPtr,
       textLenPtr,
@@ -171,10 +170,10 @@ class Document implements IDocument {
   @override
   int getVersion() {
     /// Allocate memory for the data and version.
-    final dataPtr = _pointerManager.allocate<Uint8>(_data.lengthInBytes);
+    final dataPtr = _pointerManager.allocate<Uint8>(_hibonBuffer.lengthInBytes);
     final versionPtr = _pointerManager.allocate<Uint32>();
 
-    int status = _documentFfi.tagion_document_get_version(dataPtr, _data.lengthInBytes, versionPtr);
+    int status = _documentFfi.tagion_document_get_version(dataPtr, _hibonBuffer.lengthInBytes, versionPtr);
 
     if (status != TagionErrorCode.none.value) {
       /// Free the memory.
@@ -196,10 +195,10 @@ class Document implements IDocument {
   @override
   DocumentErrorCode validate() {
     /// Allocate memory for the data and error code.
-    final dataPtr = _pointerManager.allocate<Uint8>(_data.lengthInBytes);
+    final dataPtr = _pointerManager.allocate<Uint8>(_hibonBuffer.lengthInBytes);
     final errorCodePtr = _pointerManager.allocate<Int32>();
 
-    int status = _documentFfi.tagion_document_valid(dataPtr, _data.lengthInBytes, errorCodePtr);
+    int status = _documentFfi.tagion_document_valid(dataPtr, _hibonBuffer.lengthInBytes, errorCodePtr);
 
     if (status != TagionErrorCode.none.value) {
       /// Free memory.
