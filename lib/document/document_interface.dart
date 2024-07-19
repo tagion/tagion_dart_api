@@ -1,15 +1,13 @@
-import 'dart:ffi';
-
-import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
+import 'package:tagion_dart_api/document/element/document_element_interface.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
 import 'package:tagion_dart_api/enums/document_text_format.dart';
 
 abstract interface class IDocument {
   /// Get a Document element.
-  Pointer<Element> getDocument(String key);
+  IDocumentElement getElementByKey(String key);
 
   /// Get a document element from index.
-  Pointer<Element> getArray(int index);
+  IDocumentElement getElementByIndex(int index);
 
   /// Return the version of the document.
   int getVersion();

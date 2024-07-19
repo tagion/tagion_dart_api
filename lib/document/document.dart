@@ -2,6 +2,8 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:tagion_dart_api/document/document_interface.dart';
+import 'package:tagion_dart_api/document/element/document_element.dart';
+import 'package:tagion_dart_api/document/element/document_element_interface.dart';
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
 import 'package:tagion_dart_api/enums/document_text_format.dart';
@@ -11,13 +13,16 @@ import 'package:tagion_dart_api/exception/document/document_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
-/// Class representing a document.
+/*  Class represents a document.
+    Document is a lazy handler of HiBON serialized buffer.
+    Guarantees data immutability.
+*/
 class Document implements IDocument {
   final DocumentFfi _documentFfi;
   final IPointerManager _pointerManager;
   final IErrorMessage _errorMessage;
 
-  /// This document state as a byte array.
+  /// The buffer of the HiBON document.
   final Uint8List _data;
 
   Document(
@@ -28,7 +33,7 @@ class Document implements IDocument {
   }) : _data = data ?? Uint8List(0);
 
   @override
-  Pointer<Element> getDocument(String key) {
+  IDocumentElement getElementByKey(String key) {
     final dataLen = _data.lengthInBytes;
     final keyLen = key.length;
 
@@ -61,11 +66,11 @@ class Document implements IDocument {
     _pointerManager.free(dataPtr);
     _pointerManager.free(keyPtr);
 
-    return elementPtr;
+    return DocumentElement(elementPtr);
   }
 
   @override
-  Pointer<Element> getArray(int index) {
+  IDocumentElement getElementByIndex(int index) {
     final dataLen = _data.lengthInBytes;
 
     /// Allocate memory for the data and key.
@@ -93,7 +98,7 @@ class Document implements IDocument {
     /// Free the memory.
     _pointerManager.free(dataPtr);
 
-    return elementPtr;
+    return DocumentElement(elementPtr);
   }
 
   @override

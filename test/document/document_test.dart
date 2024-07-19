@@ -5,7 +5,7 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tagion_dart_api/document/document.dart';
-import 'package:tagion_dart_api/document/element/document_element_interface.dart';
+import 'package:tagion_dart_api/document/element/document_element.dart';
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
 import 'package:tagion_dart_api/enums/document_text_format.dart';
@@ -19,8 +19,6 @@ class MockDocumentFfi extends Mock implements DocumentFfi {}
 class MockPointerManager extends Mock implements IPointerManager {}
 
 class MockErrorMessage extends Mock implements IErrorMessage {}
-
-class MockDocumentElement extends Mock implements IDocumentElement {}
 
 void main() {
   late MockDocumentFfi mockDocumentFfi;
@@ -82,10 +80,11 @@ void main() {
       when(() => mockPointerManager.free(elementPtr)).thenReturn(null);
 
       // Act
-      final result = document.getDocument(key);
+      final result = document.getElementByKey(key);
 
       // Assert
-      expect(result.ref.data.asTypedList(elementData.length), equals(Uint8List.fromList(elementData)));
+      expect((result as DocumentElement).elementPtr.ref.data.asTypedList(elementData.length),
+          equals(Uint8List.fromList(elementData)));
 
       // Verify
       verify(() => mockPointerManager.allocate<Uint8>(dataLen)).called(1);
@@ -107,7 +106,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => document.getDocument(key),
+        () => document.getElementByKey(key),
         throwsA(isA<DocumentException>()
             .having(
               (e) => e.errorCode,
@@ -160,10 +159,11 @@ void main() {
       when(() => mockPointerManager.free(elementPtr)).thenReturn(null);
 
       // Act
-      final result = document.getArray(index);
+      final result = document.getElementByIndex(index);
 
       // Assert
-      expect(result.ref.data.asTypedList(elementData.length), equals(Uint8List.fromList(elementData)));
+      expect((result as DocumentElement).elementPtr.ref.data.asTypedList(elementData.length),
+          equals(Uint8List.fromList(elementData)));
 
       // Verify
       verify(() => mockPointerManager.allocate<Uint8>(dataLen)).called(1);
@@ -182,7 +182,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => document.getArray(index),
+        () => document.getElementByIndex(index),
         throwsA(isA<DocumentException>()
             .having(
               (e) => e.errorCode,
