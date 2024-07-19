@@ -27,9 +27,9 @@ class Document implements IDocument {
   Document(
     this._documentFfi,
     this._pointerManager,
-    this._errorMessage, {
-    Uint8List? hibonBuffer,
-  }) : _hibonBuffer = hibonBuffer ?? Uint8List(0);
+    this._errorMessage,
+    this._hibonBuffer,
+  );
 
   @override
   IDocumentElement getElementByKey(String key) {

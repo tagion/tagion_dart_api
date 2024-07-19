@@ -36,7 +36,7 @@ void main() {
     mockDocumentFfi = MockDocumentFfi();
     mockPointerManager = MockPointerManager();
     mockErrorMessage = MockErrorMessage();
-    document = Document(mockDocumentFfi, mockPointerManager, mockErrorMessage, hibonBuffer: data);
+    document = Document(mockDocumentFfi, mockPointerManager, mockErrorMessage, data);
   });
 
   group('Document Unit', () {
