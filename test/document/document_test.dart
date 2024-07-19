@@ -363,7 +363,7 @@ void main() {
       when(() => mockPointerManager.free(textPtr)).thenReturn(null);
       when(() => mockPointerManager.free(textLenPtr)).thenReturn(null);
       // Act
-      final result = document.getText(textFormat);
+      final result = document.getAsString(textFormat);
       // Assert
       expect(result, equals(text));
       // Verify
@@ -387,7 +387,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => document.getText(textFormat),
+        () => document.getAsString(textFormat),
         throwsA(isA<DocumentException>()
             .having(
               (e) => e.errorCode,

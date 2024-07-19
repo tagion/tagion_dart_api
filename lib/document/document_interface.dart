@@ -19,5 +19,5 @@ abstract interface class IDocument {
   DocumentErrorCode validate();
 
   /// Get document as string by a format.
-  String getText(DocumentTextFormat textFormat);
+  String getAsString(DocumentTextFormat textFormat);
 }

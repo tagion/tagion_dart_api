@@ -134,7 +134,7 @@ class Document implements IDocument {
   }
 
   @override
-  String getText(DocumentTextFormat textFormat) {
+  String getAsString(DocumentTextFormat textFormat) {
     /// Allocate memory.
     final dataPtr = _pointerManager.allocate<Uint8>(_hibonBuffer.lengthInBytes);
     final textPtr = _pointerManager.allocate<Pointer<Char>>();
