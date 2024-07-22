@@ -10,7 +10,7 @@ import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// DocumentElement is a part of Document.
-/// Its purpose is to get data from a HiBON fields.
+/// Its purpose is to get data from HiBON fields.
 /// [_elementPtr] is a pointer to an Element struct.
 class DocumentElement implements IDocumentElement {
   final DocumentFfi _documentFfi;
