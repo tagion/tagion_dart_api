@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
+
 import 'package:ffi/ffi.dart';
+import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
+
 import 'pointer_manager_interface.dart';
 
 /// Object class providing methods to allocate, zero out, and free memory.
@@ -35,6 +38,8 @@ class PointerManager implements IPointerManager {
         return allocator<IntPtr>(size).cast<T>();
       case Char:
         return allocator<Char>(size).cast<T>();
+      case HiBONT:
+        return allocator<HiBONT>().cast<T>();
       default:
         throw UnsupportedError('Unsupported type');
     }
@@ -88,6 +93,8 @@ class PointerManager implements IPointerManager {
         return sizeOf<Void>();
       case Char:
         return sizeOf<Char>();
+      case HiBONT:
+        return sizeOf<HiBONT>();
       default:
         throw UnsupportedError('Unsupported type');
     }
