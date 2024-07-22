@@ -26,6 +26,7 @@ void main() {
     final MockPointerManager mockPointerManager = MockPointerManager();
     const String mockErrorText = 'mockErrorText';
 
+    when(() => mockPointerManager.allocate<HiBONT>()).thenReturn(malloc<HiBONT>());
     final Hibon hibon = Hibon(mockHibonFfi, mockErrorMessage, mockPointerManager);
 
     test('Create hibon', () {
