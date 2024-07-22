@@ -1,6 +1,5 @@
 import 'dart:ffi';
 
-import 'package:ffi/ffi.dart';
 import 'package:tagion_dart_api/enums/hibon_string_format.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
@@ -17,7 +16,7 @@ class Hibon implements IHibon {
   late final Pointer<HiBONT> _hibonPtr;
 
   Hibon(this._hibonFfi, this._errorMessage, this._pointerManager) {
-    _hibonPtr = malloc<HiBONT>();
+    _hibonPtr = _pointerManager.allocate<HiBONT>();
   }
 
   @override
