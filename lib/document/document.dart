@@ -65,7 +65,7 @@ class Document implements IDocument {
     _pointerManager.free(dataPtr);
     _pointerManager.free(keyPtr);
 
-    return DocumentElement(elementPtr);
+    return DocumentElement(_documentFfi, _pointerManager, _errorMessage, elementPtr);
   }
 
   @override
@@ -97,7 +97,7 @@ class Document implements IDocument {
     /// Free the memory.
     _pointerManager.free(dataPtr);
 
-    return DocumentElement(elementPtr);
+    return DocumentElement(_documentFfi, _pointerManager, _errorMessage, elementPtr);
   }
 
   @override
