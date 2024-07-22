@@ -1,4 +1,4 @@
-import 'dart:ffi' as ffi;
+import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,8 +20,8 @@ void main() {
     late IErrorMessage errorMessage;
 
     setUp(() {
-      registerFallbackValue(ffi.Pointer<ffi.Char>.fromAddress(0));
-      registerFallbackValue(ffi.Pointer<ffi.Uint64>.fromAddress(0));
+      registerFallbackValue(Pointer<Char>.fromAddress(0));
+      registerFallbackValue(Pointer<Uint64>.fromAddress(0));
       registerFallbackValue(0);
       mockErrorMessageFfi = MockErrorsMessageFfi();
       mockPointerManager = MockPointerManager();
@@ -31,19 +31,19 @@ void main() {
     test('GetErrorText returns the correct error text', () {
       // Allocate memory for the mocked error message
       const msg = 'Mocked error message';
-      final ffi.Pointer<ffi.Char> msgPtr = malloc<ffi.Char>(msg.length);
-      final ffi.Pointer<ffi.Uint64> msgLenPtr = malloc<ffi.Uint64>(ffi.sizeOf<ffi.Uint64>());
+      final Pointer<Char> msgPtr = malloc<Char>(msg.length);
+      final Pointer<Uint64> msgLenPtr = malloc<Uint64>(sizeOf<Uint64>());
 
       // Mock the PointerManager methods
-      when(() => mockPointerManager.allocate<ffi.Char>()).thenReturn(msgPtr);
-      when(() => mockPointerManager.allocate<ffi.Uint64>()).thenReturn(msgLenPtr);
-      when(() => mockPointerManager.free<ffi.Char>(any())).thenReturn(null);
-      when(() => mockPointerManager.free<ffi.Uint64>(any())).thenReturn(null);
+      when(() => mockPointerManager.allocate<Char>()).thenReturn(msgPtr);
+      when(() => mockPointerManager.allocate<Uint64>()).thenReturn(msgLenPtr);
+      when(() => mockPointerManager.free<Char>(any())).thenReturn(null);
+      when(() => mockPointerManager.free<Uint64>(any())).thenReturn(null);
 
       // Mock the FFI function call
       when(() => mockErrorMessageFfi.tagion_error_text(any(), any())).thenAnswer((invocation) {
-        final ffi.Pointer<ffi.Char> charPtr = invocation.positionalArguments[0];
-        final ffi.Pointer<ffi.Uint64> lengthPtr = invocation.positionalArguments[1];
+        final Pointer<Char> charPtr = invocation.positionalArguments[0];
+        final Pointer<Uint64> lengthPtr = invocation.positionalArguments[1];
         for (var i = 0; i < msg.length; i++) {
           charPtr[i] = msg.codeUnitAt(i);
         }
@@ -57,10 +57,10 @@ void main() {
       expect(result, msg);
 
       // Verify the interactions
-      verify(() => mockPointerManager.allocate<ffi.Char>()).called(1);
-      verify(() => mockPointerManager.allocate<ffi.Uint64>()).called(1);
-      verify(() => mockPointerManager.free<ffi.Char>(msgPtr)).called(1);
-      verify(() => mockPointerManager.free<ffi.Uint64>(msgLenPtr)).called(1);
+      verify(() => mockPointerManager.allocate<Char>()).called(1);
+      verify(() => mockPointerManager.allocate<Uint64>()).called(1);
+      verify(() => mockPointerManager.free<Char>(msgPtr)).called(1);
+      verify(() => mockPointerManager.free<Uint64>(msgLenPtr)).called(1);
     });
 
     test('clearErrors calls the correct FFI function', () {
