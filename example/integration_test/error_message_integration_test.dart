@@ -16,6 +16,7 @@ void main() {
     final DynamicLibrary dyLib = Platform.isAndroid ? DynamicLibrary.open('libtauonapi.so') : DynamicLibrary.process();
 
     final BasicFfi basicFfi = BasicFfi(dyLib);
+
     test('D runtime started', () {
       final int startDRuntimeResult = basicFfi.start_rt();
       expect(startDRuntimeResult, 1);
@@ -28,7 +29,7 @@ void main() {
 
     group('getErrorText -', () {
       test('is empty, when no errors', () {
-        Hibon hibon = Hibon(HibonFfi(dyLib));
+        Hibon hibon = Hibon(HibonFfi(dyLib), errorMessage, pointerManager);
         hibon.init();
 
         String errorText = errorMessage.getErrorText();
