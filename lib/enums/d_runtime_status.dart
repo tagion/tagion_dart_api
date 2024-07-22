@@ -1,10 +1,9 @@
-enum DrtStatus {
-  defaultStatus,
-  started,
-  terminated;
+enum DRuntimeResponse {
+  failed,
+  success;
 
-  const DrtStatus();
-  factory DrtStatus.fromInt(int value) {
-    return DrtStatus.values.firstWhere((e) => e.index == value);
+  const DRuntimeResponse();
+  factory DRuntimeResponse.fromInt(int value) {
+    return DRuntimeResponse.values.firstWhere((e) => e.index == value);
   }
 }
