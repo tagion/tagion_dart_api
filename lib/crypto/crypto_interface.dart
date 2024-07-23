@@ -1,10 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
-
 abstract interface class ICrypto {
   /// Returns a keypair wrapper of [Securnet] keypair and [Uint8List] device pin data.
-  Keypair generateKeypair(String passphrase, String pinCode, String? salt);
+  Keypair generateKeypair(String passphrase, String pinCode, String salt);
 
   /// Securnet *out_securenet.
   Securnet decryptDevicePin(String pinCode, Uint8List devicepin);
