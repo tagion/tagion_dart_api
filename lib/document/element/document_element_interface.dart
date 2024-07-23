@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 
 abstract interface class IDocumentElement {
@@ -15,26 +14,26 @@ abstract interface class IDocumentElement {
   int getTime();
 
   /// Get a bigint from a document. Returned as serialized leb128 ubyte buffer.
-  BigInt getBigint();
+  BigInt getBigInt();
 
   /// Get a bool from a document element.
   bool getBool();
 
-  /// Get a int32 from a document element.
-  Int32 getInt32();
+  /// Get an int32 from a document element.
+  int getInt32();
 
-  /// Get a int64 from a document element.
-  Int64 getInt64();
+  /// Get an int64 from a document element.
+  int getInt64();
 
   /// Get a Uint32 from a document element.
-  Uint32 getUint32();
+  int getUint32();
 
   /// Get a Uint64 from a document element.
-  Uint64 getUint64();
+  int getUint64();
 
-  /// Get a f32 from a document element.
-  Float getFloat32();
+  /// Get a Float32 from a document element.
+  double getFloat32();
 
-  /// Get an f64 from a document element.
-  Double getFloat64();
+  /// Get a Float64 from a document element.
+  double getFloat64();
 }
