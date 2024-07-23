@@ -31,6 +31,9 @@ abstract interface class IDocumentElement {
   /// Get a Uint64 from a document element.
   int getUint64();
 
-  /// Get a f64 from a document element.
-  double getDouble();
+  /// Get a Float32 from a document element.
+  double getFloat32();
+
+  /// Get a Float64 from a document element.
+  double getFloat64();
 }

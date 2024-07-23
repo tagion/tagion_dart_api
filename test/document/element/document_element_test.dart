@@ -235,7 +235,70 @@ void main() {
       verify(() => mockPointerManager.free(boolPtr)).called(1);
     });
 
-    test('getDouble returns the correct double value and throws DocumentException when an error occurs', () {
+    test('getFloat32 returns the correct double value and throws DocumentException when an error occurs', () {
+      // Arrange
+      const testValue = 123.456;
+      final floatPtr = malloc<Float>();
+      when(() => mockPointerManager.allocate<Float>()).thenReturn(floatPtr);
+      when(() => mockDocumentFfi.tagion_document_get_float32(any(), any())).thenAnswer((invocation) {
+        final Pointer<Float> floatPtr = invocation.positionalArguments[1];
+
+        floatPtr.value = testValue;
+
+        return TagionErrorCode.none.value;
+      });
+
+      // Act
+      final result = documentElement.getFloat32();
+
+      // Assert
+      expect(result, isA<double>());
+
+      /// There is a discrepancy that might occur due to the precision limitations of Float (single-precision floating-point) in dart:ffi.
+      /// Example: a stored value 3.14 in a Float, gets converted to the nearest representable value in single-precision, which is 3.140000104904175.
+      /// In order to  fix this issue, we use a tolerance when comparing floating-point numbers.
+      /// This is a common practice in tests involving floating-point arithmetic to account for precision errors.
+
+      // Use a relative tolerance for comparison
+      const relativeTolerance = 0.000001;
+      const tolerance = relativeTolerance * testValue;
+      expect(floatPtr.value, closeTo(testValue, tolerance));
+
+      // Verify
+      verify(() => mockPointerManager.allocate<Float>()).called(1);
+      verify(() => mockDocumentFfi.tagion_document_get_float32(any(), any())).called(1);
+      verify(() => mockPointerManager.free(floatPtr)).called(1);
+
+      // Arrange
+      const errorCode = TagionErrorCode.error;
+      const errorMessage = "Error message";
+      when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
+
+      when(() => mockDocumentFfi.tagion_document_get_float32(any(), any())).thenAnswer((_) {
+        return TagionErrorCode.error.value;
+      });
+
+      // Act & Assert
+      expect(
+        () => documentElement.getFloat32(),
+        throwsA(isA<DocumentException>()
+            .having(
+              (e) => e.errorCode,
+              '',
+              equals(errorCode),
+            )
+            .having(
+              (e) => e.message,
+              '',
+              equals(errorMessage),
+            )),
+      );
+
+      // Verify
+      verify(() => mockPointerManager.free(floatPtr)).called(1);
+    });
+
+    test('getFloat64 returns the correct double value and throws DocumentException when an error occurs', () {
       // Arrange
       const testValue = 123.456;
       final doublePtr = malloc<Double>();
@@ -249,7 +312,7 @@ void main() {
       });
 
       // Act
-      final result = documentElement.getDouble();
+      final result = documentElement.getFloat64();
 
       // Assert
       expect(result, isA<double>());
@@ -271,7 +334,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => documentElement.getDouble(),
+        () => documentElement.getFloat64(),
         throwsA(isA<DocumentException>()
             .having(
               (e) => e.errorCode,

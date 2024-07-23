@@ -107,28 +107,6 @@ class DocumentElement implements IDocumentElement {
   }
 
   @override
-  double getDouble() {
-    /// Allocate memory for the double.
-    final doublePtr = _pointerManager.allocate<Double>();
-
-    int status = _documentFfi.tagion_document_get_float64(_elementPtr, doublePtr);
-
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointer.
-      _pointerManager.free(doublePtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the double value.
-    final doubleValue = doublePtr.value;
-
-    /// Free the allocated pointer.
-    _pointerManager.free(doublePtr);
-
-    return doubleValue;
-  }
-
-  @override
   int getInt32() {
     /// Allocate memory for the int.
     final intPtr = _pointerManager.allocate<Int32>();
@@ -214,6 +192,50 @@ class DocumentElement implements IDocumentElement {
     _pointerManager.free(intPtr);
 
     return intValue;
+  }
+
+  @override
+  double getFloat32() {
+    /// Allocate memory for the double.
+    final floatPtr = _pointerManager.allocate<Float>();
+
+    int status = _documentFfi.tagion_document_get_float32(_elementPtr, floatPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      /// Free the allocated pointer.
+      _pointerManager.free(floatPtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    /// Get the double value.
+    final floatValue = floatPtr.value;
+
+    /// Free the allocated pointer.
+    _pointerManager.free(floatPtr);
+
+    return floatValue;
+  }
+
+  @override
+  double getFloat64() {
+    /// Allocate memory for the double.
+    final doublePtr = _pointerManager.allocate<Double>();
+
+    int status = _documentFfi.tagion_document_get_float64(_elementPtr, doublePtr);
+
+    if (status != TagionErrorCode.none.value) {
+      /// Free the allocated pointer.
+      _pointerManager.free(doublePtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    /// Get the double value.
+    final doubleValue = doublePtr.value;
+
+    /// Free the allocated pointer.
+    _pointerManager.free(doublePtr);
+
+    return doubleValue;
   }
 
   @override
