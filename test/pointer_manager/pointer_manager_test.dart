@@ -90,5 +90,16 @@ void main() {
       expect(pointer[4], utf8.encode(data[4])[0]);
       malloc.free(pointer);
     });
+
+    test('returns String from a pointer', () {
+      const String testString = 'hello';
+      final Pointer<Uint8> pointer = malloc.allocate(testString.length);
+      for (int i = 0; i < testString.length; i++) {
+        pointer[i] = utf8.encode(testString[i])[0];
+      }
+      final String result = pointerManager.pointerToString(pointer, 5);
+      expect(result, testString);
+      malloc.free(pointer);
+    });
   });
 }

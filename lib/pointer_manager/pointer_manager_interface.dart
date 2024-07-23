@@ -19,4 +19,6 @@ abstract interface class IPointerManager {
 
   /// Method to zero out and free the memory.
   void zeroOutAndFree<T extends NativeType>(Pointer<T> pointer, int size, {Allocator allocator});
+
+  String pointerToString<T extends NativeType>(Pointer<T> pointer, int length);
 }
