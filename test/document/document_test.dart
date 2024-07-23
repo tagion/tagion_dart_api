@@ -40,7 +40,7 @@ void main() {
   });
 
   group('Document Unit', () {
-    test('getDocument returns the correct DocumentElement and throws DocumentException when an error occurs', () {
+    test('getElementByKey returns the correct DocumentElement and throws DocumentException when an error occurs', () {
       // Arrange
       const key = 'testKey';
       final dataLen = data.lengthInBytes;
@@ -126,7 +126,7 @@ void main() {
       verify(() => mockPointerManager.free(elementPtr)).called(1);
     });
 
-    test('getArray returns the correct DocumentElement and throws DocumentException when an error occurs', () {
+    test('getElementByIndex returns the correct DocumentElement and throws DocumentException when an error occurs', () {
       // Arrange
       const int index = 1;
       final dataLen = data.lengthInBytes;
@@ -329,7 +329,7 @@ void main() {
       verify(() => mockPointerManager.free(docErrorCodePtr)).called(1);
     });
 
-    test('getText returns a correct value and throws DocumentException when an error occurs', () {
+    test('getAsString returns a correct value and throws DocumentException when an error occurs', () {
       // Arrange
       final dataLen = data.lengthInBytes;
       const text = 'Test text';
