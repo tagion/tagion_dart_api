@@ -289,7 +289,61 @@ void main() {
       verify(() => mockPointerManager.free(doublePtr)).called(1);
     });
 
-    test('getInt returns the correct int value and throws DocumentException when an error occurs', () {
+    test('getInt32 returns the correct int value and throws DocumentException when an error occurs', () {
+      // Arrange
+      const testValue = 123;
+      final intPtr = malloc<Int32>();
+      when(() => mockPointerManager.allocate<Int32>()).thenReturn(intPtr);
+      when(() => mockDocumentFfi.tagion_document_get_int32(any(), any())).thenAnswer((invocation) {
+        final Pointer<Int32> intPtr = invocation.positionalArguments[1];
+
+        intPtr.value = testValue;
+
+        return TagionErrorCode.none.value;
+      });
+
+      // Act
+      final result = documentElement.getInt32();
+
+      // Assert
+      expect(result, isA<int>());
+      expect(result, equals(testValue));
+
+      // Verify
+      verify(() => mockPointerManager.allocate<Int32>()).called(1);
+      verify(() => mockDocumentFfi.tagion_document_get_int32(any(), any())).called(1);
+      verify(() => mockPointerManager.free(intPtr)).called(1);
+
+      // Arrange
+      const errorCode = TagionErrorCode.error;
+      const errorMessage = "Error message";
+      when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
+
+      when(() => mockDocumentFfi.tagion_document_get_int32(any(), any())).thenAnswer((_) {
+        return TagionErrorCode.error.value;
+      });
+
+      // Act & Assert
+      expect(
+        () => documentElement.getInt32(),
+        throwsA(isA<DocumentException>()
+            .having(
+              (e) => e.errorCode,
+              '',
+              equals(errorCode),
+            )
+            .having(
+              (e) => e.message,
+              '',
+              equals(errorMessage),
+            )),
+      );
+
+      // Verify
+      verify(() => mockPointerManager.free(intPtr)).called(1);
+    });
+
+    test('getInt64 returns the correct int value and throws DocumentException when an error occurs', () {
       // Arrange
       const testValue = 123;
       final intPtr = malloc<Int64>();
@@ -303,7 +357,7 @@ void main() {
       });
 
       // Act
-      final result = documentElement.getInt();
+      final result = documentElement.getInt64();
 
       // Assert
       expect(result, isA<int>());
@@ -325,7 +379,115 @@ void main() {
 
       // Act & Assert
       expect(
-        () => documentElement.getInt(),
+        () => documentElement.getInt64(),
+        throwsA(isA<DocumentException>()
+            .having(
+              (e) => e.errorCode,
+              '',
+              equals(errorCode),
+            )
+            .having(
+              (e) => e.message,
+              '',
+              equals(errorMessage),
+            )),
+      );
+
+      // Verify
+      verify(() => mockPointerManager.free(intPtr)).called(1);
+    });
+
+    test('getUint32 returns the correct int value and throws DocumentException when an error occurs', () {
+      // Arrange
+      const testValue = 123;
+      final intPtr = malloc<Uint32>();
+      when(() => mockPointerManager.allocate<Uint32>()).thenReturn(intPtr);
+      when(() => mockDocumentFfi.tagion_document_get_uint32(any(), any())).thenAnswer((invocation) {
+        final Pointer<Uint32> intPtr = invocation.positionalArguments[1];
+
+        intPtr.value = testValue;
+
+        return TagionErrorCode.none.value;
+      });
+
+      // Act
+      final result = documentElement.getUint32();
+
+      // Assert
+      expect(result, isA<int>());
+      expect(result, equals(testValue));
+
+      // Verify
+      verify(() => mockPointerManager.allocate<Uint32>()).called(1);
+      verify(() => mockDocumentFfi.tagion_document_get_uint32(any(), any())).called(1);
+      verify(() => mockPointerManager.free(intPtr)).called(1);
+
+      // Arrange
+      const errorCode = TagionErrorCode.error;
+      const errorMessage = "Error message";
+      when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
+
+      when(() => mockDocumentFfi.tagion_document_get_uint32(any(), any())).thenAnswer((_) {
+        return TagionErrorCode.error.value;
+      });
+
+      // Act & Assert
+      expect(
+        () => documentElement.getUint32(),
+        throwsA(isA<DocumentException>()
+            .having(
+              (e) => e.errorCode,
+              '',
+              equals(errorCode),
+            )
+            .having(
+              (e) => e.message,
+              '',
+              equals(errorMessage),
+            )),
+      );
+
+      // Verify
+      verify(() => mockPointerManager.free(intPtr)).called(1);
+    });
+
+    test('getUint64 returns the correct int value and throws DocumentException when an error occurs', () {
+      // Arrange
+      const testValue = 123;
+      final intPtr = malloc<Uint64>();
+      when(() => mockPointerManager.allocate<Uint64>()).thenReturn(intPtr);
+      when(() => mockDocumentFfi.tagion_document_get_uint64(any(), any())).thenAnswer((invocation) {
+        final Pointer<Uint64> intPtr = invocation.positionalArguments[1];
+
+        intPtr.value = testValue;
+
+        return TagionErrorCode.none.value;
+      });
+
+      // Act
+      final result = documentElement.getUint64();
+
+      // Assert
+      expect(result, isA<int>());
+      expect(result, equals(testValue));
+
+      // Verify
+      verify(() => mockPointerManager.allocate<Uint64>()).called(1);
+      verify(() => mockDocumentFfi.tagion_document_get_uint64(any(), any())).called(1);
+      verify(() => mockPointerManager.free(intPtr)).called(1);
+
+      // Arrange
+      const errorCode = TagionErrorCode.error;
+      const errorMessage = "Error message";
+      when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
+
+      when(() => mockDocumentFfi.tagion_document_get_uint64(any(), any())).thenAnswer((_) {
+        return TagionErrorCode.error.value;
+      });
+
+      // Act & Assert
+      expect(
+        () => documentElement.getUint64(),
         throwsA(isA<DocumentException>()
             .having(
               (e) => e.errorCode,

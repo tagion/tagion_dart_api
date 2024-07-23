@@ -129,11 +129,77 @@ class DocumentElement implements IDocumentElement {
   }
 
   @override
-  int getInt() {
+  int getInt32() {
+    /// Allocate memory for the int.
+    final intPtr = _pointerManager.allocate<Int32>();
+
+    int status = _documentFfi.tagion_document_get_int32(_elementPtr, intPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      /// Free the allocated pointer.
+      _pointerManager.free(intPtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    /// Get the int value.
+    final intValue = intPtr.value;
+
+    /// Free the allocated pointer.
+    _pointerManager.free(intPtr);
+
+    return intValue;
+  }
+
+  @override
+  int getInt64() {
     /// Allocate memory for the int.
     final intPtr = _pointerManager.allocate<Int64>();
 
     int status = _documentFfi.tagion_document_get_int64(_elementPtr, intPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      /// Free the allocated pointer.
+      _pointerManager.free(intPtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    /// Get the int value.
+    final intValue = intPtr.value;
+
+    /// Free the allocated pointer.
+    _pointerManager.free(intPtr);
+
+    return intValue;
+  }
+
+  @override
+  int getUint32() {
+    /// Allocate memory for the int.
+    final intPtr = _pointerManager.allocate<Uint32>();
+
+    int status = _documentFfi.tagion_document_get_uint32(_elementPtr, intPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      /// Free the allocated pointer.
+      _pointerManager.free(intPtr);
+      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    /// Get the int value.
+    final intValue = intPtr.value;
+
+    /// Free the allocated pointer.
+    _pointerManager.free(intPtr);
+
+    return intValue;
+  }
+
+  @override
+  int getUint64() {
+    /// Allocate memory for the int.
+    final intPtr = _pointerManager.allocate<Uint64>();
+
+    int status = _documentFfi.tagion_document_get_uint64(_elementPtr, intPtr);
 
     if (status != TagionErrorCode.none.value) {
       /// Free the allocated pointer.

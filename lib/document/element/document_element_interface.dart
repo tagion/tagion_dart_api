@@ -19,9 +19,18 @@ abstract interface class IDocumentElement {
   /// Get a bool from a document element.
   bool getBool();
 
-  /// Get a int32, int64, Uint32 or Uint64 from a document element.
-  int getInt();
+  /// Get an int32 from a document element.
+  int getInt32();
 
-  /// Get a f32 from a document element.
+  /// Get an int64 from a document element.
+  int getInt64();
+
+  /// Get a Uint32 from a document element.
+  int getUint32();
+
+  /// Get a Uint64 from a document element.
+  int getUint64();
+
+  /// Get a f64 from a document element.
   double getDouble();
 }
