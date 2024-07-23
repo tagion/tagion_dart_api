@@ -5,7 +5,7 @@ import 'package:tagion_dart_api/document/element/document_element_interface.dart
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
-import 'package:tagion_dart_api/exception/document/document_exception.dart';
+import 'package:tagion_dart_api/exception/document_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
