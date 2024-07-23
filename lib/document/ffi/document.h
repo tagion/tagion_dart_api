@@ -24,7 +24,7 @@ int32_t tagion_document_get_string(const Element *const element, char **value, u
 
 int32_t tagion_document_get_binary(const Element *const element, uint8_t **buf, uint64_t *buf_len);
 
-int32_t tagion_document_get_time(const Element *const element, long long *time);
+int32_t tagion_document_get_time(const Element *const element, int64_t *time);
 
 int32_t tagion_document_get_bigint(const Element *const element, uint8_t **bigint_buf, uint64_t *bigint_buf_len);
 

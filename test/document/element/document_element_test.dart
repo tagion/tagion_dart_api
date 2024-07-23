@@ -477,8 +477,8 @@ void main() {
     test('getTime returns the correct int value and throws DocumentException when an error occurs', () {
       // Arrange
       const testValue = 9223372036854775807;
-      final timePtr = malloc<LongLong>();
-      when(() => mockPointerManager.allocate<LongLong>()).thenReturn(timePtr);
+      final timePtr = malloc<Int64>();
+      when(() => mockPointerManager.allocate<Int64>()).thenReturn(timePtr);
       when(() => mockDocumentFfi.tagion_document_get_time(any(), any())).thenAnswer((invocation) {
         final Pointer<LongLong> timePtr = invocation.positionalArguments[1];
 
@@ -495,7 +495,7 @@ void main() {
       expect(result, equals(testValue));
 
       // Verify
-      verify(() => mockPointerManager.allocate<LongLong>()).called(1);
+      verify(() => mockPointerManager.allocate<Int64>()).called(1);
       verify(() => mockDocumentFfi.tagion_document_get_time(any(), any())).called(1);
       verify(() => mockPointerManager.free(timePtr)).called(1);
 

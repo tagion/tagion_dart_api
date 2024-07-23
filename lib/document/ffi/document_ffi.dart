@@ -234,7 +234,7 @@ class DocumentFfi {
 
   int tagion_document_get_time(
     ffi.Pointer<Element> element,
-    ffi.Pointer<ffi.LongLong> time,
+    ffi.Pointer<ffi.Int64> time,
   ) {
     return _tagion_document_get_time(
       element,
@@ -245,10 +245,9 @@ class DocumentFfi {
   late final _tagion_document_get_timePtr = _lookup<
       ffi.NativeFunction<
           ffi.Int32 Function(ffi.Pointer<Element>,
-              ffi.Pointer<ffi.LongLong>)>>('tagion_document_get_time');
-  late final _tagion_document_get_time =
-      _tagion_document_get_timePtr.asFunction<
-          int Function(ffi.Pointer<Element>, ffi.Pointer<ffi.LongLong>)>();
+              ffi.Pointer<ffi.Int64>)>>('tagion_document_get_time');
+  late final _tagion_document_get_time = _tagion_document_get_timePtr
+      .asFunction<int Function(ffi.Pointer<Element>, ffi.Pointer<ffi.Int64>)>();
 
   int tagion_document_get_bigint(
     ffi.Pointer<Element> element,

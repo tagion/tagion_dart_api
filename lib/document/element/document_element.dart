@@ -203,7 +203,7 @@ class DocumentElement implements IDocumentElement {
   @override
   int getTime() {
     /// Allocate memory for the time.
-    final timePtr = _pointerManager.allocate<LongLong>();
+    final timePtr = _pointerManager.allocate<Int64>();
 
     int status = _documentFfi.tagion_document_get_time(_elementPtr, timePtr);
 
