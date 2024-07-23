@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:tagion_dart_api/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
+import 'package:tagion_dart_api/crypto/keypair_details.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/exception/tagion_exception.dart';
@@ -14,7 +15,6 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 /// Uses the [CryptoFfi] class to call the native functions.
 /// Uses the [PointerManager] class to manage the memory.
 /// Uses the [ErrorMessage] class to get the error message.
-/// Throws a [TagionException] if an error occurs.
 class Crypto implements ICrypto {
   final CryptoFfi _cryptoFfi;
   final PointerManager _pointerManager;
@@ -23,13 +23,13 @@ class Crypto implements ICrypto {
   const Crypto(this._cryptoFfi, this._pointerManager, this._errorMessage);
 
   /// Generates a keypair.
-  /// Returns a [Keypair] object.
+  /// Returns a [KeypairDetails] object.
   /// Throws a [TagionException] if an error occurs.
   /// The [passphrase] parameter is a string.
   /// The [pinCode] parameter is a string.
   /// The [salt] parameter is a string.
   @override
-  Keypair generateKeypair(String passphrase, String pinCode, String salt) {
+  KeypairDetails generateKeypair(String passphrase, String pinCode, String salt) {
     /// Data lengths.
     final passphraseLen = passphrase.length;
     final pinCodeLen = pinCode.length;
@@ -46,7 +46,7 @@ class Crypto implements ICrypto {
     _pointerManager.stringToPointer(saltPtr, salt);
 
     /// Out.
-    final Pointer<Securnet> securenetPtr = _pointerManager.allocate<Securnet>();
+    final Pointer<SecureNet> securenetPtr = _pointerManager.allocate<SecureNet>();
     final Pointer<Pointer<Uint8>> devicePinPtr = _pointerManager.allocate<Pointer<Uint8>>();
     final Pointer<Uint64> devicePinLenPtr = _pointerManager.allocate<Uint64>();
 
@@ -86,16 +86,16 @@ class Crypto implements ICrypto {
     _pointerManager.free(devicePinPtr);
     _pointerManager.free(devicePinLenPtr);
 
-    return Keypair(secureNet, devicePin);
+    return KeypairDetails(secureNet, devicePin);
   }
 
   /// Decrypts a device pin.
-  /// Returns a [Securnet] object.
+  /// Returns a [SecureNet] object.
   /// Throws a [TagionException] if an error occurs.
   /// The [pinCode] parameter is a string.
-  /// The [devicepin] parameter is a Uint8List. 
+  /// The [devicepin] parameter is a Uint8List.
   @override
-  Securnet decryptDevicePin(String pinCode, Uint8List devicepin) {
+  SecureNet decryptDevicePin(String pinCode, Uint8List devicepin) {
     /// Data lengths.
     final pinCodeLen = pinCode.length;
     final devicePinLen = devicepin.length;
@@ -109,7 +109,7 @@ class Crypto implements ICrypto {
     _pointerManager.uint8ListToPointer(devicePinPtr, devicepin);
 
     /// Out.
-    final Pointer<Securnet> securenetPtr = _pointerManager.allocate<Securnet>();
+    final Pointer<SecureNet> securenetPtr = _pointerManager.allocate<SecureNet>();
 
     int status = _cryptoFfi.tagion_decrypt_devicepin(
       pinCodePtr,
@@ -139,18 +139,18 @@ class Crypto implements ICrypto {
     return secureNet;
   }
 
-  /// Signs a message.
-  /// Returns a Uint8List.
+  /// Signs a given data.
+  /// Returns a signed data as a Uint8List.
   /// Throws a [TagionException] if an error occurs.
-  /// The [keypair] parameter is a [Securnet] object.
+  /// The [keypair] parameter is a [SecureNet] object.
   /// The [dataToSign] parameter is a Uint8List.
   @override
-  Uint8List signMessage(Securnet keypair, Uint8List dataToSign) {
+  Uint8List sign(SecureNet keypair, Uint8List dataToSign) {
     /// Data lengths.
     final dataToSignLen = dataToSign.length;
 
     /// In.
-    final Pointer<Securnet> keypairPtr = _pointerManager.allocate<Securnet>();
+    final Pointer<SecureNet> keypairPtr = _pointerManager.allocate<SecureNet>();
     final Pointer<Uint8> dataToSignPtr = _pointerManager.allocate<Uint8>(dataToSignLen);
 
     /// Out.

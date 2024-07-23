@@ -1793,7 +1793,7 @@ class CryptoFfi {
     int passphrase_len,
     ffi.Pointer<ffi.Char> salt_ptr,
     int salt_len,
-    ffi.Pointer<Securnet> out_securenet,
+    ffi.Pointer<SecureNet> out_securenet,
     ffi.Pointer<ffi.Char> pin_ptr,
     int pin_len,
     ffi.Pointer<ffi.Pointer<ffi.Uint8>> out_device_doc_ptr,
@@ -1819,7 +1819,7 @@ class CryptoFfi {
               ffi.Uint64,
               ffi.Pointer<ffi.Char>,
               ffi.Uint64,
-              ffi.Pointer<Securnet>,
+              ffi.Pointer<SecureNet>,
               ffi.Pointer<ffi.Char>,
               ffi.Uint64,
               ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
@@ -1830,7 +1830,7 @@ class CryptoFfi {
           int,
           ffi.Pointer<ffi.Char>,
           int,
-          ffi.Pointer<Securnet>,
+          ffi.Pointer<SecureNet>,
           ffi.Pointer<ffi.Char>,
           int,
           ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
@@ -1841,7 +1841,7 @@ class CryptoFfi {
     int pin_len,
     ffi.Pointer<ffi.Uint8> devicepin_ptr,
     int devicepin_len,
-    ffi.Pointer<Securnet> out_securenet,
+    ffi.Pointer<SecureNet> out_securenet,
   ) {
     return _tagion_decrypt_devicepin(
       pin_ptr,
@@ -1859,14 +1859,14 @@ class CryptoFfi {
               ffi.Uint64,
               ffi.Pointer<ffi.Uint8>,
               ffi.Size,
-              ffi.Pointer<Securnet>)>>('tagion_decrypt_devicepin');
+              ffi.Pointer<SecureNet>)>>('tagion_decrypt_devicepin');
   late final _tagion_decrypt_devicepin =
       _tagion_decrypt_devicepinPtr.asFunction<
           int Function(ffi.Pointer<ffi.Char>, int, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<Securnet>)>();
+              ffi.Pointer<SecureNet>)>();
 
   int tagion_sign_message(
-    Securnet root_net,
+    SecureNet root_net,
     ffi.Pointer<ffi.Uint8> message_ptr,
     int message_len,
     ffi.Pointer<ffi.Pointer<ffi.Uint8>> signature_ptr,
@@ -1884,13 +1884,13 @@ class CryptoFfi {
   late final _tagion_sign_messagePtr = _lookup<
       ffi.NativeFunction<
           ffi.Int32 Function(
-              Securnet,
+              SecureNet,
               ffi.Pointer<ffi.Uint8>,
               ffi.Uint64,
               ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
               ffi.Pointer<ffi.Uint64>)>>('tagion_sign_message');
   late final _tagion_sign_message = _tagion_sign_messagePtr.asFunction<
-      int Function(Securnet, ffi.Pointer<ffi.Uint8>, int,
+      int Function(SecureNet, ffi.Pointer<ffi.Uint8>, int,
           ffi.Pointer<ffi.Pointer<ffi.Uint8>>, ffi.Pointer<ffi.Uint64>)>();
 }
 
@@ -2018,7 +2018,7 @@ final class _opaque_pthread_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
-final class Securnet extends ffi.Struct {
+final class SecureNet extends ffi.Struct {
   @ffi.Int32()
   external int magic_byte;
 
