@@ -1866,7 +1866,7 @@ class CryptoFfi {
               ffi.Pointer<SecureNet>)>();
 
   int tagion_sign_message(
-    SecureNet root_net,
+    ffi.Pointer<SecureNet> root_net,
     ffi.Pointer<ffi.Uint8> message_ptr,
     int message_len,
     ffi.Pointer<ffi.Pointer<ffi.Uint8>> signature_ptr,
@@ -1884,13 +1884,13 @@ class CryptoFfi {
   late final _tagion_sign_messagePtr = _lookup<
       ffi.NativeFunction<
           ffi.Int32 Function(
-              SecureNet,
+              ffi.Pointer<SecureNet>,
               ffi.Pointer<ffi.Uint8>,
               ffi.Uint64,
               ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
               ffi.Pointer<ffi.Uint64>)>>('tagion_sign_message');
   late final _tagion_sign_message = _tagion_sign_messagePtr.asFunction<
-      int Function(SecureNet, ffi.Pointer<ffi.Uint8>, int,
+      int Function(ffi.Pointer<SecureNet>, ffi.Pointer<ffi.Uint8>, int,
           ffi.Pointer<ffi.Pointer<ffi.Uint8>>, ffi.Pointer<ffi.Uint64>)>();
 }
 
