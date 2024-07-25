@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// A singleton class.
 /// Designed to store a [_secureNetPtr] pointer, obtained
@@ -16,7 +17,7 @@ class SecureNetVault {
   bool _allocated = false;
   bool get initialized => _allocated;
 
-  final PointerManager _pointerManager;
+  final IPointerManager _pointerManager;
 
   static SecureNetVault? _instance;
 
