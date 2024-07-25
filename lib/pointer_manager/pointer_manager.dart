@@ -39,6 +39,8 @@ class PointerManager implements IPointerManager {
         return allocator<IntPtr>(size).cast<T>();
       case Char:
         return allocator<Char>(size).cast<T>();
+      case const (Pointer<Char>):
+        return allocator<Pointer>(size).cast<T>();
       case HiBONT:
         return allocator<HiBONT>().cast<T>();
       case SecureNet:
@@ -96,6 +98,8 @@ class PointerManager implements IPointerManager {
         return sizeOf<Void>();
       case Char:
         return sizeOf<Char>();
+      case const (Pointer<Char>):
+        return sizeOf<Pointer<Char>>();
       case HiBONT:
         return sizeOf<HiBONT>();
       case SecureNet:

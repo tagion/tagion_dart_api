@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:tagion_dart_api/enums/hibon_string_format.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
-import 'package:tagion_dart_api/exception/hibon/hibon_exception.dart';
+import 'package:tagion_dart_api/exception/hibon_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/hibon/hibon_interface.dart';
