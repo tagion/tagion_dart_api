@@ -5,21 +5,21 @@ import 'package:tagion_dart_api/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/crypto/secure_net_vault.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
-import 'package:tagion_dart_api/error_message/error_message.dart';
+import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/tagion_exception.dart';
-import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// Crypto class.
 /// Implements the ICrypto interface.
 /// Provides methods for generating a keypair, decrypting a device pin, and signing a message.
 /// Uses the [CryptoFfi] class to call the native functions.
-/// Uses the [PointerManager] class to manage the memory.
-/// Uses the [ErrorMessage] class to get the error message.
+/// Uses the [IPointerManager] interface to manage the memory.
+/// Uses the [IErrorMessage] inteface to get the error message.
 /// Uses the [SecureNetVault] class to set or get access to a stored keypair pointer.
 class Crypto implements ICrypto {
   final CryptoFfi _cryptoFfi;
-  final PointerManager _pointerManager;
-  final ErrorMessage _errorMessage;
+  final IPointerManager _pointerManager;
+  final IErrorMessage _errorMessage;
   final SecureNetVault _vault;
 
   const Crypto(
