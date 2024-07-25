@@ -407,7 +407,7 @@ void main() {
       verify(() => mockPointerManager.free(textLenPtr)).called(1);
     });
 
-    test('getRecondName returns a correct value and throws DocumentException when an error occurs', () {
+    test('getRecordName returns a correct value and throws DocumentException when an error occurs', () {
       // Arrange
       final dataLen = data.lengthInBytes;
       const text = 'Test record name';

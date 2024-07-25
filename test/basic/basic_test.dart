@@ -47,22 +47,24 @@ void main() {
 
     test('encodeBase64Url returns a string on success and throws on error', () {
       // Arrange
-      const String testString = 'base64Url';
-      final Pointer<Pointer<Char>> testStringPtr = testString.toNativeUtf8().cast<Pointer<Char>>();
-      final Pointer<Uint64> testStringLenPtr = malloc<Uint64>(testString.length);
-      testStringLenPtr.value = testString.length;
-      final Uint8List testStringAsByteArray = Uint8List.fromList(testString.codeUnits);
-      final Pointer<Uint8> testStringAsByteArrayPointer = malloc<Uint8>(testStringAsByteArray.length);
+      const String text = 'base64Url';
+      final Pointer<Utf8> textUtf8Ptr = text.toNativeUtf8();
+      final Pointer<Pointer<Char>> textPtr = malloc<Pointer<Char>>();
+      final Pointer<Uint64> textLenPtr = malloc<Uint64>();
+      final Uint8List textAsByteArray = Uint8List.fromList(text.codeUnits);
+      final Pointer<Uint8> textAsByteArrayPointer = malloc<Uint8>(textAsByteArray.length);
 
-      when(() => mockPointerManager.allocate<Uint8>(any())).thenReturn(testStringAsByteArrayPointer);
+      when(() => mockPointerManager.allocate<Uint8>(any())).thenReturn(textAsByteArrayPointer);
       when(() => mockPointerManager.uint8ListToPointer<Uint8>(any(), any())).thenReturn(null);
-      when(() => mockPointerManager.allocate<Pointer<Char>>()).thenReturn(testStringPtr);
-      when(() => mockPointerManager.allocate<Uint64>()).thenReturn(testStringLenPtr);
+      when(() => mockPointerManager.allocate<Pointer<Char>>()).thenReturn(textPtr);
+      when(() => mockPointerManager.allocate<Uint64>()).thenReturn(textLenPtr);
 
       when(() => mockBasicFfi.tagion_basic_encode_base64url(any(), any(), any(), any())).thenAnswer((invocation) {
-        (invocation.positionalArguments[0] as Pointer<Uint8>).value = testStringAsByteArrayPointer.value;
-        (invocation.positionalArguments[2] as Pointer<Pointer<Char>>).value = testStringPtr.value;
-        (invocation.positionalArguments[3] as Pointer<Uint64>).value = testStringLenPtr.value;
+        final Pointer<Pointer<Char>> textPtr = invocation.positionalArguments[2];
+        final Pointer<Uint64> textLenPtr = invocation.positionalArguments[3];
+
+        textPtr.value = textUtf8Ptr.cast<Char>();
+        textLenPtr.value = textUtf8Ptr.length;
 
         return TagionErrorCode.none.value;
       });
@@ -70,18 +72,17 @@ void main() {
       when(() => mockPointerManager.free<Uint8>(any())).thenReturn(null);
       when(() => mockPointerManager.free<Pointer<Char>>(any())).thenReturn(null);
       when(() => mockPointerManager.free<Uint64>(any())).thenReturn(null);
-      when(() => mockPointerManager.pointerToString<Pointer<Char>>(any(), any())).thenReturn(testString);
 
       // Act
-      String result = basic.encodeBase64Url(testStringAsByteArray);
+      String result = basic.encodeBase64Url(textAsByteArray);
 
       // Assert
-      expect(result, testString);
+      expect(result, text);
 
       // Verify
-      verify(() => mockPointerManager.free(testStringAsByteArrayPointer)).called(1);
-      verify(() => mockPointerManager.free(testStringPtr)).called(1);
-      verify(() => mockPointerManager.free(testStringLenPtr)).called(1);
+      verify(() => mockPointerManager.free(textAsByteArrayPointer)).called(1);
+      verify(() => mockPointerManager.free(textPtr)).called(1);
+      verify(() => mockPointerManager.free(textLenPtr)).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
@@ -92,7 +93,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => basic.encodeBase64Url(testStringAsByteArray),
+        () => basic.encodeBase64Url(textAsByteArray),
         throwsA(isA<BasicException>()
             .having(
               (e) => e.errorCode,
@@ -107,41 +108,43 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(testStringAsByteArrayPointer)).called(1);
-      verify(() => mockPointerManager.free(testStringPtr)).called(1);
-      verify(() => mockPointerManager.free(testStringLenPtr)).called(1);
+      verify(() => mockPointerManager.free(textAsByteArrayPointer)).called(1);
+      verify(() => mockPointerManager.free(textPtr)).called(1);
+      verify(() => mockPointerManager.free(textLenPtr)).called(1);
     });
 
     test('tagionRevision returns a string on success & throws on error', () {
       // Arrange
-      const String testString = 'revision';
-      final Pointer<Pointer<Char>> testStringPtr = testString.toNativeUtf8().cast<Pointer<Char>>();
-      final Pointer<Uint64> testStringLenPtr = malloc<Uint64>(testString.length);
-      testStringLenPtr.value = testString.length;
+      const String text = 'revision';
+      final Pointer<Utf8> textUtf8Ptr = text.toNativeUtf8();
+      final Pointer<Pointer<Char>> textPtr = malloc<Pointer<Char>>();
+      final Pointer<Uint64> textLenPtr = malloc<Uint64>();
 
-      when(() => mockPointerManager.allocate<Pointer<Char>>()).thenReturn(testStringPtr);
-      when(() => mockPointerManager.allocate<Uint64>()).thenReturn(testStringLenPtr);
+      when(() => mockPointerManager.allocate<Pointer<Char>>()).thenReturn(textPtr);
+      when(() => mockPointerManager.allocate<Uint64>()).thenReturn(textLenPtr);
 
       when(() => mockBasicFfi.tagion_revision(any(), any())).thenAnswer((invocation) {
-        (invocation.positionalArguments[0] as Pointer<Pointer<Char>>).value = testStringPtr.value;
-        (invocation.positionalArguments[1] as Pointer<Uint64>).value = testStringLenPtr.value;
+        final Pointer<Pointer<Char>> textPtr = invocation.positionalArguments[0];
+        final Pointer<Uint64> textLenPtr = invocation.positionalArguments[1];
+
+        textPtr.value = textUtf8Ptr.cast<Char>();
+        textLenPtr.value = textUtf8Ptr.length;
 
         return TagionErrorCode.none.value;
       });
 
       when(() => mockPointerManager.free<Pointer<Char>>(any())).thenReturn(null);
       when(() => mockPointerManager.free<Uint64>(any())).thenReturn(null);
-      when(() => mockPointerManager.pointerToString<Pointer<Char>>(any(), any())).thenReturn(testString);
 
       // Act
       String result = basic.tagionRevision();
 
       // Assert
-      expect(result, testString);
+      expect(result, text);
 
       // Verify
-      verify(() => mockPointerManager.free(testStringPtr)).called(1);
-      verify(() => mockPointerManager.free(testStringLenPtr)).called(1);
+      verify(() => mockPointerManager.free(textPtr)).called(1);
+      verify(() => mockPointerManager.free(textLenPtr)).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
@@ -167,8 +170,8 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(testStringPtr)).called(1);
-      verify(() => mockPointerManager.free(testStringLenPtr)).called(1);
+      verify(() => mockPointerManager.free(textPtr)).called(1);
+      verify(() => mockPointerManager.free(textLenPtr)).called(1);
     });
   });
 }

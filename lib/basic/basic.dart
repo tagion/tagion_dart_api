@@ -7,6 +7,7 @@ import 'package:tagion_dart_api/enums/d_runtime_response.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/basic_exception.dart';
+import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 class Basic implements IBasic {
@@ -46,7 +47,7 @@ class Basic implements IBasic {
       throw BasicException(TagionErrorCode.fromInt(result), _errorMessage.getErrorText());
     }
 
-    String resultString = _pointerManager.pointerToString(strPtr, strLenPtr.value);
+    String resultString = strPtr[0].toDartString(length: strLenPtr.value);
 
     _pointerManager.free(arrayPointer);
     _pointerManager.free(strPtr);
@@ -69,7 +70,7 @@ class Basic implements IBasic {
       throw BasicException(TagionErrorCode.fromInt(result), _errorMessage.getErrorText());
     }
 
-    String resultString = _pointerManager.pointerToString(strPtr, strLenPtr.value);
+    String resultString = strPtr[0].toDartString(length: strLenPtr.value);
 
     _pointerManager.free(strPtr);
     _pointerManager.free(strLenPtr);
