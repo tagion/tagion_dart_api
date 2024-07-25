@@ -122,16 +122,4 @@ class PointerManager implements IPointerManager {
   void stringToPointer<T extends NativeType>(Pointer<T> pointer, String data) {
     uint8ListToPointer<T>(pointer, Uint8List.fromList(utf8.encode(data)));
   }
-
-  @override
-  String pointerToString<T extends NativeType>(Pointer<T> pointer, int length) {
-    final Pointer<Uint8> unit8Pointer = pointer.cast<Uint8>();
-    final StringBuffer stringBuffer = StringBuffer();
-    final int typeSize = _sizeOf<T>();
-    for (var i = 0; i < length * typeSize; i++) {
-      stringBuffer.writeCharCode(unit8Pointer[i]);
-    }
-    String result = stringBuffer.toString();
-    return result;
-  }
 }
