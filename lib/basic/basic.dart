@@ -19,19 +19,13 @@ class Basic implements IBasic {
   @override
   bool startDRuntime() {
     int result = _basicFfi.start_rt();
-    if (result == DRuntimeResponse.success.index) {
-      return true;
-    }
-    return false;
+    return result == DRuntimeResponse.success.index;
   }
 
   @override
   bool stopDRuntime() {
     int result = _basicFfi.stop_rt();
-    if (result == DRuntimeResponse.success.index) {
-      return true;
-    }
-    return false;
+    return result == DRuntimeResponse.success.index;
   }
 
   @override
