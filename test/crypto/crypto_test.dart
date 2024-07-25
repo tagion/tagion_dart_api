@@ -73,21 +73,6 @@ void main() {
 
       when(() => mockCryptoFfi.tagion_generate_keypair(any(), any(), any(), any(), any(), any(), any(), any(), any()))
           .thenAnswer((invocation) {
-        final Pointer<Char> passphrasePtr = invocation.positionalArguments[0];
-        passphrase.split('').asMap().forEach((i, char) {
-          passphrasePtr[i] = char.codeUnitAt(0);
-        });
-
-        final Pointer<Char> pinCodePtr = invocation.positionalArguments[2];
-        pinCode.split('').asMap().forEach((i, char) {
-          pinCodePtr[i] = char.codeUnitAt(0);
-        });
-
-        final Pointer<Char> saltPtr = invocation.positionalArguments[5];
-        salt.split('').asMap().forEach((i, char) {
-          saltPtr[i] = char.codeUnitAt(0);
-        });
-
         final Pointer<Pointer<Uint8>> devicePinPtr = invocation.positionalArguments[7];
         devicePinPtr.value = malloc<Uint8>(devicePinBytes.length);
         for (var i = 0; i < devicePinBytes.length; i++) {
@@ -170,12 +155,7 @@ void main() {
       when(() => mockSecureNetVault.secureNetPtr).thenReturn(securenetPtr);
 
       when(() => mockCryptoFfi.tagion_decrypt_devicepin(any(), any(), any(), any(), any())).thenAnswer((invocation) {
-        final Pointer<Char> pinCodePtr = invocation.positionalArguments[0];
         final Pointer<Uint8> devicePinPtr = invocation.positionalArguments[2];
-
-        pinCode.split('').asMap().forEach((i, char) {
-          pinCodePtr[i] = char.codeUnitAt(0);
-        });
 
         for (var i = 0; i < devicePinBytes.length; i++) {
           devicePinPtr[i] = devicePinBytes[i];
@@ -242,13 +222,8 @@ void main() {
       when(() => mockPointerManager.allocate<Uint64>()).thenReturn(signedDataLenPtr);
 
       when(() => mockCryptoFfi.tagion_sign_message(any(), any(), any(), any(), any())).thenAnswer((invocation) {
-        final Pointer<Uint8> dataToSignPtr = invocation.positionalArguments[1];
         final Pointer<Pointer<Uint8>> signedDataPtr = invocation.positionalArguments[3];
         final Pointer<Uint64> signedDataLenPtr = invocation.positionalArguments[4];
-
-        for (var i = 0; i < dataToSign.length; i++) {
-          dataToSign[i] = dataToSignPtr[i];
-        }
 
         signedDataPtr.value = malloc<Uint8>(signedData.length);
         for (var i = 0; i < signedData.length; i++) {
