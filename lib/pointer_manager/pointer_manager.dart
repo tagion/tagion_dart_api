@@ -40,7 +40,7 @@ class PointerManager implements IPointerManager {
       case Char:
         return allocator<Char>(size).cast<T>();
       case const (Pointer<Char>):
-        return allocator<Pointer>().cast<T>();
+        return allocator<Pointer>(size).cast<T>();
       case HiBONT:
         return allocator<HiBONT>().cast<T>();
       case SecureNet:
