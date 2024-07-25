@@ -1,0 +1,6 @@
+output: ../lib/crypto/ffi/crypto_ffi.dart
+headers:
+  entry-points:
+    - ../lib/crypto/ffi/crypto.h
+name: CryptoFfi
+description: Dart API for using Crypto
