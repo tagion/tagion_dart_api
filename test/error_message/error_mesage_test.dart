@@ -30,36 +30,32 @@ void main() {
 
     test('GetErrorText returns the correct error text', () {
       // Allocate memory for the mocked error message
-      const msg = 'Mocked error message';
-      final Pointer<Char> msgPtr = malloc<Char>(msg.length);
+      const testValue = 'Mocked error message';
+      final Pointer<Pointer<Char>> msgPtr = malloc<Pointer<Char>>(1);
       final Pointer<Uint64> msgLenPtr = malloc<Uint64>(sizeOf<Uint64>());
 
       // Mock the PointerManager methods
-      when(() => mockPointerManager.allocate<Char>()).thenReturn(msgPtr);
+      when(() => mockPointerManager.allocate<Pointer<Char>>()).thenReturn(msgPtr);
       when(() => mockPointerManager.allocate<Uint64>()).thenReturn(msgLenPtr);
-      when(() => mockPointerManager.free<Char>(any())).thenReturn(null);
+      when(() => mockPointerManager.free<Pointer<Char>>(any())).thenReturn(null);
       when(() => mockPointerManager.free<Uint64>(any())).thenReturn(null);
 
       // Mock the FFI function call
       when(() => mockErrorMessageFfi.tagion_error_text(any(), any())).thenAnswer((invocation) {
-        final Pointer<Char> charPtr = invocation.positionalArguments[0];
-        final Pointer<Uint64> lengthPtr = invocation.positionalArguments[1];
-        for (var i = 0; i < msg.length; i++) {
-          charPtr[i] = msg.codeUnitAt(i);
-        }
-        lengthPtr.value = msg.length;
+        (invocation.positionalArguments[0] as Pointer<Pointer<Char>>)[0] = testValue.toNativeUtf8().cast<Char>();
+        (invocation.positionalArguments[1] as Pointer<Uint64>)[0] = testValue.length;
       });
 
       // Call the method
       final result = errorMessage.getErrorText();
 
       // Check the result
-      expect(result, msg);
+      expect(result, testValue);
 
       // Verify the interactions
-      verify(() => mockPointerManager.allocate<Char>()).called(1);
+      verify(() => mockPointerManager.allocate<Pointer<Char>>()).called(1);
       verify(() => mockPointerManager.allocate<Uint64>()).called(1);
-      verify(() => mockPointerManager.free<Char>(msgPtr)).called(1);
+      verify(() => mockPointerManager.free<Pointer<Char>>(msgPtr)).called(1);
       verify(() => mockPointerManager.free<Uint64>(msgLenPtr)).called(1);
     });
 
