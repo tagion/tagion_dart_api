@@ -581,9 +581,9 @@ void main() {
         final Pointer<Pointer<Char>> stringPtr = invocation.positionalArguments[1];
         final Pointer<Uint64> stringLenPtr = invocation.positionalArguments[2];
 
-        final pointerToChar = testValue.toNativeUtf8();
-        stringPtr.value = pointerToChar.cast();
-        stringLenPtr.value = testValue.length;
+        final pointerToChar = testValue.toNativeUtf8().cast<Char>();
+        stringPtr[0] = pointerToChar;
+        stringLenPtr[0] = testValue.length;
 
         return TagionErrorCode.none.value;
       });

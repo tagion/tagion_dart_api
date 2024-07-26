@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void tagion_error_text(const char* msg, uint64_t* msg_len);
+void tagion_error_text(const char** msg, uint64_t* msg_len);
 
 void tagion_clear_error();
 

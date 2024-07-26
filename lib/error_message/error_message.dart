@@ -19,12 +19,12 @@ class ErrorMessage implements IErrorMessage {
 
   @override
   String getErrorText() {
-    final msgPtr = _pointerManager.allocate<Char>();
+    final msgPtr = _pointerManager.allocate<Pointer<Char>>();
     final msgLenPtr = _pointerManager.allocate<Uint64>();
     // Call the FFI function
     _errorsMessageFfi.tagion_error_text(msgPtr, msgLenPtr);
     final int length = msgLenPtr.value;
-    final String result = msgPtr.toDartString(length: length);
+    final String result = msgPtr.value.toDartString(length: length);
     _pointerManager.free(msgPtr);
     _pointerManager.free(msgLenPtr);
     return result;

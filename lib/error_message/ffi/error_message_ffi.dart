@@ -21,7 +21,7 @@ class ErrorMessageFfi {
       : _lookup = lookup;
 
   void tagion_error_text(
-    ffi.Pointer<ffi.Char> msg,
+    ffi.Pointer<ffi.Pointer<ffi.Char>> msg,
     ffi.Pointer<ffi.Uint64> msg_len,
   ) {
     return _tagion_error_text(
@@ -32,10 +32,11 @@ class ErrorMessageFfi {
 
   late final _tagion_error_textPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Char>,
+          ffi.Void Function(ffi.Pointer<ffi.Pointer<ffi.Char>>,
               ffi.Pointer<ffi.Uint64>)>>('tagion_error_text');
   late final _tagion_error_text = _tagion_error_textPtr.asFunction<
-      void Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Uint64>)>();
+      void Function(
+          ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Uint64>)>();
 
   void tagion_clear_error() {
     return _tagion_clear_error();
