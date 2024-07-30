@@ -89,7 +89,6 @@ class Document implements IDocument {
     if (status != TagionErrorCode.none.value) {
       /// Free the memory.
       _pointerManager.free(dataPtr);
-
       _pointerManager.free(elementPtr);
       throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
@@ -139,6 +138,9 @@ class Document implements IDocument {
     final dataPtr = _pointerManager.allocate<Uint8>(_hibonBuffer.lengthInBytes);
     final textPtr = _pointerManager.allocate<Pointer<Char>>();
     final textLenPtr = _pointerManager.allocate<Uint64>();
+
+    /// Fill necessary pointers with data.
+    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
 
     int status = _documentFfi.tagion_document_get_text(
       dataPtr,
