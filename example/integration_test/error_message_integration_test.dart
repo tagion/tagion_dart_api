@@ -8,6 +8,11 @@ import 'package:tagion_dart_api/hibon/hibon.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
+void main() {
+  final DynamicLibrary dyLib = DynamicLibrary.process();
+  errorMessageIntegrationTest(dyLib);
+}
+
 void errorMessageIntegrationTest(DynamicLibrary dyLib) {
   group('ErrorMessage-DynamicLibrary Integration.', () {
     //create a ErrorMessage object
@@ -17,6 +22,8 @@ void errorMessageIntegrationTest(DynamicLibrary dyLib) {
 
     group('getErrorText -', () {
       test('is empty, when no errors', () {
+        // errorMessage.clearErrors();
+
         Hibon hibon = Hibon(HibonFfi(dyLib), errorMessage, pointerManager);
         hibon.init();
 
@@ -36,6 +43,8 @@ void errorMessageIntegrationTest(DynamicLibrary dyLib) {
       // });
     });
 
-    // test('clearErrors clears the error text', () {});
+    // test('clearErrors clears the error text', () {
+    //   // expect(errorText, '');
+    // });
   });
 }

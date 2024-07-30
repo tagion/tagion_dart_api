@@ -10,6 +10,11 @@ import 'package:tagion_dart_api/hibon/hibon.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
+void main() {
+  final DynamicLibrary dyLib = Platform.isAndroid ? DynamicLibrary.open('libtauonapi.so') : DynamicLibrary.process();
+  hibonIntegrationTest(dyLib);
+}
+
 void hibonIntegrationTest(DynamicLibrary dyLib) {
   group('Hibon-HibonFfi-DynamicLibrary Integration.', () {
     //create a dynamic library

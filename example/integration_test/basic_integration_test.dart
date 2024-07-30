@@ -10,6 +10,11 @@ import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
+void main() {
+  final DynamicLibrary dyLib = DynamicLibrary.process();
+  basicIntegrationTests(dyLib);
+}
+
 void basicIntegrationTests(DynamicLibrary dyLib) {
   group('Basic-BasicFfi-Binary Integration.', () {
     final BasicFfi basicFfi = BasicFfi(dyLib);
