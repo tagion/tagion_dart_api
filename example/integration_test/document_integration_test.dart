@@ -86,9 +86,6 @@ void main() {
       expect(yResult, pubKeyTestValue);
 
       /// "$msg": {}
-      const testIndex = 0;
-      const dartIndexTestValue = '@oRNYezjVGYOocg88DNaqrX-ORYYBysvM1loKTf7I9lc=';
-
       const msgKey = '\$msg';
       final msgElement = hibonDoc.getElementByKey(msgKey);
       final msgBuffer = msgElement.getSubDocument();
@@ -138,6 +135,9 @@ void main() {
         inBuffer,
       );
 
+      const testIndex = 0;
+      const dartIndexTestValue = '@oRNYezjVGYOocg88DNaqrX-ORYYBysvM1loKTf7I9lc=';
+      
       final element5 = inDoc.getElementByIndex(testIndex);
       Uint8List elementBinary = element5.getBinary();
 
