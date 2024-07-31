@@ -17,9 +17,6 @@ void main() {
 
 void hibonIntegrationTest(DynamicLibrary dyLib) {
   group('Hibon-HibonFfi-DynamicLibrary Integration.', () {
-    //create a dynamic library
-    final DynamicLibrary dyLib = Platform.isAndroid ? DynamicLibrary.open('libtauonapi.so') : DynamicLibrary.process();
-
     final ErrorMessageFfi errorMessageFfi = ErrorMessageFfi(dyLib);
     const IPointerManager pointerManager = PointerManager();
     IErrorMessage errorMessage = ErrorMessage(errorMessageFfi, pointerManager);
@@ -32,17 +29,13 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
       expect(() => hibon.init(), returnsNormally);
     });
 
-    // test('Hibon add string executed', () {
-    //   expect(() => hibon.addString('key', 'value'), returnsNormally);
-    // });
+    test('Hibon adds string', () {
+      expect(() => hibon.addString('key', 'value'), returnsNormally);
+    });
 
-    // test('Hibon get as string', () {
-    //   try {
-    //     String getAsStringResult = hibon.getAsString();
-    //     // expect(getAsStringResult, {'key': 'value'});
-    //   } on HibonException catch (e) {
-    //     expect(e.errorCode, TagionErrorCode.error);
-    //   }
-    // });
+    test('Hibon get as string', () {
+      String hibonAsString = hibon.getAsString();
+      expect(hibonAsString.contains('key') && hibonAsString.contains('value'), true);
+    });
   });
 }
