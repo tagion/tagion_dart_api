@@ -4,3 +4,7 @@ git pull
 git rebase main  "$branchName"
 git push --force
 git pull
+
+# case: 
+# local main is behind remote main, so that we can check that the pull and checkout work properly
+# the target branch exists on remote, so that we can check that after the task the remote branch is also rebased onto main
