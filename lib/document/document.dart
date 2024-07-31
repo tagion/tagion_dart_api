@@ -45,7 +45,7 @@ class Document implements IDocument {
     _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
     _pointerManager.stringToPointer<Char>(keyPtr, key);
 
-    int status = _documentFfi.tagion_document(
+    int status = _documentFfi.tagion_document_element_by_key(
       dataPtr,
       dataLen,
       keyPtr,
@@ -83,7 +83,7 @@ class Document implements IDocument {
     /// Fill necessary pointers with data.
     _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
 
-    int status = _documentFfi.tagion_document_array(
+    int status = _documentFfi.tagion_document_element_by_index(
       dataPtr,
       dataLen,
       index,
