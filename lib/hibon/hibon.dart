@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:tagion_dart_api/document/document.dart';
 import 'package:tagion_dart_api/document/document_interface.dart';
+import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/hibon_string_format.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
@@ -12,6 +13,7 @@ import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/hibon/hibon_interface.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
+import 'package:tagion_dart_api/utils/ffi_library_util.dart';
 
 class Hibon implements IHibon {
   final HibonFfi _hibonFfi;
@@ -145,9 +147,15 @@ class Hibon implements IHibon {
 
     _pointerManager.free(bufferPtr);
     _pointerManager.free(bufferLenPtr);
+
     /// TODO: Implement the locator class.
     /// It is necessary create the Document via locator with injected dependencies.
-    return Document(buffer);
+    return Document(
+      DocumentFfi(FFILibraryUtil.load()),
+      _pointerManager,
+      _errorMessage,
+      buffer,
+    );
   }
 
   @override
