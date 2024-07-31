@@ -30,7 +30,9 @@ class Hibon implements IHibon {
   @override
   void addString(String key, String value) {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    _pointerManager.stringToPointer(keyPtr, key);
     final Pointer<Char> valuePtr = _pointerManager.allocate<Char>(value.length);
+    _pointerManager.stringToPointer(valuePtr, value);
 
     final int addStringResult =
         _hibonFfi.tagion_hibon_add_string(_hibonPtr, keyPtr, key.length, valuePtr, value.length);
