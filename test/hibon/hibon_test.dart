@@ -47,9 +47,9 @@ void main() {
       when(() => mockPointerManager.allocate<Char>(any())).thenReturn(malloc<Char>());
       when(() => mockHibonFfi.tagion_hibon_add_string(any(), any(), any(), any(), any()))
           .thenAnswer((_) => TagionErrorCode.none.value);
-      when(() => mockPointerManager.free<Char>(any())).thenAnswer((_) {});
+      when(() => mockPointerManager.free(any())).thenAnswer((_) {});
       expect(() => hibon.addString('key', 'value'), returnsNormally);
-      verify(() => mockPointerManager.free<Char>(any())).called(2);
+      verify(() => mockPointerManager.free(any())).called(2);
 
       when(() => mockHibonFfi.tagion_hibon_add_string(any(), any(), any(), any(), any()))
           .thenAnswer((_) => TagionErrorCode.error.value);
@@ -59,7 +59,7 @@ void main() {
       } on HibonException catch (e) {
         expect(e.errorCode, TagionErrorCode.error);
       }
-      verify(() => mockPointerManager.free<Char>(any())).called(2);
+      verify(() => mockPointerManager.free(any())).called(2);
     });
 
     test('Get hibon as string', () {
@@ -78,11 +78,11 @@ void main() {
 
         return TagionErrorCode.none.value;
       });
-      when(() => mockPointerManager.free<Char>(any())).thenAnswer((_) {});
-      when(() => mockPointerManager.free<Uint64>(any())).thenAnswer((_) {});
+      when(() => mockPointerManager.free(any())).thenAnswer((_) {});
+      when(() => mockPointerManager.free(any())).thenAnswer((_) {});
       expect(hibon.getAsString(), mockResponseString);
-      verify(() => mockPointerManager.free<Pointer<Char>>(any())).called(1);
-      verify(() => mockPointerManager.free<Uint64>(any())).called(1);
+      verify(() => mockPointerManager.free(any())).called(2);
+      
 
       when(() => mockHibonFfi.tagion_hibon_get_text(any(), any(), any(), any()))
           .thenAnswer((_) => TagionErrorCode.error.value);
@@ -92,8 +92,7 @@ void main() {
       } on HibonException catch (e) {
         expect(e.errorCode, TagionErrorCode.error);
       }
-      verify(() => mockPointerManager.free<Pointer<Char>>(any())).called(1);
-      verify(() => mockPointerManager.free<Uint64>(any())).called(1);
+      verify(() => mockPointerManager.free(any())).called(2);
     });
 
     test('Free hibon', () {
