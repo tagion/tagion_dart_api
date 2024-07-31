@@ -3,3 +3,4 @@ git pull
 git checkout main
 git rebase main  "$branchName"
 git push --force
+git pull
