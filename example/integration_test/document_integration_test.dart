@@ -18,9 +18,15 @@ import 'package:tagion_dart_api/utils/ffi_library_util.dart';
 void main() {
   final DynamicLibrary dyLib = FFILibraryUtil.load();
   BasicFfi basicFfi = BasicFfi(dyLib);
-  basicFfi.start_rt();
+  setUpAll(() {
+    basicFfi.start_rt();
+  });
+
   documentIntegrationTests(dyLib);
-  // basicFfi.stop_rt();
+
+  tearDownAll(() {
+    basicFfi.stop_rt();
+  });
 }
 
 void documentIntegrationTests(DynamicLibrary dyLib) {
