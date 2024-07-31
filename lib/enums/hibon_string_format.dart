@@ -1,5 +1,4 @@
 enum HibonAsStringFormat {
-  none,
   json,
   prettyJson,
   base64,
