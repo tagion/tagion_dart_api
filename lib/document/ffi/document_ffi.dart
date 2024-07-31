@@ -20,14 +20,14 @@ class DocumentFfi {
           lookup)
       : _lookup = lookup;
 
-  int tagion_document(
+  int tagion_document_element_by_key(
     ffi.Pointer<ffi.Uint8> buf,
     int buf_len,
     ffi.Pointer<ffi.Char> key,
     int key_len,
     ffi.Pointer<Element> element,
   ) {
-    return _tagion_document(
+    return _tagion_document_element_by_key(
       buf,
       buf_len,
       key,
@@ -36,17 +36,18 @@ class DocumentFfi {
     );
   }
 
-  late final _tagion_documentPtr = _lookup<
+  late final _tagion_document_element_by_keyPtr = _lookup<
       ffi.NativeFunction<
           ffi.Int32 Function(
               ffi.Pointer<ffi.Uint8>,
               ffi.Uint64,
               ffi.Pointer<ffi.Char>,
               ffi.Uint64,
-              ffi.Pointer<Element>)>>('tagion_document');
-  late final _tagion_document = _tagion_documentPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Char>, int,
-          ffi.Pointer<Element>)>();
+              ffi.Pointer<Element>)>>('tagion_document_element_by_key');
+  late final _tagion_document_element_by_key =
+      _tagion_document_element_by_keyPtr.asFunction<
+          int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Char>, int,
+              ffi.Pointer<Element>)>();
 
   int tagion_document_get_version(
     ffi.Pointer<ffi.Uint8> buf,
@@ -113,13 +114,13 @@ class DocumentFfi {
   late final _tagion_document_valid = _tagion_document_validPtr.asFunction<
       int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Int32>)>();
 
-  int tagion_document_array(
+  int tagion_document_element_by_index(
     ffi.Pointer<ffi.Uint8> buf,
     int buf_len,
     int index,
     ffi.Pointer<Element> element,
   ) {
-    return _tagion_document_array(
+    return _tagion_document_element_by_index(
       buf,
       buf_len,
       index,
@@ -127,12 +128,14 @@ class DocumentFfi {
     );
   }
 
-  late final _tagion_document_arrayPtr = _lookup<
+  late final _tagion_document_element_by_indexPtr = _lookup<
       ffi.NativeFunction<
           ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Uint64, ffi.Uint64,
-              ffi.Pointer<Element>)>>('tagion_document_array');
-  late final _tagion_document_array = _tagion_document_arrayPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, int, ffi.Pointer<Element>)>();
+              ffi.Pointer<Element>)>>('tagion_document_element_by_index');
+  late final _tagion_document_element_by_index =
+      _tagion_document_element_by_indexPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.Uint8>, int, int, ffi.Pointer<Element>)>();
 
   int tagion_document_get_text(
     ffi.Pointer<ffi.Uint8> buf,
@@ -209,26 +212,26 @@ class DocumentFfi {
           int Function(ffi.Pointer<Element>, ffi.Pointer<ffi.Pointer<ffi.Char>>,
               ffi.Pointer<ffi.Uint64>)>();
 
-  int tagion_document_get_binary(
+  int tagion_document_get_u8_array(
     ffi.Pointer<Element> element,
     ffi.Pointer<ffi.Pointer<ffi.Uint8>> buf,
     ffi.Pointer<ffi.Uint64> buf_len,
   ) {
-    return _tagion_document_get_binary(
+    return _tagion_document_get_u8_array(
       element,
       buf,
       buf_len,
     );
   }
 
-  late final _tagion_document_get_binaryPtr = _lookup<
+  late final _tagion_document_get_u8_arrayPtr = _lookup<
       ffi.NativeFunction<
           ffi.Int32 Function(
               ffi.Pointer<Element>,
               ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
-              ffi.Pointer<ffi.Uint64>)>>('tagion_document_get_binary');
-  late final _tagion_document_get_binary =
-      _tagion_document_get_binaryPtr.asFunction<
+              ffi.Pointer<ffi.Uint64>)>>('tagion_document_get_u8_array');
+  late final _tagion_document_get_u8_array =
+      _tagion_document_get_u8_arrayPtr.asFunction<
           int Function(ffi.Pointer<Element>,
               ffi.Pointer<ffi.Pointer<ffi.Uint8>>, ffi.Pointer<ffi.Uint64>)>();
 
