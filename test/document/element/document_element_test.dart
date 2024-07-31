@@ -64,8 +64,7 @@ void main() {
 
         return TagionErrorCode.none.value;
       });
-      when(() => mockPointerManager.free(bigIntPtr)).thenReturn(null);
-      when(() => mockPointerManager.free(bigIntLenPtr)).thenReturn(null);
+      when(() => mockPointerManager.free(any())).thenReturn(null);
 
       // Act
       final result = documentElement.getBigInt();

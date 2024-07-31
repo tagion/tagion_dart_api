@@ -79,10 +79,8 @@ void main() {
         return TagionErrorCode.none.value;
       });
       when(() => mockPointerManager.free(any())).thenAnswer((_) {});
-      when(() => mockPointerManager.free(any())).thenAnswer((_) {});
       expect(hibon.getAsString(), mockResponseString);
       verify(() => mockPointerManager.free(any())).called(2);
-      
 
       when(() => mockHibonFfi.tagion_hibon_get_text(any(), any(), any(), any()))
           .thenAnswer((_) => TagionErrorCode.error.value);

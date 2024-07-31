@@ -38,7 +38,6 @@ void main() {
       when(() => mockPointerManager.allocate<Pointer<Char>>()).thenReturn(msgPtr);
       when(() => mockPointerManager.allocate<Uint64>()).thenReturn(msgLenPtr);
       when(() => mockPointerManager.free(any())).thenReturn(null);
-      when(() => mockPointerManager.free(any())).thenReturn(null);
 
       // Mock the FFI function call
       when(() => mockErrorMessageFfi.tagion_error_text(any(), any())).thenAnswer((invocation) {

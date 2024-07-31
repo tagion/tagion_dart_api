@@ -75,8 +75,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(keyPtr)).thenReturn(null);
-      when(() => mockPointerManager.free(elementPtr)).thenReturn(null);
+      when(() => mockPointerManager.free(any())).thenReturn(null);
 
       // Act
       final result = document.getElementByKey(key);
@@ -153,7 +152,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(elementPtr)).thenReturn(null);
+      when(() => mockPointerManager.free(any())).thenReturn(null);
 
       // Act
       final result = document.getElementByIndex(index);
@@ -219,7 +218,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(dataPtr)).thenReturn(null);
+      when(() => mockPointerManager.free(any())).thenReturn(null);
       // Act
       final result = document.getVersion();
       // Assert
@@ -283,7 +282,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(dataPtr)).thenReturn(null);
+      when(() => mockPointerManager.free(any())).thenReturn(null);
       // Act
       final result = document.validate();
       // Assert
@@ -355,9 +354,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(dataPtr)).thenReturn(null);
-      when(() => mockPointerManager.free(textPtr)).thenReturn(null);
-      when(() => mockPointerManager.free(textLenPtr)).thenReturn(null);
+      when(() => mockPointerManager.free(any())).thenReturn(null);
       // Act
       final result = document.getAsString(textFormat);
       // Assert
@@ -432,9 +429,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(dataPtr)).thenReturn(null);
-      when(() => mockPointerManager.free(textPtr)).thenReturn(null);
-      when(() => mockPointerManager.free(textLenPtr)).thenReturn(null);
+      when(() => mockPointerManager.free(any())).thenReturn(null);
       // Act
       final result = document.getRecordName();
       // Assert
