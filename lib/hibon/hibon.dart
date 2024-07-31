@@ -107,12 +107,25 @@ class Hibon implements IHibon {
 
   @override
   void addBool(String key, bool value) {
-    // TODO: implement addBool
+    /// Allocate memory for the key.
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+
+    /// Write the key to the pointer.
+    _pointerManager.stringToPointer(keyPtr, key);
+
+    final int status = _hibonFfi.tagion_hibon_add_bool(_hibonPtr, keyPtr, key.length, value);
+
+    _pointerManager.free(keyPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
   }
 
   @override
-  void addBoolArray(String key, Uint8List array) {
-    // TODO: implement addBoolArray
+  IDocument getDocument() {
+    // TODO: implement getDocument
+    throw UnimplementedError();
   }
 
   @override
@@ -121,83 +134,146 @@ class Hibon implements IHibon {
   }
 
   @override
-  void addFloat32(String key, double value) {
-    // TODO: implement addFloat32
-  }
+  void addHibon(String key, IHibon hibon) {}
 
   @override
-  void addFloat32Array(String key, Float32List array) {
-    // TODO: implement addFloat32Array
+  void addFloat32(String key, double value) {
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    _pointerManager.stringToPointer(keyPtr, key);
+
+    final int status = _hibonFfi.tagion_hibon_add_float32(_hibonPtr, keyPtr, key.length, value);
+
+    _pointerManager.free(keyPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
   }
 
   @override
   void addFloat64(String key, double value) {
-    // TODO: implement addFloat64
-  }
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    _pointerManager.stringToPointer(keyPtr, key);
 
-  @override
-  void addFloat64Array(String key, Float64List array) {
-    // TODO: implement addFloat64Array
-  }
+    final int status = _hibonFfi.tagion_hibon_add_float64(_hibonPtr, keyPtr, key.length, value);
 
-  @override
-  void addHibon(String key, IHibon hibon) {
-    // TODO: implement addHibon
+    _pointerManager.free(keyPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
   }
 
   @override
   void addInt32(String key, int value) {
-    // TODO: implement addInt32
-  }
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    _pointerManager.stringToPointer(keyPtr, key);
 
-  @override
-  void addInt32Array(String key, Int32List array) {
-    // TODO: implement addInt32Array
+    final int status = _hibonFfi.tagion_hibon_add_int32(_hibonPtr, keyPtr, key.length, value);
+
+    _pointerManager.free(keyPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
   }
 
   @override
   void addInt64(String key, int value) {
-    // TODO: implement addInt64
-  }
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    _pointerManager.stringToPointer(keyPtr, key);
 
-  @override
-  void addInt64Array(String key, Int64List array) {
-    // TODO: implement addInt64Array
-  }
+    final int status = _hibonFfi.tagion_hibon_add_int64(_hibonPtr, keyPtr, key.length, value);
 
-  @override
-  void addTime(String key, int time) {
-    // TODO: implement addTime
+    _pointerManager.free(keyPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
   }
 
   @override
   void addUint32(String key, int value) {
-    // TODO: implement addUint32
-  }
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    _pointerManager.stringToPointer(keyPtr, key);
 
-  @override
-  void addUint32Array(String key, Uint32List array) {
-    // TODO: implement addUint32Array
+    final int status = _hibonFfi.tagion_hibon_add_uint32(_hibonPtr, keyPtr, key.length, value);
+
+    _pointerManager.free(keyPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
   }
 
   @override
   void addUint64(String key, int value) {
-    // TODO: implement addUint64
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    _pointerManager.stringToPointer(keyPtr, key);
+
+    final int status = _hibonFfi.tagion_hibon_add_uint64(_hibonPtr, keyPtr, key.length, value);
+
+    _pointerManager.free(keyPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
   }
 
   @override
-  void addUint64Array(String key, Uint64List buf) {
-    // TODO: implement addUint64Array
+  void addTypedArray<T>(String key, Uint8List array) {
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    final Pointer<Uint8> arrayPtr = _pointerManager.allocate<Uint8>(array.length);
+
+    _pointerManager.stringToPointer(keyPtr, key);
+    _pointerManager.uint8ListToPointer(arrayPtr, array);
+
+    int status = 0;
+    switch (T) {
+      case Float32List:
+        status = _hibonFfi.tagion_hibon_add_array_float32(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        break;
+      case Float64List:
+        status = _hibonFfi.tagion_hibon_add_array_float64(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        break;
+      case Int32List:
+        status = _hibonFfi.tagion_hibon_add_array_int32(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        break;
+      case Int64List:
+        status = _hibonFfi.tagion_hibon_add_array_int64(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        break;
+      case Uint32List:
+        status = _hibonFfi.tagion_hibon_add_array_uint32(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        break;
+      case Uint64List:
+        status = _hibonFfi.tagion_hibon_add_array_uint64(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        break;
+      case Uint8List:
+        status = _hibonFfi.tagion_hibon_add_binary(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        break;
+      default:
+        throw Exception('Unsupported type');
+    }
+
+    _pointerManager.free(keyPtr);
+    _pointerManager.free(arrayPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
   }
 
   @override
-  void addUint8Array(String key, Uint8List array) {
-    // TODO: implement addUint8Array
-  }
+  void addTime(String key, int time) {
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    _pointerManager.stringToPointer(keyPtr, key);
 
-  @override
-  IDocument getDocument() {
-    // TODO: implement getDocument
-    throw UnimplementedError();
+    final int status = _hibonFfi.tagion_hibon_add_time(_hibonPtr, keyPtr, key.length, time);
+
+    _pointerManager.free(keyPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
   }
 }
