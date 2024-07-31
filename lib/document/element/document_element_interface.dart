@@ -8,7 +8,7 @@ abstract interface class IDocumentElement {
   String getString();
 
   /// Get a binary from a document.
-  Uint8List getBinary();
+  Uint8List getU8Array();
 
   /// Get a time from a document.
   int getTime();

@@ -37,8 +37,7 @@ void main() {
       // Mock the PointerManager methods
       when(() => mockPointerManager.allocate<Pointer<Char>>()).thenReturn(msgPtr);
       when(() => mockPointerManager.allocate<Uint64>()).thenReturn(msgLenPtr);
-      when(() => mockPointerManager.free<Pointer<Char>>(any())).thenReturn(null);
-      when(() => mockPointerManager.free<Uint64>(any())).thenReturn(null);
+      when(() => mockPointerManager.free(any())).thenReturn(null);
 
       // Mock the FFI function call
       when(() => mockErrorMessageFfi.tagion_error_text(any(), any())).thenAnswer((invocation) {
@@ -55,8 +54,8 @@ void main() {
       // Verify the interactions
       verify(() => mockPointerManager.allocate<Pointer<Char>>()).called(1);
       verify(() => mockPointerManager.allocate<Uint64>()).called(1);
-      verify(() => mockPointerManager.free<Pointer<Char>>(msgPtr)).called(1);
-      verify(() => mockPointerManager.free<Uint64>(msgLenPtr)).called(1);
+      verify(() => mockPointerManager.free(msgPtr)).called(1);
+      verify(() => mockPointerManager.free(msgLenPtr)).called(1);
     });
 
     test('clearErrors calls the correct FFI function', () {

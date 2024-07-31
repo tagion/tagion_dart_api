@@ -69,9 +69,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free<Uint8>(any())).thenReturn(null);
-      when(() => mockPointerManager.free<Pointer<Char>>(any())).thenReturn(null);
-      when(() => mockPointerManager.free<Uint64>(any())).thenReturn(null);
+      when(() => mockPointerManager.free(any())).thenReturn(null);
 
       // Act
       String result = basic.encodeBase64Url(textAsByteArray);
@@ -133,8 +131,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free<Pointer<Char>>(any())).thenReturn(null);
-      when(() => mockPointerManager.free<Uint64>(any())).thenReturn(null);
+      when(() => mockPointerManager.free(any())).thenReturn(null);
 
       // Act
       String result = basic.tagionRevision();

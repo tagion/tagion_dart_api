@@ -60,12 +60,12 @@ class DocumentElement implements IDocumentElement {
   }
 
   @override
-  Uint8List getBinary() {
+  Uint8List getU8Array() {
     /// Allocate memory for the binary and its length.
     final binaryPtr = _pointerManager.allocate<Pointer<Uint8>>();
     final binaryLenPtr = _pointerManager.allocate<Uint64>();
 
-    int status = _documentFfi.tagion_document_get_binary(_elementPtr, binaryPtr, binaryLenPtr);
+    int status = _documentFfi.tagion_document_get_u8_array(_elementPtr, binaryPtr, binaryLenPtr);
 
     if (status != TagionErrorCode.none.value) {
       /// Free the allocated pointers.

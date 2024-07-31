@@ -11,6 +11,7 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:tagion_dart_api/utils/ffi_library_util.dart';
 
 import 'basic_integration_test.dart';
+import 'document_integration_test.dart';
 import 'error_message_integration_test.dart';
 import 'hibon_integration_test.dart';
 
@@ -32,6 +33,8 @@ void main() {
     basicIntegrationTests(dyLib);
     errorMessageIntegrationTest(dyLib);
     hibonIntegrationTest(dyLib);
+    documentIntegrationTests(dyLib);
+    
 
     test('D runtime stopped', () {
       final bool stopDRuntimeResult = basic.stopDRuntime();
