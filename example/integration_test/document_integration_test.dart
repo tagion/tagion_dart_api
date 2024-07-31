@@ -17,7 +17,10 @@ import 'package:tagion_dart_api/utils/ffi_library_util.dart';
 
 void main() {
   final DynamicLibrary dyLib = FFILibraryUtil.load();
+  BasicFfi basicFfi = BasicFfi(dyLib);
+  basicFfi.start_rt();
   documentIntegrationTests(dyLib);
+  // basicFfi.stop_rt();
 }
 
 void documentIntegrationTests(DynamicLibrary dyLib) {
@@ -82,7 +85,7 @@ void documentIntegrationTests(DynamicLibrary dyLib) {
       const pubKeyTestValue = '@Axrmj0vbt69tlh3fdydrhKrhwb_wOKhPYPXGuasS-Sa8';
 
       final yElement = hibonDoc.getElementByKey(yKey);
-      Uint8List yElementBinary = yElement.getBinary();
+      Uint8List yElementBinary = yElement.getU8Array();
       String yResult = basic.encodeBase64Url(yElementBinary);
       expect(yResult, pubKeyTestValue);
 
@@ -140,7 +143,7 @@ void documentIntegrationTests(DynamicLibrary dyLib) {
       const dartIndexTestValue = '@oRNYezjVGYOocg88DNaqrX-ORYYBysvM1loKTf7I9lc=';
 
       final element5 = inDoc.getElementByIndex(testIndex);
-      Uint8List elementBinary = element5.getBinary();
+      Uint8List elementBinary = element5.getU8Array();
 
       String dartIndexResult = basic.encodeBase64Url(elementBinary);
       expect(dartIndexResult, dartIndexTestValue);

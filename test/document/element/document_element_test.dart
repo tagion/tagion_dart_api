@@ -120,7 +120,7 @@ void main() {
       when(() => mockPointerManager.allocate<Pointer<Uint8>>()).thenReturn(testDataPtr);
       when(() => mockPointerManager.allocate<Uint64>()).thenReturn(testDataLenPtr);
 
-      when(() => mockDocumentFfi.tagion_document_get_binary(any(), any(), any())).thenAnswer((invocation) {
+      when(() => mockDocumentFfi.tagion_document_get_u8_array(any(), any(), any())).thenAnswer((invocation) {
         final Pointer<Pointer<Uint8>> testDataPtr = invocation.positionalArguments[1];
         final Pointer<Uint64> testDataLenPtr = invocation.positionalArguments[2];
 
@@ -136,7 +136,7 @@ void main() {
       });
 
       // Act
-      final result = documentElement.getBinary();
+      final result = documentElement.getU8Array();
 
       // Assert
       expect(result, isA<Uint8List>());
@@ -145,7 +145,7 @@ void main() {
       // Verify
       verify(() => mockPointerManager.allocate<Pointer<Uint8>>()).called(1);
       verify(() => mockPointerManager.allocate<Uint64>()).called(1);
-      verify(() => mockDocumentFfi.tagion_document_get_binary(any(), any(), any())).called(1);
+      verify(() => mockDocumentFfi.tagion_document_get_u8_array(any(), any(), any())).called(1);
       verify(() => mockPointerManager.free(testDataPtr)).called(1);
       verify(() => mockPointerManager.free(testDataLenPtr)).called(1);
 
@@ -154,13 +154,13 @@ void main() {
       const errorMessage = "Error message";
       when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
 
-      when(() => mockDocumentFfi.tagion_document_get_binary(any(), any(), any())).thenAnswer((_) {
+      when(() => mockDocumentFfi.tagion_document_get_u8_array(any(), any(), any())).thenAnswer((_) {
         return TagionErrorCode.error.value;
       });
 
       // Act & Assert
       expect(
-        () => documentElement.getBinary(),
+        () => documentElement.getU8Array(),
         throwsA(isA<DocumentException>()
             .having(
               (e) => e.errorCode,
