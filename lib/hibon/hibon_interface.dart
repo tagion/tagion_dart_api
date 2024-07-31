@@ -1,7 +1,9 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:tagion_dart_api/document/document_interface.dart';
 import 'package:tagion_dart_api/enums/hibon_string_format.dart';
+import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 
 /// The interface for the Hibon (Hash invariant Binary Object Notation) object.
 /// Hibon is a binary format for storing data.
@@ -12,6 +14,8 @@ abstract class IHibon {
 
   /// It is necessary to call this method after using the Hibon object. It frees the memory allocated for the Hibon object.
   void free();
+
+  Pointer<HiBONT> getPointer();
 
   /// Adds a string to the Hibon object.
   void addString(String key, String value);

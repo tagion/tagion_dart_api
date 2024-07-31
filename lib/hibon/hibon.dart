@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
+import 'package:tagion_dart_api/document/document.dart';
 import 'package:tagion_dart_api/document/document_interface.dart';
 import 'package:tagion_dart_api/enums/hibon_string_format.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
@@ -24,6 +25,11 @@ class Hibon implements IHibon {
     this._pointerManager,
   ) {
     _hibonPtr = _pointerManager.allocate<HiBONT>();
+  }
+
+  @override
+  Pointer<HiBONT> getPointer() {
+    return _hibonPtr;
   }
 
   @override
@@ -124,17 +130,60 @@ class Hibon implements IHibon {
 
   @override
   IDocument getDocument() {
-    // TODO: implement getDocument
-    throw UnimplementedError();
+    final Pointer<Pointer<Uint8>> bufferPtr = _pointerManager.allocate<Pointer<Uint8>>();
+    final Pointer<Uint64> bufferLenPtr = _pointerManager.allocate<Uint64>();
+
+    final int status = _hibonFfi.tagion_hibon_get_document(_hibonPtr, bufferPtr, bufferLenPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      _pointerManager.free(bufferPtr);
+      _pointerManager.free(bufferLenPtr);
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    final Uint8List buffer = bufferPtr[0].asTypedList(bufferLenPtr.value);
+
+    _pointerManager.free(bufferPtr);
+    _pointerManager.free(bufferLenPtr);
+    /// TODO: Implement the locator class.
+    /// It is necessary create the Document via locator with injected dependencies.
+    return Document(buffer);
   }
 
   @override
   void addDocument(String key, IDocument document) {
-    // TODO: implement addDocument
+    final docData = document.getData();
+
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    final Pointer<Uint8> documentPtr = _pointerManager.allocate<Uint8>(docData.length);
+
+    _pointerManager.stringToPointer(keyPtr, key);
+    _pointerManager.uint8ListToPointer(documentPtr, docData);
+
+    final int status = _hibonFfi.tagion_hibon_add_document(_hibonPtr, keyPtr, key.length, documentPtr, docData.length);
+
+    _pointerManager.free(keyPtr);
+    _pointerManager.free(documentPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
   }
 
   @override
-  void addHibon(String key, IHibon hibon) {}
+  void addHibon(String key, IHibon hibon) {
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+
+    _pointerManager.stringToPointer(keyPtr, key);
+
+    final int status = _hibonFfi.tagion_hibon_add_hibon(_hibonPtr, keyPtr, key.length, hibon.getPointer());
+
+    _pointerManager.free(keyPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+  }
 
   @override
   void addFloat32(String key, double value) {
