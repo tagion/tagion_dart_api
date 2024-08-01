@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:tagion_dart_api/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/crypto/secure_net_vault.dart';
+import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/tagion_exception.dart';
@@ -20,7 +21,7 @@ class Crypto implements ICrypto {
   final CryptoFfi _cryptoFfi;
   final IPointerManager _pointerManager;
   final IErrorMessage _errorMessage;
-  final SecureNetVault _vault;
+  final ISecureNetVault _vault;
 
   const Crypto(
     this._cryptoFfi,
@@ -80,7 +81,7 @@ class Crypto implements ICrypto {
     }
 
     /// Get the values.
-    final devicePin = devicePinPtr.value.asTypedList(devicePinLenPtr.value);
+    final devicePin = devicePinPtr[0].asTypedList(devicePinLenPtr.value);
 
     /// Free memory.
     _pointerManager.zeroOutAndFree(passphrasePtr, passphraseLen);

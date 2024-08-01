@@ -5,7 +5,7 @@ import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tagion_dart_api/crypto/crypto.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
-import 'package:tagion_dart_api/crypto/secure_net_vault.dart';
+import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/exception/tagion_exception.dart';
@@ -19,7 +19,7 @@ class MockPointerManager extends Mock implements PointerManager {}
 
 class MockErrorMessage extends Mock implements ErrorMessage {}
 
-class MockSecureNetVault extends Mock implements SecureNetVault {}
+class MockSecureNetVault extends Mock implements ISecureNetVault {}
 
 void main() {
   group('Crypto', () {
