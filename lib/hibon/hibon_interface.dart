@@ -33,6 +33,14 @@ abstract class IHibon {
   void addHibon(String key, IHibon hibon);
 
   /// Adds a byte array to the Hibon object.
+  /// Supports:
+  /// - [Int32List]
+  /// - [Int64List]
+  /// - [Uint8List]
+  /// - [Uint32List]
+  /// - [Uint64List]
+  /// - [Float32List]
+  /// - [Float64List]
   void addTypedArray<T>(String key, Uint8List array);
 
   /// Adds a time to the Hibon object.
@@ -44,21 +52,17 @@ abstract class IHibon {
   /// Adds a bool to the Hibon object.
   void addBool(String key, bool value);
 
-  /// Adds an int32 to the Hibon object.
-  void addInt32(String key, int value);
-
-  /// Adds an int64 to the Hibon object.
-  void addInt64(String key, int value);
-
-  /// Adds a uint32 to the Hibon object.
-  void addUint32(String key, int value);
-
-  /// Adds a uint64 to the Hibon object.
-  void addUint64(String key, int value);
+  /// Adds an int to the Hibon object.
+  /// Supports:
+  /// - [Int32]
+  /// - [Int64]
+  /// - [Uint32]
+  /// - [Uint64]
+  void addInt<T>(String key, int value);
 
   /// Adds a float to the Hibon object.
-  void addFloat32(String key, double value);
-
-  /// Adds a double to the Hibon object.
-  void addFloat64(String key, double value);
+  /// Supports:
+  /// - [Float]
+  /// - [Double]
+  void addFloat<T>(String key, double value);
 }
