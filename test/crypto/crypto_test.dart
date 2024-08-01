@@ -8,7 +8,7 @@ import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
-import 'package:tagion_dart_api/exception/tagion_exception.dart';
+import 'package:tagion_dart_api/exception/crypto_exception.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:test/test.dart';
 
@@ -49,7 +49,7 @@ void main() {
       );
     });
 
-    test('generateKeypair returns the correct Uint8List and throws TagionException when an error occurs', () {
+    test('generateKeypair returns the correct Uint8List and throws CryptoException when an error occurs', () {
       // Arrange
       const passphrase = 'passphrase';
       const pinCode = 'pinCode';
@@ -120,7 +120,7 @@ void main() {
       // Act & Assert
       expect(
         () => crypto.generateKeypair(passphrase, pinCode, salt),
-        throwsA(isA<TagionException>()
+        throwsA(isA<CryptoException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -141,7 +141,7 @@ void main() {
       verify(() => mockPointerManager.free(devicePinLenPtr)).called(1);
     });
 
-    test('decryptDevicePin succeeds and throws TagionException when an error occurs', () {
+    test('decryptDevicePin succeeds and throws CryptoException when an error occurs', () {
       // Arrange
       const pinCode = 'pinCode';
       final devicePinBytes = Uint8List.fromList([1, 2, 3, 4, 5]);
@@ -188,7 +188,7 @@ void main() {
       // Act & Assert
       expect(
         () => crypto.decryptDevicePin(pinCode, devicePinBytes),
-        throwsA(isA<TagionException>()
+        throwsA(isA<CryptoException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -206,7 +206,7 @@ void main() {
       verify(() => mockPointerManager.zeroOutAndFree(devicePinPtr, devicePinBytes.length)).called(1);
     });
 
-    test('sign returns the correct Uint8List and throws TagionException when an error occurs', () {
+    test('sign returns the correct Uint8List and throws CryptoException when an error occurs', () {
       // Arrange
       final dataToSign = Uint8List.fromList([1, 2, 3, 4, 5]);
       final signedData = Uint8List.fromList([6, 7, 8, 9, 0]);
@@ -262,7 +262,7 @@ void main() {
       // Act & Assert
       expect(
         () => crypto.sign(dataToSign),
-        throwsA(isA<TagionException>()
+        throwsA(isA<CryptoException>()
             .having(
               (e) => e.errorCode,
               '',

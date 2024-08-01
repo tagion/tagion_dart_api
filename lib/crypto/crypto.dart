@@ -7,7 +7,7 @@ import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault.dart';
 import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
-import 'package:tagion_dart_api/exception/tagion_exception.dart';
+import 'package:tagion_dart_api/exception/crypto_exception.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// Crypto class.
@@ -32,7 +32,7 @@ class Crypto implements ICrypto {
 
   /// Generates a keypair.
   /// Returns a [Uint8List] device pin.
-  /// Throws a [TagionException] if an error occurs.
+  /// Throws a [CryptoException] if an error occurs.
   /// The [passphrase] parameter is a string.
   /// The [pinCode] parameter is a string.
   /// The [salt] parameter is a string.
@@ -77,7 +77,7 @@ class Crypto implements ICrypto {
       _pointerManager.free(devicePinPtr);
       _pointerManager.free(devicePinLenPtr);
 
-      throw TagionException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw CryptoException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the values.
@@ -94,7 +94,7 @@ class Crypto implements ICrypto {
   }
 
   /// Decrypts a device pin.
-  /// Throws a [TagionException] if an error occurs.
+  /// Throws a [CryptoException] if an error occurs.
   /// The [pinCode] parameter is a string.
   /// The [devicepin] parameter is a Uint8List.
   @override
@@ -125,13 +125,13 @@ class Crypto implements ICrypto {
 
     /// Check the status.
     if (status != TagionErrorCode.none.value) {
-      throw TagionException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw CryptoException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
   }
 
   /// Signs a given [Uint8List] typed list.
   /// Returns a signed data as a [Uint8List] typed list.
-  /// Throws a [TagionException] if an error occurs.
+  /// Throws a [CryptoException] if an error occurs.
   /// The [dataToSign] parameter is a Uint8List.
   @override
   Uint8List sign(Uint8List dataToSign) {
@@ -161,7 +161,7 @@ class Crypto implements ICrypto {
       _pointerManager.free(dataToSignPtr);
       _pointerManager.free(signaturePtr);
 
-      throw TagionException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw CryptoException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the values.
