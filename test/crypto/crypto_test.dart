@@ -7,17 +7,17 @@ import 'package:tagion_dart_api/crypto/crypto.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
-import 'package:tagion_dart_api/error_message/error_message.dart';
+import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/tagion_exception.dart';
-import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:test/test.dart';
 
 // Mock classes
 class MockCryptoFfi extends Mock implements CryptoFfi {}
 
-class MockPointerManager extends Mock implements PointerManager {}
+class MockPointerManager extends Mock implements IPointerManager {}
 
-class MockErrorMessage extends Mock implements ErrorMessage {}
+class MockErrorMessage extends Mock implements IErrorMessage {}
 
 class MockSecureNetVault extends Mock implements ISecureNetVault {}
 

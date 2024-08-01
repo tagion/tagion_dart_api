@@ -2,7 +2,6 @@ import 'dart:ffi';
 
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
-import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// A singleton class.
@@ -26,7 +25,7 @@ class SecureNetVault implements ISecureNetVault {
 
   static SecureNetVault? _instance;
 
-  factory SecureNetVault(PointerManager pointerManager) {
+  factory SecureNetVault(IPointerManager pointerManager) {
     _instance ??= SecureNetVault._(pointerManager);
     return _instance!;
   }
