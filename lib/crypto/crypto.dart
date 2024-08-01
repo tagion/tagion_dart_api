@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:tagion_dart_api/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
-import 'package:tagion_dart_api/crypto/secure_net_vault.dart';
+import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault.dart';
 import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
