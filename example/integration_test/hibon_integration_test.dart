@@ -1,5 +1,4 @@
 import 'dart:ffi';
-import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
@@ -47,6 +46,10 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
     test('Hibon get as string', () {
       String hibonAsString = hibon.getAsString();
       expect(hibonAsString.contains('key') && hibonAsString.contains('value'), true);
+    });
+
+    test('Hibon free', () {
+      expect(() => hibon.free(), returnsNormally);
     });
   });
 }
