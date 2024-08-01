@@ -223,34 +223,6 @@ class HibonFfi {
   late final _tagion_hibon_add_time = _tagion_hibon_add_timePtr.asFunction<
       int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int, int)>();
 
-  int tagion_hibon_add_bigint(
-    ffi.Pointer<HiBONT> instance,
-    ffi.Pointer<ffi.Char> key,
-    int key_len,
-    ffi.Pointer<ffi.Uint8> bigint_buf,
-    int bigint_buf_len,
-  ) {
-    return _tagion_hibon_add_bigint(
-      instance,
-      key,
-      key_len,
-      bigint_buf,
-      bigint_buf_len,
-    );
-  }
-
-  late final _tagion_hibon_add_bigintPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<HiBONT>,
-              ffi.Pointer<ffi.Char>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('tagion_hibon_add_bigint');
-  late final _tagion_hibon_add_bigint = _tagion_hibon_add_bigintPtr.asFunction<
-      int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
-          ffi.Pointer<ffi.Uint8>, int)>();
-
   int tagion_hibon_add_bool(
     ffi.Pointer<HiBONT> h,
     ffi.Pointer<ffi.Char> key,
@@ -271,35 +243,6 @@ class HibonFfi {
               ffi.Uint64, ffi.Bool)>>('tagion_hibon_add_bool');
   late final _tagion_hibon_add_bool = _tagion_hibon_add_boolPtr.asFunction<
       int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int, bool)>();
-
-  int tagion_hibon_add_array_bool(
-    ffi.Pointer<HiBONT> h,
-    ffi.Pointer<ffi.Char> key,
-    int key_len,
-    ffi.Pointer<ffi.Uint8> buf,
-    int buf_len,
-  ) {
-    return _tagion_hibon_add_array_bool(
-      h,
-      key,
-      key_len,
-      buf,
-      buf_len,
-    );
-  }
-
-  late final _tagion_hibon_add_array_boolPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<HiBONT>,
-              ffi.Pointer<ffi.Char>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('tagion_hibon_add_array_bool');
-  late final _tagion_hibon_add_array_bool =
-      _tagion_hibon_add_array_boolPtr.asFunction<
-          int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
-              ffi.Pointer<ffi.Uint8>, int)>();
 
   int tagion_hibon_add_int32(
     ffi.Pointer<HiBONT> h,
@@ -322,35 +265,6 @@ class HibonFfi {
   late final _tagion_hibon_add_int32 = _tagion_hibon_add_int32Ptr.asFunction<
       int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int, int)>();
 
-  int tagion_hibon_add_array_int32(
-    ffi.Pointer<HiBONT> h,
-    ffi.Pointer<ffi.Char> key,
-    int key_len,
-    ffi.Pointer<ffi.Uint8> buf,
-    int buf_len,
-  ) {
-    return _tagion_hibon_add_array_int32(
-      h,
-      key,
-      key_len,
-      buf,
-      buf_len,
-    );
-  }
-
-  late final _tagion_hibon_add_array_int32Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<HiBONT>,
-              ffi.Pointer<ffi.Char>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('tagion_hibon_add_array_int32');
-  late final _tagion_hibon_add_array_int32 =
-      _tagion_hibon_add_array_int32Ptr.asFunction<
-          int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
-              ffi.Pointer<ffi.Uint8>, int)>();
-
   int tagion_hibon_add_int64(
     ffi.Pointer<HiBONT> h,
     ffi.Pointer<ffi.Char> key,
@@ -371,35 +285,6 @@ class HibonFfi {
               ffi.Uint64, ffi.Int64)>>('tagion_hibon_add_int64');
   late final _tagion_hibon_add_int64 = _tagion_hibon_add_int64Ptr.asFunction<
       int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int, int)>();
-
-  int tagion_hibon_add_array_int64(
-    ffi.Pointer<HiBONT> h,
-    ffi.Pointer<ffi.Char> key,
-    int key_len,
-    ffi.Pointer<ffi.Uint8> buf,
-    int buf_len,
-  ) {
-    return _tagion_hibon_add_array_int64(
-      h,
-      key,
-      key_len,
-      buf,
-      buf_len,
-    );
-  }
-
-  late final _tagion_hibon_add_array_int64Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<HiBONT>,
-              ffi.Pointer<ffi.Char>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('tagion_hibon_add_array_int64');
-  late final _tagion_hibon_add_array_int64 =
-      _tagion_hibon_add_array_int64Ptr.asFunction<
-          int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
-              ffi.Pointer<ffi.Uint8>, int)>();
 
   int tagion_hibon_add_uint32(
     ffi.Pointer<HiBONT> h,
@@ -422,35 +307,6 @@ class HibonFfi {
   late final _tagion_hibon_add_uint32 = _tagion_hibon_add_uint32Ptr.asFunction<
       int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int, int)>();
 
-  int tagion_hibon_add_array_uint32(
-    ffi.Pointer<HiBONT> h,
-    ffi.Pointer<ffi.Char> key,
-    int key_len,
-    ffi.Pointer<ffi.Uint8> buf,
-    int buf_len,
-  ) {
-    return _tagion_hibon_add_array_uint32(
-      h,
-      key,
-      key_len,
-      buf,
-      buf_len,
-    );
-  }
-
-  late final _tagion_hibon_add_array_uint32Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<HiBONT>,
-              ffi.Pointer<ffi.Char>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('tagion_hibon_add_array_uint32');
-  late final _tagion_hibon_add_array_uint32 =
-      _tagion_hibon_add_array_uint32Ptr.asFunction<
-          int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
-              ffi.Pointer<ffi.Uint8>, int)>();
-
   int tagion_hibon_add_uint64(
     ffi.Pointer<HiBONT> h,
     ffi.Pointer<ffi.Char> key,
@@ -471,35 +327,6 @@ class HibonFfi {
               ffi.Uint64, ffi.Uint64)>>('tagion_hibon_add_uint64');
   late final _tagion_hibon_add_uint64 = _tagion_hibon_add_uint64Ptr.asFunction<
       int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int, int)>();
-
-  int tagion_hibon_add_array_uint64(
-    ffi.Pointer<HiBONT> h,
-    ffi.Pointer<ffi.Char> key,
-    int key_len,
-    ffi.Pointer<ffi.Uint8> buf,
-    int buf_len,
-  ) {
-    return _tagion_hibon_add_array_uint64(
-      h,
-      key,
-      key_len,
-      buf,
-      buf_len,
-    );
-  }
-
-  late final _tagion_hibon_add_array_uint64Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<HiBONT>,
-              ffi.Pointer<ffi.Char>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('tagion_hibon_add_array_uint64');
-  late final _tagion_hibon_add_array_uint64 =
-      _tagion_hibon_add_array_uint64Ptr.asFunction<
-          int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
-              ffi.Pointer<ffi.Uint8>, int)>();
 
   int tagion_hibon_add_float32(
     ffi.Pointer<HiBONT> h,
@@ -524,35 +351,6 @@ class HibonFfi {
           int Function(
               ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int, double)>();
 
-  int tagion_hibon_add_array_float32(
-    ffi.Pointer<HiBONT> h,
-    ffi.Pointer<ffi.Char> key,
-    int key_len,
-    ffi.Pointer<ffi.Uint8> buf,
-    int buf_len,
-  ) {
-    return _tagion_hibon_add_array_float32(
-      h,
-      key,
-      key_len,
-      buf,
-      buf_len,
-    );
-  }
-
-  late final _tagion_hibon_add_array_float32Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<HiBONT>,
-              ffi.Pointer<ffi.Char>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('tagion_hibon_add_array_float32');
-  late final _tagion_hibon_add_array_float32 =
-      _tagion_hibon_add_array_float32Ptr.asFunction<
-          int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
-              ffi.Pointer<ffi.Uint8>, int)>();
-
   int tagion_hibon_add_float64(
     ffi.Pointer<HiBONT> h,
     ffi.Pointer<ffi.Char> key,
@@ -575,35 +373,6 @@ class HibonFfi {
       _tagion_hibon_add_float64Ptr.asFunction<
           int Function(
               ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int, double)>();
-
-  int tagion_hibon_add_array_float64(
-    ffi.Pointer<HiBONT> h,
-    ffi.Pointer<ffi.Char> key,
-    int key_len,
-    ffi.Pointer<ffi.Uint8> buf,
-    int buf_len,
-  ) {
-    return _tagion_hibon_add_array_float64(
-      h,
-      key,
-      key_len,
-      buf,
-      buf_len,
-    );
-  }
-
-  late final _tagion_hibon_add_array_float64Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<HiBONT>,
-              ffi.Pointer<ffi.Char>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('tagion_hibon_add_array_float64');
-  late final _tagion_hibon_add_array_float64 =
-      _tagion_hibon_add_array_float64Ptr.asFunction<
-          int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
-              ffi.Pointer<ffi.Uint8>, int)>();
 
   int tagion_hibon_has_member(
     ffi.Pointer<HiBONT> h,

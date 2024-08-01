@@ -33,15 +33,7 @@ abstract class IHibon {
   void addHibon(String key, IHibon hibon);
 
   /// Adds a byte array to the Hibon object.
-  /// Supports:
-  /// - [Int32List]
-  /// - [Int64List]
-  /// - [Uint8List]
-  /// - [Uint32List]
-  /// - [Uint64List]
-  /// - [Float32List]
-  /// - [Float64List]
-  void addTypedArray<T>(String key, Uint8List array);
+  void addArray(String key, Uint8List array);
 
   /// Adds a time to the Hibon object.
   void addTime(String key, int time);
