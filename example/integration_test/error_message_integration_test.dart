@@ -29,31 +29,22 @@ void errorMessageIntegrationTest(DynamicLibrary dyLib) {
     const IPointerManager pointerManager = PointerManager();
     final ErrorMessage errorMessage = ErrorMessage(errorMessageFfi, pointerManager);
 
-    // group('getErrorText -', () {
-    // test('is empty, when no errors', () {
-    // errorMessage.clearErrors();
+    group('getErrorText', () {
+      test('is empty, when no errors', () {
+        String errorText = errorMessage.getErrorText();
+        expect(errorText, '');
+      });
 
-    // Hibon hibon = Hibon(HibonFfi(dyLib), errorMessage, pointerManager);
-    // hibon.init();
+      test('returns correct error text', () {
+        // run smth that will cause an error
+        // check that the error text returns the correct text
+      });
+    });
 
-    // String errorText = errorMessage.getErrorText();
-    // expect(errorText, '');
-    // });
-
-    // test('-returns correct error text', () {
-    //   Hibon hibon = Hibon(HibonFfi(dyLib));
-    //   try {
-    //     hibon.getAsString();
-    //   } on HibonException catch (e) {
-    //     expect(e.errorCode, TagionErrorCode.exception);
-    //   }
-    //   String errorText = errorMessage.getErrorText();
-    //   expect(errorText, '');
-    // });
+    test('clearErrors clears the error text', () {
+      // check that the error text returns same text as before
+      // clear error text
+      // check that the error text is empty
+    });
   });
-
-  // test('clearErrors clears the error text', () {
-  //   // expect(errorText, '');
-  // });
-  // });
 }
