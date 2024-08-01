@@ -2,8 +2,12 @@ import 'dart:ffi';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
+import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
+import 'package:tagion_dart_api/exception/hibon_exception.dart';
+import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
+import 'package:tagion_dart_api/hibon/hibon.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:tagion_dart_api/utils/ffi_library_util.dart';
@@ -29,22 +33,42 @@ void errorMessageIntegrationTest(DynamicLibrary dyLib) {
     const IPointerManager pointerManager = PointerManager();
     final ErrorMessage errorMessage = ErrorMessage(errorMessageFfi, pointerManager);
 
+    // Arrange
+    const TagionErrorCode errorCode = TagionErrorCode.error;
+    const String expectdErrorText = "Empty or none hibon instance";
+
     group('getErrorText', () {
-      test('is empty, when no errors', () {
+      test('returns an empty string, when no errors', () {
         String errorText = errorMessage.getErrorText();
         expect(errorText, '');
       });
 
-      test('returns correct error text', () {
-        // run smth that will cause an error
-        // check that the error text returns the correct text
+      test('returns a correct error text', () {
+        Hibon hibon = Hibon(HibonFfi(dyLib), errorMessage, const PointerManager());
+        expect(
+          () => hibon.getAsString(),
+          throwsA(isA<HibonException>()
+              .having(
+                (e) => e.errorCode,
+                '',
+                equals(errorCode),
+              )
+              .having(
+                (e) => e.message,
+                '',
+                equals(expectdErrorText),
+              )),
+        );
       });
     });
 
     test('clearErrors clears the error text', () {
-      // check that the error text returns same text as before
-      // clear error text
-      // check that the error text is empty
+      String errorText = errorMessage.getErrorText();
+      expect(errorText, errorText);
+
+      errorMessage.clearErrors();
+      errorText = errorMessage.getErrorText();
+      expect(errorText, '');
     });
   });
 }

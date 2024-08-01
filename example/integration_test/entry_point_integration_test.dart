@@ -34,7 +34,6 @@ void main() {
     errorMessageIntegrationTest(dyLib);
     hibonIntegrationTest(dyLib);
     documentIntegrationTests(dyLib);
-    
 
     test('D runtime stopped', () {
       final bool stopDRuntimeResult = basic.stopDRuntime();
