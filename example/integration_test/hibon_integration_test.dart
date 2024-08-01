@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
@@ -9,10 +10,20 @@ import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/hibon/hibon.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
+import 'package:tagion_dart_api/utils/ffi_library_util.dart';
 
 void main() {
-  final DynamicLibrary dyLib = Platform.isAndroid ? DynamicLibrary.open('libtauonapi.so') : DynamicLibrary.process();
+  final DynamicLibrary dyLib = FFILibraryUtil.load();
+  BasicFfi basicFfi = BasicFfi(dyLib);
+  setUpAll(() {
+    basicFfi.start_rt();
+  });
+
   hibonIntegrationTest(dyLib);
+
+  tearDownAll(() {
+    basicFfi.stop_rt();
+  });
 }
 
 void hibonIntegrationTest(DynamicLibrary dyLib) {
