@@ -65,4 +65,10 @@ abstract class IHibon {
   /// - [Float]
   /// - [Double]
   void addFloat<T>(String key, double value);
+
+  /// Checks if the Hibon object has a member with the given key.
+  bool hasMember(String key);
+
+  /// Removes a member from the Hibon object by key.
+  void removeByKey(String key);
 }

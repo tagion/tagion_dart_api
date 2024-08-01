@@ -25,8 +25,20 @@ class Hibon implements IHibon {
     this._hibonFfi,
     this._errorMessage,
     this._pointerManager,
-  ) {
+  );
+
+  @override
+  void init() {
     _hibonPtr = _pointerManager.allocate<HiBONT>();
+    final int createResult = _hibonFfi.tagion_hibon_create(_hibonPtr);
+    if (createResult != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(createResult), _errorMessage.getErrorText());
+    }
+  }
+
+  @override
+  void free() {
+    _hibonFfi.tagion_hibon_free(_hibonPtr);
   }
 
   @override
@@ -35,28 +47,26 @@ class Hibon implements IHibon {
   }
 
   @override
-  void init() {
-    final int createResult = _hibonFfi.tagion_hibon_create(_hibonPtr);
-    if (createResult != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(createResult), _errorMessage.getErrorText());
-    }
-  }
-
-  @override
   void addString(String key, String value) {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
-    _pointerManager.stringToPointer(keyPtr, key);
     final Pointer<Char> valuePtr = _pointerManager.allocate<Char>(value.length);
+
+    _pointerManager.stringToPointer(keyPtr, key);
     _pointerManager.stringToPointer(valuePtr, value);
 
-    final int addStringResult =
-        _hibonFfi.tagion_hibon_add_string(_hibonPtr, keyPtr, key.length, valuePtr, value.length);
+    int status = _hibonFfi.tagion_hibon_add_string(
+      _hibonPtr,
+      keyPtr,
+      key.length,
+      valuePtr,
+      value.length,
+    );
 
-    if (addStringResult != TagionErrorCode.none.value) {
+    if (status != TagionErrorCode.none.value) {
       _pointerManager.free(keyPtr);
       _pointerManager.free(valuePtr);
 
-      throw HibonException(TagionErrorCode.fromInt(addStringResult), _errorMessage.getErrorText());
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     _pointerManager.free(keyPtr);
@@ -68,7 +78,12 @@ class Hibon implements IHibon {
     final Pointer<Pointer<Char>> charArrayPtr = _pointerManager.allocate<Pointer<Char>>();
     final Pointer<Uint64> charArrayLenPtr = _pointerManager.allocate<Uint64>();
 
-    final int getTextResult = _hibonFfi.tagion_hibon_get_text(_hibonPtr, format.index, charArrayPtr, charArrayLenPtr);
+    final int getTextResult = _hibonFfi.tagion_hibon_get_text(
+      _hibonPtr,
+      format.index,
+      charArrayPtr,
+      charArrayLenPtr,
+    );
 
     if (getTextResult != TagionErrorCode.none.value) {
       _pointerManager.free(charArrayPtr);
@@ -85,11 +100,6 @@ class Hibon implements IHibon {
   }
 
   @override
-  void free() {
-    _hibonFfi.tagion_hibon_free(_hibonPtr);
-  }
-
-  @override
   void addBigint(String key, BigInt value) {
     /// Convert the BigInt value to a Uint8List.
     final Uint8List uint8ArrayValue = Uint8List.fromList(utf8.encode(value.toRadixString(16)));
@@ -102,7 +112,13 @@ class Hibon implements IHibon {
     _pointerManager.stringToPointer(keyPtr, key);
     _pointerManager.uint8ListToPointer(valuePtr, uint8ArrayValue);
 
-    int status = _hibonFfi.tagion_hibon_add_bigint(_hibonPtr, keyPtr, key.length, valuePtr, uint8ArrayValue.length);
+    int status = _hibonFfi.tagion_hibon_add_bigint(
+      _hibonPtr,
+      keyPtr,
+      key.length,
+      valuePtr,
+      uint8ArrayValue.length,
+    );
 
     _pointerManager.free(keyPtr);
     _pointerManager.free(valuePtr);
@@ -121,7 +137,12 @@ class Hibon implements IHibon {
     /// Write the key to the pointer.
     _pointerManager.stringToPointer(keyPtr, key);
 
-    final int status = _hibonFfi.tagion_hibon_add_bool(_hibonPtr, keyPtr, key.length, value);
+    final int status = _hibonFfi.tagion_hibon_add_bool(
+      _hibonPtr,
+      keyPtr,
+      key.length,
+      value,
+    );
 
     _pointerManager.free(keyPtr);
 
@@ -135,7 +156,11 @@ class Hibon implements IHibon {
     final Pointer<Pointer<Uint8>> bufferPtr = _pointerManager.allocate<Pointer<Uint8>>();
     final Pointer<Uint64> bufferLenPtr = _pointerManager.allocate<Uint64>();
 
-    final int status = _hibonFfi.tagion_hibon_get_document(_hibonPtr, bufferPtr, bufferLenPtr);
+    final int status = _hibonFfi.tagion_hibon_get_document(
+      _hibonPtr,
+      bufferPtr,
+      bufferLenPtr,
+    );
 
     if (status != TagionErrorCode.none.value) {
       _pointerManager.free(bufferPtr);
@@ -168,7 +193,13 @@ class Hibon implements IHibon {
     _pointerManager.stringToPointer(keyPtr, key);
     _pointerManager.uint8ListToPointer(documentPtr, docData);
 
-    final int status = _hibonFfi.tagion_hibon_add_document(_hibonPtr, keyPtr, key.length, documentPtr, docData.length);
+    final int status = _hibonFfi.tagion_hibon_add_document(
+      _hibonPtr,
+      keyPtr,
+      key.length,
+      documentPtr,
+      docData.length,
+    );
 
     _pointerManager.free(keyPtr);
     _pointerManager.free(documentPtr);
@@ -184,7 +215,12 @@ class Hibon implements IHibon {
 
     _pointerManager.stringToPointer(keyPtr, key);
 
-    final int status = _hibonFfi.tagion_hibon_add_hibon(_hibonPtr, keyPtr, key.length, hibon.getPointer());
+    final int status = _hibonFfi.tagion_hibon_add_hibon(
+      _hibonPtr,
+      keyPtr,
+      key.length,
+      hibon.getPointer(),
+    );
 
     _pointerManager.free(keyPtr);
 
@@ -198,14 +234,24 @@ class Hibon implements IHibon {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
     _pointerManager.stringToPointer(keyPtr, key);
 
-    int status = 0;
+    int status;
 
     switch (T) {
       case Float:
-        status = _hibonFfi.tagion_hibon_add_float32(_hibonPtr, keyPtr, key.length, value);
+        status = _hibonFfi.tagion_hibon_add_float32(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          value,
+        );
         break;
       case Double:
-        status = _hibonFfi.tagion_hibon_add_float64(_hibonPtr, keyPtr, key.length, value);
+        status = _hibonFfi.tagion_hibon_add_float64(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          value,
+        );
         break;
       default:
         throw Exception('Unsupported type');
@@ -223,20 +269,40 @@ class Hibon implements IHibon {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
     _pointerManager.stringToPointer(keyPtr, key);
 
-    int status = 0;
+    int status;
 
     switch (T) {
       case Int32:
-        status = _hibonFfi.tagion_hibon_add_int32(_hibonPtr, keyPtr, key.length, value);
+        status = _hibonFfi.tagion_hibon_add_int32(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          value,
+        );
         break;
       case Int64:
-        status = _hibonFfi.tagion_hibon_add_int64(_hibonPtr, keyPtr, key.length, value);
+        status = _hibonFfi.tagion_hibon_add_int64(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          value,
+        );
         break;
       case Uint32:
-        status = _hibonFfi.tagion_hibon_add_uint32(_hibonPtr, keyPtr, key.length, value);
+        status = _hibonFfi.tagion_hibon_add_uint32(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          value,
+        );
         break;
       case Uint64:
-        status = _hibonFfi.tagion_hibon_add_uint64(_hibonPtr, keyPtr, key.length, value);
+        status = _hibonFfi.tagion_hibon_add_uint64(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          value,
+        );
         break;
       default:
         throw Exception('Unsupported type');
@@ -257,28 +323,71 @@ class Hibon implements IHibon {
     _pointerManager.stringToPointer(keyPtr, key);
     _pointerManager.uint8ListToPointer(arrayPtr, array);
 
-    int status = 0;
+    int status;
+
     switch (T) {
       case Int32List:
-        status = _hibonFfi.tagion_hibon_add_array_int32(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        status = _hibonFfi.tagion_hibon_add_array_int32(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          arrayPtr,
+          array.length,
+        );
         break;
       case Int64List:
-        status = _hibonFfi.tagion_hibon_add_array_int64(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        status = _hibonFfi.tagion_hibon_add_array_int64(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          arrayPtr,
+          array.length,
+        );
         break;
       case Uint8List:
-        status = _hibonFfi.tagion_hibon_add_binary(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        status = _hibonFfi.tagion_hibon_add_binary(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          arrayPtr,
+          array.length,
+        );
         break;
       case Uint32List:
-        status = _hibonFfi.tagion_hibon_add_array_uint32(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        status = _hibonFfi.tagion_hibon_add_array_uint32(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          arrayPtr,
+          array.length,
+        );
         break;
       case Uint64List:
-        status = _hibonFfi.tagion_hibon_add_array_uint64(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        status = _hibonFfi.tagion_hibon_add_array_uint64(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          arrayPtr,
+          array.length,
+        );
         break;
       case Float32List:
-        status = _hibonFfi.tagion_hibon_add_array_float32(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        status = _hibonFfi.tagion_hibon_add_array_float32(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          arrayPtr,
+          array.length,
+        );
         break;
       case Float64List:
-        status = _hibonFfi.tagion_hibon_add_array_float64(_hibonPtr, keyPtr, key.length, arrayPtr, array.length);
+        status = _hibonFfi.tagion_hibon_add_array_float64(
+          _hibonPtr,
+          keyPtr,
+          key.length,
+          arrayPtr,
+          array.length,
+        );
         break;
       default:
         throw Exception('Unsupported type');
@@ -297,7 +406,57 @@ class Hibon implements IHibon {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
     _pointerManager.stringToPointer(keyPtr, key);
 
-    final int status = _hibonFfi.tagion_hibon_add_time(_hibonPtr, keyPtr, key.length, time);
+    final int status = _hibonFfi.tagion_hibon_add_time(
+      _hibonPtr,
+      keyPtr,
+      key.length,
+      time,
+    );
+
+    _pointerManager.free(keyPtr);
+
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+  }
+
+  @override
+  bool hasMember(String key) {
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    final Pointer<Bool> resultPtr = _pointerManager.allocate<Bool>();
+    _pointerManager.stringToPointer(keyPtr, key);
+
+    final int status = _hibonFfi.tagion_hibon_has_member(
+      _hibonPtr,
+      keyPtr,
+      key.length,
+      resultPtr,
+    );
+
+    if (status != TagionErrorCode.none.value) {
+      _pointerManager.free(keyPtr);
+      _pointerManager.free(resultPtr);
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+
+    bool result = resultPtr.value;
+
+    _pointerManager.free(keyPtr);
+    _pointerManager.free(resultPtr);
+
+    return result;
+  }
+
+  @override
+  void removeByKey(String key) {
+    final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
+    _pointerManager.stringToPointer(keyPtr, key);
+
+    final int status = _hibonFfi.tagion_hibon_remove_by_key(
+      _hibonPtr,
+      keyPtr,
+      key.length,
+    );
 
     _pointerManager.free(keyPtr);
 

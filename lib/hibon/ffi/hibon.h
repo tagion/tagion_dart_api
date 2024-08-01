@@ -53,3 +53,7 @@ int32_t tagion_hibon_add_array_float32(const HiBONT* const h, const char* const 
 int32_t tagion_hibon_add_float64(const HiBONT* const h, const char* const key, const uint64_t key_len, double value);
 
 int32_t tagion_hibon_add_array_float64(const HiBONT* const h, const char* const key, const uint64_t key_len, uint8_t* buf, const uint64_t buf_len);
+
+int32_t tagion_hibon_has_member(const HiBONT* const h, const char* const key, const uint64_t key_len, bool* result);
+
+int32_t tagion_hibon_remove_by_key(const HiBONT* const h, const char* const key, const uint64_t key_len);

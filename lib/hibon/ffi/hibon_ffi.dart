@@ -604,6 +604,48 @@ class HibonFfi {
       _tagion_hibon_add_array_float64Ptr.asFunction<
           int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
               ffi.Pointer<ffi.Uint8>, int)>();
+
+  int tagion_hibon_has_member(
+    ffi.Pointer<HiBONT> h,
+    ffi.Pointer<ffi.Char> key,
+    int key_len,
+    ffi.Pointer<ffi.Bool> result,
+  ) {
+    return _tagion_hibon_has_member(
+      h,
+      key,
+      key_len,
+      result,
+    );
+  }
+
+  late final _tagion_hibon_has_memberPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>,
+              ffi.Uint64, ffi.Pointer<ffi.Bool>)>>('tagion_hibon_has_member');
+  late final _tagion_hibon_has_member = _tagion_hibon_has_memberPtr.asFunction<
+      int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
+          ffi.Pointer<ffi.Bool>)>();
+
+  int tagion_hibon_remove_by_key(
+    ffi.Pointer<HiBONT> h,
+    ffi.Pointer<ffi.Char> key,
+    int key_len,
+  ) {
+    return _tagion_hibon_remove_by_key(
+      h,
+      key,
+      key_len,
+    );
+  }
+
+  late final _tagion_hibon_remove_by_keyPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>,
+              ffi.Uint64)>>('tagion_hibon_remove_by_key');
+  late final _tagion_hibon_remove_by_key =
+      _tagion_hibon_remove_by_keyPtr.asFunction<
+          int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int)>();
 }
 
 final class __mbstate_t extends ffi.Union {
