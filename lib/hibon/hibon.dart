@@ -15,36 +15,33 @@ import 'package:tagion_dart_api/hibon/hibon_interface.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:tagion_dart_api/utils/ffi_library_util.dart';
 
+/// [_hibonPtr] is the pointer to the Hibon object.
 class Hibon implements IHibon {
   final HibonFfi _hibonFfi;
   final IErrorMessage _errorMessage;
   final IPointerManager _pointerManager;
+
   late final Pointer<HiBONT> _hibonPtr;
 
   Hibon(
     this._hibonFfi,
     this._errorMessage,
     this._pointerManager,
-  );
-
-  @override
-  void init() {
+  ) {
     _hibonPtr = _pointerManager.allocate<HiBONT>();
-    final int createResult = _hibonFfi.tagion_hibon_create(_hibonPtr);
-    if (createResult != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(createResult), _errorMessage.getErrorText());
+    int status = _hibonFfi.tagion_hibon_create(_hibonPtr);
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
   }
 
   @override
-  void free() {
+  void dispose() {
     _hibonFfi.tagion_hibon_free(_hibonPtr);
   }
 
   @override
-  Pointer<HiBONT> getPointer() {
-    return _hibonPtr;
-  }
+  Pointer<HiBONT> getPointer() => _hibonPtr;
 
   @override
   void addString(String key, String value) {
@@ -159,21 +156,19 @@ class Hibon implements IHibon {
   }
 
   @override
-  void addDocument(String key, IDocument document) {
-    final docData = document.getData();
-
+  void addDocumentBuffer(String key, Uint8List buffer) {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
-    final Pointer<Uint8> documentPtr = _pointerManager.allocate<Uint8>(docData.length);
+    final Pointer<Uint8> documentPtr = _pointerManager.allocate<Uint8>(buffer.length);
 
     _pointerManager.stringToPointer(keyPtr, key);
-    _pointerManager.uint8ListToPointer(documentPtr, docData);
+    _pointerManager.uint8ListToPointer(documentPtr, buffer);
 
     final int status = _hibonFfi.tagion_hibon_add_document(
       _hibonPtr,
       keyPtr,
       key.length,
       documentPtr,
-      docData.length,
+      buffer.length,
     );
 
     _pointerManager.free(keyPtr);
@@ -182,6 +177,11 @@ class Hibon implements IHibon {
     if (status != TagionErrorCode.none.value) {
       throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
+  }
+
+  @override
+  void addDocument(String key, IDocument document) {
+    addDocumentBuffer(key, document.getData());
   }
 
   @override
