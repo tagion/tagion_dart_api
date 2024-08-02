@@ -52,7 +52,7 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
       expect(() => hibon.addFloat<Double>('key8', 123.456), returnsNormally);
       expect(() => hibon.addTime('key9', 638578428038904150), returnsNormally);
       expect(() => hibon.addBigint('key10', BigInt.from(9223372036854775807)), returnsNormally);
-      expect(() => hibon.addArray('key11', Uint8List.fromList([1, 2, 3])), returnsNormally);
+      expect(() => hibon.addArrayByKey('key11', Uint8List.fromList([1, 2, 3])), returnsNormally);
     });
 
     test('Hibon adds values of all supported custom types', () {
@@ -60,13 +60,13 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
       final Hibon nestedHibon = Hibon(hibonFfi, errorMessage, pointerManager);
       nestedHibon.addString('key1', 'value');
 
-      expect(() => hibon.addHibon('key12', nestedHibon), returnsNormally);
+      expect(() => hibon.addHibonByKey('key12', nestedHibon), returnsNormally);
 
       /// Document test.
       final document = Document(DocumentFfi(dyLib), pointerManager, errorMessage, hibonBuffer);
 
-      expect(() => hibon.addDocument('key13', document), returnsNormally);
-      expect(() => hibon.addDocumentBuffer('key14', hibonBuffer), returnsNormally);
+      expect(() => hibon.addDocumentByKey('key13', document), returnsNormally);
+      expect(() => hibon.addDocumentBufferByKey('key14', hibonBuffer), returnsNormally);
     });
 
     test('Get hibon as a document', () {

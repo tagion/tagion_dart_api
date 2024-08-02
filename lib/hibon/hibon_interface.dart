@@ -24,17 +24,29 @@ abstract class IHibon {
   /// Gets a document from the Hibon object.
   IDocument getDocument();
 
-  /// Adds a document to the Hibon object.
-  void addDocument(String key, IDocument document);
+  /// Adds a document to the Hibon object by key.
+  void addDocumentByKey(String key, IDocument document);
 
-  /// Adds a document buffer to the Hibon object.
-  void addDocumentBuffer(String key, Uint8List buffer);
+  /// Adds a document to the Hibon object by index.
+  void addDocumentByIndex(int index, IDocument document);
 
-  /// Adds an inner Hibon object to the Hibon object.
-  void addHibon(String key, IHibon hibon);
+  /// Adds a document buffer to the Hibon object by key.
+  void addDocumentBufferByKey(String key, Uint8List buffer);
 
-  /// Adds a byte array to the Hibon object.
-  void addArray(String key, Uint8List array);
+  /// Adds a document buffer to the Hibon object by index.
+  void addDocumentBufferByIndex(int index, Uint8List buffer);
+
+  /// Adds an inner Hibon object to the Hibon object by key.
+  void addHibonByKey(String key, IHibon hibon);
+
+  /// Adds an inner Hibon object to the Hibon object by index.
+  void addHibonByIndex(int index, IHibon hibon);
+
+  /// Adds a byte array to the Hibon object by key.
+  void addArrayByKey(String key, Uint8List array);
+
+  /// Adds a byte array to the Hibon object by index.
+  void addArrayByIndex(int index, Uint8List array);
 
   /// Adds a time to the Hibon object.
   void addTime(String key, int time);
@@ -60,8 +72,14 @@ abstract class IHibon {
   void addFloat<T>(String key, double value);
 
   /// Checks if the Hibon object has a member with the given key.
-  bool hasMember(String key);
+  bool hasMemberByKey(String key);
+
+  /// Checks if the Hibon object has a member with the given index.
+  bool hasMemberByIndex(int index);
 
   /// Removes a member from the Hibon object by key.
   void removeByKey(String key);
+
+  /// Removes a member from the Hibon object by index.
+  void removeByIndex(int index);
 }

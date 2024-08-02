@@ -116,7 +116,7 @@ class Hibon implements IHibon, Finalizable {
 
   @override
   void addBigint(String key, BigInt value) {
-    addArray(key, Uint8List.fromList(utf8.encode(value.toRadixString(16))));
+    addArrayByKey(key, Uint8List.fromList(utf8.encode(value.toRadixString(16))));
   }
 
   @override
@@ -160,7 +160,7 @@ class Hibon implements IHibon, Finalizable {
   }
 
   @override
-  void addDocumentBuffer(String key, Uint8List buffer) {
+  void addDocumentBufferByKey(String key, Uint8List buffer) {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
     final Pointer<Uint8> documentPtr = _pointerManager.allocate<Uint8>(buffer.length);
 
@@ -179,12 +179,33 @@ class Hibon implements IHibon, Finalizable {
   }
 
   @override
-  void addDocument(String key, IDocument document) {
-    addDocumentBuffer(key, document.getData());
+  void addDocumentBufferByIndex(int index, Uint8List buffer) {
+    final Pointer<Uint8> documentPtr = _pointerManager.allocate<Uint8>(buffer.length);
+
+    _pointerManager.uint8ListToPointer(documentPtr, buffer);
+
+    final int status = _hibonFfi.tagion_hibon_add_index_document(
+      _hibonPtr,
+      index,
+      documentPtr,
+      buffer.length,
+    );
+
+    _checkStatusOrThrow<void>(status, () {}, [documentPtr]);
   }
 
   @override
-  void addHibon(String key, IHibon hibon) {
+  void addDocumentByKey(String key, IDocument document) {
+    addDocumentBufferByKey(key, document.getData());
+  }
+
+  @override
+  void addDocumentByIndex(int index, IDocument document) {
+    addDocumentBufferByIndex(index, document.getData());
+  }
+
+  @override
+  void addHibonByKey(String key, IHibon hibon) {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
 
     _pointerManager.stringToPointer(keyPtr, key);
@@ -197,6 +218,17 @@ class Hibon implements IHibon, Finalizable {
     );
 
     _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
+  }
+
+  @override
+  void addHibonByIndex(int index, IHibon hibon) {
+    final int status = _hibonFfi.tagion_hibon_add_index_hibon(
+      _hibonPtr,
+      index,
+      hibon.getPointer(),
+    );
+
+    _checkStatusOrThrow<void>(status, () {});
   }
 
   @override
@@ -278,7 +310,7 @@ class Hibon implements IHibon, Finalizable {
   }
 
   @override
-  void addArray(String key, Uint8List array) {
+  void addArrayByKey(String key, Uint8List array) {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
     final Pointer<Uint8> arrayPtr = _pointerManager.allocate<Uint8>(array.length);
 
@@ -297,6 +329,22 @@ class Hibon implements IHibon, Finalizable {
   }
 
   @override
+  void addArrayByIndex(int index, Uint8List array) {
+    final Pointer<Uint8> arrayPtr = _pointerManager.allocate<Uint8>(array.length);
+
+    _pointerManager.uint8ListToPointer(arrayPtr, array);
+
+    int status = _hibonFfi.tagion_hibon_add_index_binary(
+      _hibonPtr,
+      index,
+      arrayPtr,
+      array.length,
+    );
+
+    _checkStatusOrThrow<void>(status, () {}, [arrayPtr]);
+  }
+
+  @override
   void addTime(String key, int time) {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
     _pointerManager.stringToPointer(keyPtr, key);
@@ -312,7 +360,7 @@ class Hibon implements IHibon, Finalizable {
   }
 
   @override
-  bool hasMember(String key) {
+  bool hasMemberByKey(String key) {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
     final Pointer<Bool> resultPtr = _pointerManager.allocate<Bool>();
     _pointerManager.stringToPointer(keyPtr, key);
@@ -328,6 +376,19 @@ class Hibon implements IHibon, Finalizable {
   }
 
   @override
+  bool hasMemberByIndex(int index) {
+    final Pointer<Bool> resultPtr = _pointerManager.allocate<Bool>();
+
+    final int status = _hibonFfi.tagion_hibon_has_member_index(
+      _hibonPtr,
+      index,
+      resultPtr,
+    );
+
+    return _checkStatusOrThrow<bool>(status, () => resultPtr.value, [resultPtr]);
+  }
+
+  @override
   void removeByKey(String key) {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
     _pointerManager.stringToPointer(keyPtr, key);
@@ -339,5 +400,15 @@ class Hibon implements IHibon, Finalizable {
     );
 
     _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
+  }
+
+  @override
+  void removeByIndex(int index) {
+    final int status = _hibonFfi.tagion_hibon_remove_by_index(
+      _hibonPtr,
+      index,
+    );
+
+    _checkStatusOrThrow<void>(status, () {});
   }
 }

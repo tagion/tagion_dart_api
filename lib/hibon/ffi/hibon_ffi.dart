@@ -152,6 +152,32 @@ class HibonFfi {
           int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
               ffi.Pointer<ffi.Uint8>, int)>();
 
+  int tagion_hibon_add_index_document(
+    ffi.Pointer<HiBONT> instance,
+    int index,
+    ffi.Pointer<ffi.Uint8> buf,
+    int buf_len,
+  ) {
+    return _tagion_hibon_add_index_document(
+      instance,
+      index,
+      buf,
+      buf_len,
+    );
+  }
+
+  late final _tagion_hibon_add_index_documentPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(
+              ffi.Pointer<HiBONT>,
+              ffi.Int32,
+              ffi.Pointer<ffi.Uint8>,
+              ffi.Uint64)>>('tagion_hibon_add_index_document');
+  late final _tagion_hibon_add_index_document =
+      _tagion_hibon_add_index_documentPtr.asFunction<
+          int Function(
+              ffi.Pointer<HiBONT>, int, ffi.Pointer<ffi.Uint8>, int)>();
+
   int tagion_hibon_add_hibon(
     ffi.Pointer<HiBONT> instance,
     ffi.Pointer<ffi.Char> key,
@@ -173,6 +199,26 @@ class HibonFfi {
   late final _tagion_hibon_add_hibon = _tagion_hibon_add_hibonPtr.asFunction<
       int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
           ffi.Pointer<HiBONT>)>();
+
+  int tagion_hibon_add_index_hibon(
+    ffi.Pointer<HiBONT> instance,
+    int index,
+    ffi.Pointer<HiBONT> sub_instance,
+  ) {
+    return _tagion_hibon_add_index_hibon(
+      instance,
+      index,
+      sub_instance,
+    );
+  }
+
+  late final _tagion_hibon_add_index_hibonPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(ffi.Pointer<HiBONT>, ffi.Int32,
+              ffi.Pointer<HiBONT>)>>('tagion_hibon_add_index_hibon');
+  late final _tagion_hibon_add_index_hibon =
+      _tagion_hibon_add_index_hibonPtr.asFunction<
+          int Function(ffi.Pointer<HiBONT>, int, ffi.Pointer<HiBONT>)>();
 
   int tagion_hibon_add_binary(
     ffi.Pointer<HiBONT> instance,
@@ -201,6 +247,32 @@ class HibonFfi {
   late final _tagion_hibon_add_binary = _tagion_hibon_add_binaryPtr.asFunction<
       int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
           ffi.Pointer<ffi.Uint8>, int)>();
+
+  int tagion_hibon_add_index_binary(
+    ffi.Pointer<HiBONT> instance,
+    int index,
+    ffi.Pointer<ffi.Uint8> buf,
+    int buf_len,
+  ) {
+    return _tagion_hibon_add_index_binary(
+      instance,
+      index,
+      buf,
+      buf_len,
+    );
+  }
+
+  late final _tagion_hibon_add_index_binaryPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(
+              ffi.Pointer<HiBONT>,
+              ffi.Int32,
+              ffi.Pointer<ffi.Uint8>,
+              ffi.Uint64)>>('tagion_hibon_add_index_binary');
+  late final _tagion_hibon_add_index_binary =
+      _tagion_hibon_add_index_binaryPtr.asFunction<
+          int Function(
+              ffi.Pointer<HiBONT>, int, ffi.Pointer<ffi.Uint8>, int)>();
 
   int tagion_hibon_add_time(
     ffi.Pointer<HiBONT> instance,
@@ -396,6 +468,26 @@ class HibonFfi {
       int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int,
           ffi.Pointer<ffi.Bool>)>();
 
+  int tagion_hibon_has_member_index(
+    ffi.Pointer<HiBONT> h,
+    int index,
+    ffi.Pointer<ffi.Bool> result,
+  ) {
+    return _tagion_hibon_has_member_index(
+      h,
+      index,
+      result,
+    );
+  }
+
+  late final _tagion_hibon_has_member_indexPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(ffi.Pointer<HiBONT>, ffi.Int32,
+              ffi.Pointer<ffi.Bool>)>>('tagion_hibon_has_member_index');
+  late final _tagion_hibon_has_member_index =
+      _tagion_hibon_has_member_indexPtr.asFunction<
+          int Function(ffi.Pointer<HiBONT>, int, ffi.Pointer<ffi.Bool>)>();
+
   int tagion_hibon_remove_by_key(
     ffi.Pointer<HiBONT> h,
     ffi.Pointer<ffi.Char> key,
@@ -415,6 +507,23 @@ class HibonFfi {
   late final _tagion_hibon_remove_by_key =
       _tagion_hibon_remove_by_keyPtr.asFunction<
           int Function(ffi.Pointer<HiBONT>, ffi.Pointer<ffi.Char>, int)>();
+
+  int tagion_hibon_remove_by_index(
+    ffi.Pointer<HiBONT> h,
+    int index,
+  ) {
+    return _tagion_hibon_remove_by_index(
+      h,
+      index,
+    );
+  }
+
+  late final _tagion_hibon_remove_by_indexPtr = _lookup<
+          ffi
+          .NativeFunction<ffi.Int32 Function(ffi.Pointer<HiBONT>, ffi.Int32)>>(
+      'tagion_hibon_remove_by_index');
+  late final _tagion_hibon_remove_by_index = _tagion_hibon_remove_by_indexPtr
+      .asFunction<int Function(ffi.Pointer<HiBONT>, int)>();
 }
 
 final class __mbstate_t extends ffi.Union {
