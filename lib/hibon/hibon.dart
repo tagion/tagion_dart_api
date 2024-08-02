@@ -23,6 +23,8 @@ class Hibon implements IHibon {
 
   late final Pointer<HiBONT> _hibonPtr;
 
+  /// Throws a [HibonException] if the operation is not successful.
+  /// Allocates [_hibonPtr] for the Hibon object.
   Hibon(
     this._hibonFfi,
     this._errorMessage,
@@ -32,6 +34,29 @@ class Hibon implements IHibon {
     int status = _hibonFfi.tagion_hibon_create(_hibonPtr);
     if (status != TagionErrorCode.none.value) {
       throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+  }
+
+  /// Checks the status of the operation and throws an exception if it is not successful.
+  /// If the operation is successful, returns the result of the [onDone] function.
+  /// Guarantees freeing the memory of the pointers in the [ptrs] list.
+  T _checkStatusOrThrow<T>(
+    int status,
+    T Function() onDone, [
+    List<Pointer> ptrs = const [],
+  ]) {
+    try {
+      if (status != TagionErrorCode.none.value) {
+        throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      }
+      return onDone();
+    } catch (_) {
+      rethrow;
+    } finally {
+      /// Loop through pointers list and free the memory.
+      for (var ptr in ptrs) {
+        _pointerManager.free(ptr);
+      }
     }
   }
 
@@ -59,15 +84,7 @@ class Hibon implements IHibon {
       value.length,
     );
 
-    if (status != TagionErrorCode.none.value) {
-      _pointerManager.free(keyPtr);
-      _pointerManager.free(valuePtr);
-
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    _pointerManager.free(keyPtr);
-    _pointerManager.free(valuePtr);
+    _checkStatusOrThrow<void>(status, () {}, [keyPtr, valuePtr]);
   }
 
   @override
@@ -75,25 +92,18 @@ class Hibon implements IHibon {
     final Pointer<Pointer<Char>> charArrayPtr = _pointerManager.allocate<Pointer<Char>>();
     final Pointer<Uint64> charArrayLenPtr = _pointerManager.allocate<Uint64>();
 
-    final int getTextResult = _hibonFfi.tagion_hibon_get_text(
+    int status = _hibonFfi.tagion_hibon_get_text(
       _hibonPtr,
       format.index,
       charArrayPtr,
       charArrayLenPtr,
     );
 
-    if (getTextResult != TagionErrorCode.none.value) {
-      _pointerManager.free(charArrayPtr);
-      _pointerManager.free(charArrayLenPtr);
-      throw HibonException(TagionErrorCode.fromInt(getTextResult), _errorMessage.getErrorText());
-    }
-
-    final resultString = charArrayPtr[0].toDartString(length: charArrayLenPtr.value);
-
-    _pointerManager.free(charArrayPtr);
-    _pointerManager.free(charArrayLenPtr);
-
-    return resultString;
+    return _checkStatusOrThrow<String>(
+      status,
+      () => charArrayPtr[0].toDartString(length: charArrayLenPtr.value),
+      [charArrayPtr, charArrayLenPtr],
+    );
   }
 
   @override
@@ -116,11 +126,7 @@ class Hibon implements IHibon {
       value,
     );
 
-    _pointerManager.free(keyPtr);
-
-    if (status != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
+    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
   }
 
   @override
@@ -134,25 +140,15 @@ class Hibon implements IHibon {
       bufferLenPtr,
     );
 
-    if (status != TagionErrorCode.none.value) {
-      _pointerManager.free(bufferPtr);
-      _pointerManager.free(bufferLenPtr);
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    final Uint8List buffer = bufferPtr[0].asTypedList(bufferLenPtr.value);
-
-    _pointerManager.free(bufferPtr);
-    _pointerManager.free(bufferLenPtr);
-
-    /// TODO: Implement the locator class.
-    /// It is necessary create the Document via locator with injected dependencies.
-    return Document(
-      DocumentFfi(FFILibraryUtil.load()),
-      _pointerManager,
-      _errorMessage,
-      buffer,
-    );
+    return _checkStatusOrThrow<IDocument>(
+        status,
+        () => Document(
+              DocumentFfi(FFILibraryUtil.load()),
+              _pointerManager,
+              _errorMessage,
+              bufferPtr[0].asTypedList(bufferLenPtr.value),
+            ),
+        [bufferPtr, bufferLenPtr]);
   }
 
   @override
@@ -171,12 +167,7 @@ class Hibon implements IHibon {
       buffer.length,
     );
 
-    _pointerManager.free(keyPtr);
-    _pointerManager.free(documentPtr);
-
-    if (status != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
+    _checkStatusOrThrow<void>(status, () {}, [keyPtr, documentPtr]);
   }
 
   @override
@@ -197,11 +188,7 @@ class Hibon implements IHibon {
       hibon.getPointer(),
     );
 
-    _pointerManager.free(keyPtr);
-
-    if (status != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
+    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
   }
 
   @override
@@ -232,11 +219,7 @@ class Hibon implements IHibon {
         throw Exception('Unsupported type');
     }
 
-    _pointerManager.free(keyPtr);
-
-    if (status != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
+    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
   }
 
   @override
@@ -283,11 +266,7 @@ class Hibon implements IHibon {
         throw Exception('Unsupported type');
     }
 
-    _pointerManager.free(keyPtr);
-
-    if (status != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
+    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
   }
 
   @override
@@ -306,12 +285,7 @@ class Hibon implements IHibon {
       array.length,
     );
 
-    _pointerManager.free(keyPtr);
-    _pointerManager.free(arrayPtr);
-
-    if (status != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
+    _checkStatusOrThrow<void>(status, () {}, [keyPtr, arrayPtr]);
   }
 
   @override
@@ -326,11 +300,7 @@ class Hibon implements IHibon {
       time,
     );
 
-    _pointerManager.free(keyPtr);
-
-    if (status != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
+    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
   }
 
   @override
@@ -346,18 +316,7 @@ class Hibon implements IHibon {
       resultPtr,
     );
 
-    if (status != TagionErrorCode.none.value) {
-      _pointerManager.free(keyPtr);
-      _pointerManager.free(resultPtr);
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    bool result = resultPtr.value;
-
-    _pointerManager.free(keyPtr);
-    _pointerManager.free(resultPtr);
-
-    return result;
+    return _checkStatusOrThrow<bool>(status, () => resultPtr.value, [keyPtr, resultPtr]);
   }
 
   @override
@@ -371,10 +330,6 @@ class Hibon implements IHibon {
       key.length,
     );
 
-    _pointerManager.free(keyPtr);
-
-    if (status != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
+    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
   }
 }
