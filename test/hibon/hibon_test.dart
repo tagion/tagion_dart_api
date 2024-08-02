@@ -31,13 +31,11 @@ void main() {
 
     test('Create hibon', () {
       when(() => mockHibonFfi.tagion_hibon_create(any())).thenAnswer((_) => TagionErrorCode.none.value);
-      expect(() => hibon.init(), returnsNormally);
 
       when(() => mockHibonFfi.tagion_hibon_create(any())).thenAnswer((_) => TagionErrorCode.error.value);
       when(() => mockErrorMessage.getErrorText()).thenAnswer((_) => mockErrorText);
-      final Hibon hibonFailedInit = Hibon(mockHibonFfi, mockErrorMessage, mockPointerManager);
       try {
-        hibonFailedInit.init();
+        Hibon(mockHibonFfi, mockErrorMessage, mockPointerManager);
       } on HibonException catch (e) {
         expect(e.errorCode, TagionErrorCode.error);
       }
@@ -95,7 +93,7 @@ void main() {
 
     test('Free hibon', () {
       when(() => mockHibonFfi.tagion_hibon_free(any())).thenAnswer((_) {});
-      hibon.free();
+      hibon.dispose();
       verify(() => mockHibonFfi.tagion_hibon_free(any())).called(1);
     });
   });
