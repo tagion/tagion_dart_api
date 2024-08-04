@@ -18,14 +18,14 @@ void main() {
     basicFfi.start_rt();
   });
 
-  basicIntegrationTests(dyLib);
+  basicIntegrationTest(dyLib);
 
   tearDownAll(() {
     basicFfi.stop_rt();
   });
 }
 
-void basicIntegrationTests(DynamicLibrary dyLib) {
+void basicIntegrationTest(DynamicLibrary dyLib) {
   group('Basic-BasicFfi-Binary Integration.', () {
     final BasicFfi basicFfi = BasicFfi(dyLib);
     final ErrorMessageFfi errorMessageFfi = ErrorMessageFfi(dyLib);

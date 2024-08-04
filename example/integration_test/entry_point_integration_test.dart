@@ -30,10 +30,10 @@ void main() {
       expect(startDRuntimeResult, true);
     });
 
-    basicIntegrationTests(dyLib);
+    basicIntegrationTest(dyLib);
+    documentIntegrationTest(dyLib);
     errorMessageIntegrationTest(dyLib);
     hibonIntegrationTest(dyLib);
-    documentIntegrationTests(dyLib);
 
     test('D runtime stopped', () {
       final bool stopDRuntimeResult = basic.stopDRuntime();
