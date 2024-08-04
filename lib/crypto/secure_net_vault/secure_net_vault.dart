@@ -10,7 +10,18 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 /// The [_secureNetPtr] field is a pointer to a [SecureNet] object.
 class SecureNetVault implements ISecureNetVault {
   /// Pointer to the [SecureNet] keypair.
+  final IPointerManager _pointerManager;
   late final Pointer<SecureNet> _secureNetPtr;
+  static SecureNetVault? _instance;
+
+  SecureNetVault._(this._pointerManager) {
+    _open();
+  }
+
+  factory SecureNetVault(IPointerManager pointerManager) {
+    _instance ??= SecureNetVault._(pointerManager);
+    return _instance!;
+  }
 
   @override
   Pointer<SecureNet> get secureNetPtr => _secureNetPtr;
@@ -21,22 +32,10 @@ class SecureNetVault implements ISecureNetVault {
   @override
   bool get initialized => _allocated;
 
-  final IPointerManager _pointerManager;
-
-  static SecureNetVault? _instance;
-
-  factory SecureNetVault(IPointerManager pointerManager) {
-    _instance ??= SecureNetVault._(pointerManager);
-    return _instance!;
-  }
-
-  SecureNetVault._(this._pointerManager);
-
   /// Allocates memory for the pointer.
   /// Sets [_allocated] flag to true.
   /// If already allocated, does nothing.
-  @override
-  void open() {
+  void _open() {
     if (!_allocated) {
       _secureNetPtr = _pointerManager.allocate<SecureNet>();
       _allocated = true;
@@ -49,7 +48,7 @@ class SecureNetVault implements ISecureNetVault {
   @override
   void close() {
     if (_allocated) {
-      _pointerManager.free(_secureNetPtr);
+      _pointerManager.zeroOutAndFree(_secureNetPtr, sizeOf<SecureNet>());
       _allocated = false;
     }
   }

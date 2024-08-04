@@ -7,7 +7,5 @@ abstract interface class ISecureNetVault {
 
   bool get initialized;
 
-  void open();
-
   void close();
 }
