@@ -1,4 +1,6 @@
 {
+  "version": "1.2.1",
+  "description": "ci: add transaction test to acceptance stage #3194",
   "arm64-v8a": {
     "checksum": "8f33b9e1b5b1d7a6f4e44fbb1bcb0fcef2b372cf4e06c24f5338dc70bf6e7cf5",
     "path": "android/src/main/jniLibs/arm64-v8a/libtauonapi.so"
