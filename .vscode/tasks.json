@@ -2,6 +2,14 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "REBASE_BRANCH_ONTO_MAIN",
+            "type": "shell",
+            "group": "build",
+            "command": [
+                ".vscode/scripts/rebase_branch.sh",
+            ],
+        },
+        {
             "label": "FFIGEN_RUN",
             "type": "shell",
             "group": "build",
