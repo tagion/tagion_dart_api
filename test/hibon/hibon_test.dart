@@ -27,12 +27,11 @@ void main() {
     const String mockErrorText = 'mockErrorText';
 
     when(() => mockPointerManager.allocate<HiBONT>()).thenReturn(malloc<HiBONT>());
+    when(() => mockHibonFfi.tagion_hibon_create(any())).thenAnswer((_) => TagionErrorCode.error.value);
+    when(() => mockHibonFfi.tagion_hibon_create(any())).thenAnswer((_) => TagionErrorCode.none.value);
     final Hibon hibon = Hibon(mockHibonFfi, mockErrorMessage, mockPointerManager);
 
     test('Create hibon', () {
-      when(() => mockHibonFfi.tagion_hibon_create(any())).thenAnswer((_) => TagionErrorCode.none.value);
-
-      when(() => mockHibonFfi.tagion_hibon_create(any())).thenAnswer((_) => TagionErrorCode.error.value);
       when(() => mockErrorMessage.getErrorText()).thenAnswer((_) => mockErrorText);
       try {
         Hibon(mockHibonFfi, mockErrorMessage, mockPointerManager);
