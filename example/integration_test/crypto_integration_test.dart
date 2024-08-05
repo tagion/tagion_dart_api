@@ -56,12 +56,14 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
       expect(secureNetPtrValueBefore, isNot(secureNetPtrValueAfter));
     });
 
+    //PR Review: Discuss here
     // test('SecureNetVault returns an empty pointer after close', () {
     //   vault.close();
     //   int secureNetPtrValue = vault.secureNetPtr.cast<Uint8>()[0];
     //   expect(secureNetPtrValue, equals(0));
     // });
 
+    //PR Review: Discuss here
     test('decrypt sets SecureNet in SecureNetVault', () {
       // vault.open();
       // int secureNetPtrValueBefore = vault.secureNetPtr.cast<Uint8>()[0];
