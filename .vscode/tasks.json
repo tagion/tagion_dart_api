@@ -34,6 +34,8 @@
             "type": "shell",
             "group": "build",
             "command": [
+                "chmod +x binary_validate.sh &&",
+                "./binary_validate.sh &&",
                 "cd example &&",
                 "flutter test integration_test/entry_point_integration_test.dart --reporter expanded | sed -E 's/^([0-9]{2}:[0-9]{2}) [^:]+:[^:]+: (.+)/\\1 \\2/'",
             ]
@@ -94,6 +96,24 @@
                 // remove unmodified binary
                 "rm libtauonapi.dylib",
             ],
+        },
+        {
+            "label": "VALIDATE_BINARY",
+            "type": "shell",
+            "group": "build",
+            "command": [
+                "chmod +x binary_validate.sh &&",
+                "./binary_validate.sh",
+            ]
+        },
+        {
+            "label": "UPDATE_CHECKSUM_JSON",
+            "type": "shell",
+            "group": "build",
+            "command": [
+                "chmod +x binary_validate.sh &&",
+                "./update_checksum.sh",
+            ]
         },
     ]
 }
