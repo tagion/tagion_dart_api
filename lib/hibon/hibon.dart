@@ -195,16 +195,6 @@ class Hibon implements IHibon, Finalizable {
   }
 
   @override
-  void addDocumentByKey(String key, IDocument document) {
-    addDocumentBufferByKey(key, document.getData());
-  }
-
-  @override
-  void addDocumentByIndex(int index, IDocument document) {
-    addDocumentBufferByIndex(index, document.getData());
-  }
-
-  @override
   void addHibonByKey(String key, IHibon hibon) {
     final Pointer<Char> keyPtr = _pointerManager.allocate<Char>(key.length);
 

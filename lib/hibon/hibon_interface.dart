@@ -24,12 +24,6 @@ abstract class IHibon {
   /// Gets a document from the Hibon object.
   IDocument getDocument();
 
-  /// Adds a document to the Hibon object by key.
-  void addDocumentByKey(String key, IDocument document);
-
-  /// Adds a document to the Hibon object by index.
-  void addDocumentByIndex(int index, IDocument document);
-
   /// Adds a document buffer to the Hibon object by key.
   void addDocumentBufferByKey(String key, Uint8List buffer);
 
