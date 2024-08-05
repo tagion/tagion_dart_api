@@ -2,8 +2,12 @@ import 'dart:ffi';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
+import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
+import 'package:tagion_dart_api/exception/hibon_exception.dart';
+import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
+import 'package:tagion_dart_api/hibon/hibon.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:tagion_dart_api/utils/ffi_library_util.dart';
@@ -29,31 +33,42 @@ void errorMessageIntegrationTest(DynamicLibrary dyLib) {
     const IPointerManager pointerManager = PointerManager();
     final ErrorMessage errorMessage = ErrorMessage(errorMessageFfi, pointerManager);
 
-    // group('getErrorText -', () {
-    // test('is empty, when no errors', () {
-    // errorMessage.clearErrors();
+    // Arrange
+    const TagionErrorCode errorCode = TagionErrorCode.error;
+    const String expectdErrorText = "Empty or none hibon instance";
 
-    // Hibon hibon = Hibon(HibonFfi(dyLib), errorMessage, pointerManager);
-    // hibon.init();
+    group('getErrorText', () {
+      test('returns an empty string, when no errors', () {
+        String errorText = errorMessage.getErrorText();
+        expect(errorText, '');
+      });
 
-    // String errorText = errorMessage.getErrorText();
-    // expect(errorText, '');
-    // });
+      test('returns a correct error text', () {
+        Hibon hibon = Hibon(HibonFfi(dyLib), errorMessage, const PointerManager());
+        expect(
+          () => hibon.getAsString(),
+          throwsA(isA<HibonException>()
+              .having(
+                (e) => e.errorCode,
+                '',
+                equals(errorCode),
+              )
+              .having(
+                (e) => e.message,
+                '',
+                equals(expectdErrorText),
+              )),
+        );
+      });
+    });
 
-    // test('-returns correct error text', () {
-    //   Hibon hibon = Hibon(HibonFfi(dyLib));
-    //   try {
-    //     hibon.getAsString();
-    //   } on HibonException catch (e) {
-    //     expect(e.errorCode, TagionErrorCode.exception);
-    //   }
-    //   String errorText = errorMessage.getErrorText();
-    //   expect(errorText, '');
-    // });
+    test('clearErrors clears the error text', () {
+      String errorText = errorMessage.getErrorText();
+      expect(errorText, errorText);
+
+      errorMessage.clearErrors();
+      errorText = errorMessage.getErrorText();
+      expect(errorText, '');
+    });
   });
-
-  // test('clearErrors clears the error text', () {
-  //   // expect(errorText, '');
-  // });
-  // });
 }
