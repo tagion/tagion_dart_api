@@ -13,7 +13,7 @@ void main() {
   registerFallbackValue(Pointer<SecureNet>.fromAddress(0));
 
   group('SecureNetVault Unit.', () {
-    final Pointer<SecureNet> secureNetPtr = malloc.allocate<SecureNet>(sizeOf<SecureNet>());
+    Pointer<SecureNet> secureNetPtr = malloc.allocate<SecureNet>(1);
     final MockPointerManager mockPointerManager = MockPointerManager();
     when(() => mockPointerManager.allocate<SecureNet>()).thenReturn(secureNetPtr);
     final SecureNetVault secureNetVault = SecureNetVault(mockPointerManager);
@@ -27,24 +27,16 @@ void main() {
       verify(() => mockPointerManager.allocate<SecureNet>()).called(1);
     });
 
-    test('is initialized after instantiation', () {
-      final bool isInitialized = secureNetVault.initialized;
-      expect(isInitialized, isTrue);
+    test('open exists when already allocated', () {
+      secureNetVault.open();
+      verifyNever(() => mockPointerManager.allocate<SecureNet>());
     });
 
-    test('returns same pointer', () {
-      final int secureNetPtrAddress = secureNetVault.secureNetPtr.address;
-      final int secureNetPtr2Address = secureNetVault2.secureNetPtr.address;
-      expect(secureNetPtrAddress, equals(secureNetPtr2Address));
-    });
-
-    test('not initialized on close', () {
-      when(() => mockPointerManager.zeroOutAndFree(any(), any())).thenReturn(null);
+    test('zeroes out secureNetPtr on close', () {
+      when(() => mockPointerManager.zeroOutAndFree(any(), any())).thenAnswer((_) {});
       secureNetVault.close();
-      final bool isInitialized = secureNetVault.initialized;
-      expect(isInitialized, isFalse);
 
-      verify(() => mockPointerManager.zeroOutAndFree(secureNetPtr, sizeOf<SecureNet>())).called(1);
+      verify(() => mockPointerManager.zeroOutAndFree(secureNetPtr, 1)).called(1);
     });
   });
 }

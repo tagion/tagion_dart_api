@@ -11,11 +11,11 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 class SecureNetVault implements ISecureNetVault {
   /// Pointer to the [SecureNet] keypair.
   final IPointerManager _pointerManager;
-  late final Pointer<SecureNet> _secureNetPtr;
+  late Pointer<SecureNet> _secureNetPtr;
   static SecureNetVault? _instance;
 
   SecureNetVault._(this._pointerManager) {
-    _open();
+    open();
   }
 
   factory SecureNetVault(IPointerManager pointerManager) {
@@ -29,17 +29,14 @@ class SecureNetVault implements ISecureNetVault {
   /// State of the pointer.
   bool _allocated = false;
 
-  @override
-  bool get initialized => _allocated;
-
   /// Allocates memory for the pointer.
   /// Sets [_allocated] flag to true.
   /// If already allocated, does nothing.
-  void _open() {
-    if (!_allocated) {
-      _secureNetPtr = _pointerManager.allocate<SecureNet>();
-      _allocated = true;
-    }
+  @override
+  void open() {
+    if (_allocated) return;
+    _secureNetPtr = _pointerManager.allocate<SecureNet>();
+    _allocated = true;
   }
 
   /// Frees memory for the pointer.
@@ -47,9 +44,7 @@ class SecureNetVault implements ISecureNetVault {
   /// If not allocated, does nothing.
   @override
   void close() {
-    if (_allocated) {
-      _pointerManager.zeroOutAndFree(_secureNetPtr, sizeOf<SecureNet>());
-      _allocated = false;
-    }
+    _pointerManager.zeroOutAndFree(_secureNetPtr, 1);
+    _allocated = false;
   }
 }

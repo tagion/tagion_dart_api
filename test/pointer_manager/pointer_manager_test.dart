@@ -55,15 +55,16 @@ void main() {
     });
 
     test('ZeroOutAndFree zeroes out and then frees memory', () {
-      final pointer = malloc<Uint8>(10).cast<Uint8>();
-      for (var i = 0; i < 10; i++) {
+      final int typeSize = sizeOf<Float>();
+      final Pointer<Uint8> pointer = malloc<Float>(typeSize).cast<Uint8>();
+      for (var i = 0; i < typeSize; i++) {
         pointer[i] = 1;
       }
       when(() => mockAllocator.free(pointer)).thenReturn(null);
 
-      pointerManager.zeroOutAndFree(pointer, 10, allocator: mockAllocator);
+      pointerManager.zeroOutAndFree(pointer, typeSize, allocator: mockAllocator);
 
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < typeSize; i++) {
         expect(pointer[i], 0);
       }
       verify(() => mockAllocator.free(pointer)).called(1);

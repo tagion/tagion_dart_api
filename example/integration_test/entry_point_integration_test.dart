@@ -11,6 +11,7 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:tagion_dart_api/utils/ffi_library_util.dart';
 
 import 'basic_integration_test.dart';
+import 'crypto_integration_test.dart';
 import 'document_integration_test.dart';
 import 'error_message_integration_test.dart';
 import 'hibon_integration_test.dart';
@@ -31,6 +32,7 @@ void main() {
     });
 
     basicIntegrationTest(dyLib);
+    cryptoIntegrationTest(dyLib);
     documentIntegrationTest(dyLib);
     errorMessageIntegrationTest(dyLib);
     hibonIntegrationTest(dyLib);
