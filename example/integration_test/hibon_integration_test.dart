@@ -42,31 +42,119 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
         '_QMBAiRABUhpUlBDAwIkWSEDGuaPS9u3r22WHd93J2uEquHBv_A4qE9g9ca5qxL5JrwCBCRtc2f9AhQCaWThzpPzBQEGbWV0aG9kBnN1Ym1pdAIGcGFyYW1z2wIBAiRAA1NTQwIJJGNvbnRyYWN0-QEBAiRAA1NNQwIDJGluJAMAACChE1h7ONUZg6hyDzwM1qqtf45FhgHKy8zWWgpN_sj2VwIEJHJ1br8BAQIkQANwYXkCBSR2YWxzrgECAABTAQIkQANUR04CAiRWChIBJICwr4yJoAEDAiRZIQLg1niES5tE941z3cyVO7ohtAZr4SAr11ZXFjMqRkXgzwkCJHTW8vHjpvar7ggDAiR4BMaIdRACAAFTAQIkQANUR04CAiRWChIBJICgt-yD_QADAiRZIQKYkUOPyywdDJ6G8OZ5eMLBKhvMhr4O3nuxfUiq1sO3BAkCJHSO6PTjpvar7ggDAiR4BPSQmA0CBiRzaWduc0QDAABAZRhWEMrAzAVqBJKa-pQIMf0O5PqDOLd62vzka6Z_MYaZq5rk39M47EdMeycnTNfGUot7Z1HdutgrNvcHme2KnAMFJHNpZ25AhgGz68Pq9LWPcnQPKeumtLYh0mGnnNsBk764abVvBYGthZDOYebP7zyz95wf-e2Kc7XqKOw3delXWcMwWXTEjA=='));
 
     test('Hibon adds values of all supported standard types', () {
-      expect(() => hibon.addString('key1', 'value'), returnsNormally);
-      expect(() => hibon.addBool('key2', true), returnsNormally);
-      expect(() => hibon.addInt<Int32>('key3', 10), returnsNormally);
-      expect(() => hibon.addInt<Int64>('key4', 9223372036854775807), returnsNormally);
-      expect(() => hibon.addInt<Uint32>('key5', -10), returnsNormally);
-      expect(() => hibon.addInt<Uint64>('key6', -9223372036854775808), returnsNormally);
-      expect(() => hibon.addFloat<Float>('key7', 123.456), returnsNormally);
-      expect(() => hibon.addFloat<Double>('key8', 123.456), returnsNormally);
-      expect(() => hibon.addTime('key9', 638578428038904150), returnsNormally);
-      expect(() => hibon.addBigint('key10', BigInt.from(9223372036854775807)), returnsNormally);
-      expect(() => hibon.addArrayByKey('key11', Uint8List.fromList([1, 2, 3])), returnsNormally);
+      /// Add string.
+      const addStringKey = 'addStringKey';
+      expect(() => hibon.addString(addStringKey, 'value'), returnsNormally);
+      expect(hibon.hasMemberByKey(addStringKey), isTrue);
+
+      /// Add bool.
+      const addBoolKey = 'addBoolKey';
+      expect(() => hibon.addBool(addBoolKey, true), returnsNormally);
+      expect(hibon.hasMemberByKey(addBoolKey), isTrue);
+
+      /// Add int32.
+      const addInt32Key = 'addInt32Key';
+      expect(() => hibon.addInt<Int32>(addInt32Key, 10), returnsNormally);
+      expect(hibon.hasMemberByKey(addInt32Key), isTrue);
+
+      /// Add int64.
+      const addInt64Key = 'addInt64Key';
+      expect(() => hibon.addInt<Int64>(addInt64Key, 9223372036854775807), returnsNormally);
+      expect(hibon.hasMemberByKey(addInt64Key), isTrue);
+
+      /// Add uint32.
+      const addUint32Key = 'addUint32Key';
+      expect(() => hibon.addInt<Uint32>(addUint32Key, -10), returnsNormally);
+      expect(hibon.hasMemberByKey(addUint32Key), isTrue);
+
+      /// Add uint64.
+      const addUint64Key = 'addUint64Key';
+      expect(() => hibon.addInt<Uint64>(addUint64Key, -9223372036854775808), returnsNormally);
+      expect(hibon.hasMemberByKey(addUint64Key), isTrue);
+
+      /// Add float.
+      const addFloatKey = 'addFloatKey';
+      expect(() => hibon.addFloat<Float>(addFloatKey, 123.456), returnsNormally);
+      expect(hibon.hasMemberByKey(addFloatKey), isTrue);
+
+      /// Add double.
+      const addDoubleKey = 'addDoubleKey';
+      expect(() => hibon.addFloat<Double>(addDoubleKey, 123.456), returnsNormally);
+      expect(hibon.hasMemberByKey(addDoubleKey), isTrue);
+
+      /// Add time.
+      const addTimeKey = 'addTimeKey';
+      expect(() => hibon.addTime(addTimeKey, 638578428038904150), returnsNormally);
+      expect(hibon.hasMemberByKey(addTimeKey), isTrue);
+
+      /// Add bigint.
+      const addBigIntKey = 'addBigIntKey';
+      expect(() => hibon.addBigint(addBigIntKey, BigInt.from(9223372036854775807)), returnsNormally);
+      expect(hibon.hasMemberByKey(addBigIntKey), isTrue);
     });
 
-    test('Hibon adds values of all supported custom types', () {
+    test('Hibon adds, deletes values of all supported custom types', () {
       /// Hibon test.
+      const nestedHibonKey = 'nestedHibonKey';
       final Hibon nestedHibon = Hibon(hibonFfi, errorMessage, pointerManager);
-      nestedHibon.addString('key1', 'value');
-
-      expect(() => hibon.addHibonByKey('key12', nestedHibon), returnsNormally);
+      nestedHibon.addString(nestedHibonKey, 'value');
 
       /// Document test.
-      final document = Document(DocumentFfi(dyLib), pointerManager, errorMessage, hibonBuffer);
+      final Document document = Document(DocumentFfi(dyLib), pointerManager, errorMessage, hibonBuffer);
 
-      expect(() => hibon.addDocumentByKey('key13', document), returnsNormally);
-      expect(() => hibon.addDocumentBufferByKey('key14', hibonBuffer), returnsNormally);
+      const array = [1, 2, 3];
+
+      /// By key.
+      const docKey = 'docKey';
+      const docBuffKey = 'docBuffKey';
+      const hibonKey = 'hibonKey';
+      const arrayKey = 'arrayKey';
+
+      expect(() => hibon.addDocumentByKey(docKey, document), returnsNormally);
+      expect(() => hibon.addDocumentBufferByKey(docBuffKey, hibonBuffer), returnsNormally);
+      expect(() => hibon.addHibonByKey(hibonKey, nestedHibon), returnsNormally);
+      expect(() => hibon.addArrayByKey(arrayKey, Uint8List.fromList(array)), returnsNormally);
+
+      expect(hibon.hasMemberByKey(docKey), isTrue);
+      expect(hibon.hasMemberByKey(docBuffKey), isTrue);
+      expect(hibon.hasMemberByKey(hibonKey), isTrue);
+      expect(hibon.hasMemberByKey(arrayKey), isTrue);
+
+      expect(() => hibon.removeByKey(docKey), returnsNormally);
+      expect(() => hibon.removeByKey(docBuffKey), returnsNormally);
+      expect(() => hibon.removeByKey(hibonKey), returnsNormally);
+      expect(() => hibon.removeByKey(arrayKey), returnsNormally);
+
+      expect(hibon.hasMemberByKey(docKey), isFalse);
+      expect(hibon.hasMemberByKey(docBuffKey), isFalse);
+      expect(hibon.hasMemberByKey(hibonKey), isFalse);
+      expect(hibon.hasMemberByKey(arrayKey), isFalse);
+
+      /// By index.
+      const docIndex = 0;
+      const docBuffIndex = 1;
+      const hibonIndex = 2;
+      const arrayIndex = 3;
+
+      expect(() => hibon.addDocumentByIndex(docIndex, document), returnsNormally);
+      expect(() => hibon.addDocumentBufferByIndex(docBuffIndex, hibonBuffer), returnsNormally);
+      expect(() => hibon.addHibonByIndex(hibonIndex, nestedHibon), returnsNormally);
+      expect(() => hibon.addArrayByIndex(arrayIndex, Uint8List.fromList(array)), returnsNormally);
+
+      expect(hibon.hasMemberByIndex(docIndex), isTrue);
+      expect(hibon.hasMemberByIndex(docBuffIndex), isTrue);
+      expect(hibon.hasMemberByIndex(hibonIndex), isTrue);
+      expect(hibon.hasMemberByIndex(arrayIndex), isTrue);
+
+      expect(() => hibon.removeByIndex(docIndex), returnsNormally);
+      expect(() => hibon.removeByIndex(docBuffIndex), returnsNormally);
+      expect(() => hibon.removeByIndex(hibonIndex), returnsNormally);
+      expect(() => hibon.removeByIndex(arrayIndex), returnsNormally);
+
+      expect(hibon.hasMemberByIndex(docIndex), isFalse);
+      expect(hibon.hasMemberByIndex(docBuffIndex), isFalse);
+      expect(hibon.hasMemberByIndex(hibonIndex), isFalse);
+      expect(hibon.hasMemberByIndex(arrayIndex), isFalse);
     });
 
     test('Get hibon as a document', () {
