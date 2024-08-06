@@ -2,9 +2,6 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/document/document.dart';
-import 'package:tagion_dart_api/document/document_interface.dart';
-import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/hibon_string_format.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
@@ -13,7 +10,7 @@ import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/hibon/hibon_interface.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
-import 'package:tagion_dart_api/utils/ffi_library_util.dart';
+// import 'package:tagion_dart_api/utils/ffi_library_util.dart';
 
 /// [_hibonPtr] is the pointer to the Hibon object.
 class Hibon implements IHibon, Finalizable {
@@ -21,19 +18,21 @@ class Hibon implements IHibon, Finalizable {
   final IErrorMessage _errorMessage;
   final IPointerManager _pointerManager;
 
-  late final Pointer<HiBONT> _hibonPtr;
+  final Pointer<HiBONT> _hibonPtr;
 
-  static final Finalizer<Pointer<HiBONT>> _finalizer = Finalizer<Pointer<HiBONT>>(
-    /// TODO: get HibonFfi as singleton and call tagion_hibon_free method.
-    (pointer) =>
-        HibonFfi(FFILibraryUtil.load()).tagion_hibon_free(pointer), // free memory for the Hibon object in a finalizer.
-  );
+  /// TODO: get HibonFfi as singleton and call tagion_hibon_free method.
+  /// Left commented out for now.
+  // static final Finalizer<Pointer<HiBONT>> _finalizer = Finalizer<Pointer<HiBONT>>(
+  //   (pointer) => HibonFfi(FFILibraryUtil.load()).tagion_hibon_free(pointer),
+  // );
 
+  /// Throws a [HibonException] if the operation is not successful.
+  /// Allocates [_hibonPtr] for the Hibon object.
   Hibon(
     this._hibonFfi,
     this._errorMessage,
     this._pointerManager,
-  );
+  ) : _hibonPtr = _pointerManager.allocate<HiBONT>(); // allocate memory for the Hibon object.
 
   /// Checks the status of the operation and throws an exception if it is not successful.
   /// If the operation is successful, returns the result of the [onDone] function.
@@ -58,24 +57,21 @@ class Hibon implements IHibon, Finalizable {
     }
   }
 
-  /// Throws a [HibonException] if the operation is not successful.
-  /// Allocates [_hibonPtr] for the Hibon object.
   /// Attaches the finalizer to the Hibon object.
   @override
   void create() {
-    _hibonPtr = _pointerManager.allocate<HiBONT>(); // allocate memory for the Hibon object.
     int status = _hibonFfi.tagion_hibon_create(_hibonPtr);
     if (status != TagionErrorCode.none.value) {
       throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
-    _finalizer.attach(this, _hibonPtr);
+    // _finalizer.attach(this, _hibonPtr);
   }
 
   /// Detaches the finalizer from the Hibon object.
   /// Frees the memory for the Hibon object.
   @override
   void dispose() {
-    _finalizer.detach(this);
+    // _finalizer.detach(this);
     _hibonFfi.tagion_hibon_free(_hibonPtr);
   }
 
@@ -144,7 +140,7 @@ class Hibon implements IHibon, Finalizable {
   }
 
   @override
-  IDocument getDocument() {
+  Uint8List getAsDocumentBuffer() {
     final Pointer<Pointer<Uint8>> bufferPtr = _pointerManager.allocate<Pointer<Uint8>>();
     final Pointer<Uint64> bufferLenPtr = _pointerManager.allocate<Uint64>();
 
@@ -154,15 +150,11 @@ class Hibon implements IHibon, Finalizable {
       bufferLenPtr,
     );
 
-    return _checkStatusOrThrow<IDocument>(
-        status,
-        () => Document(
-              DocumentFfi(FFILibraryUtil.load()),
-              _pointerManager,
-              _errorMessage,
-              bufferPtr[0].asTypedList(bufferLenPtr.value),
-            ),
-        [bufferPtr, bufferLenPtr]);
+    return _checkStatusOrThrow<Uint8List>(
+      status,
+      () => bufferPtr[0].asTypedList(bufferLenPtr.value),
+      [bufferPtr, bufferLenPtr],
+    );
   }
 
   @override

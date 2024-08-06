@@ -1,7 +1,6 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/document/document_interface.dart';
 import 'package:tagion_dart_api/enums/hibon_string_format.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 
@@ -24,8 +23,8 @@ abstract class IHibon {
   /// Returns the Hibon object as a string.
   String getAsString([HibonAsStringFormat format]);
 
-  /// Gets a document from the Hibon object.
-  IDocument getDocument();
+  /// Returns the current Hibon object as a document buffer.
+  Uint8List getAsDocumentBuffer();
 
   /// Adds a document buffer to the Hibon object by key.
   void addDocumentBufferByKey(String key, Uint8List buffer);
