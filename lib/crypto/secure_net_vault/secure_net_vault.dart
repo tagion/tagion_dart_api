@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// A singleton class.
@@ -26,6 +27,10 @@ class SecureNetVault implements ISecureNetVault {
   @override
   Pointer<SecureNet> get secureNetPtr => _secureNetPtr;
 
+  static final Finalizer<Pointer<SecureNet>> _finalizer = Finalizer<Pointer<SecureNet>>(
+    (pointer) => const PointerManager().zeroOutAndFree(pointer, 1),
+  );
+
   /// State of the pointer.
   bool _allocated = false;
 
@@ -37,6 +42,7 @@ class SecureNetVault implements ISecureNetVault {
     if (_allocated) return;
     _secureNetPtr = _pointerManager.allocate<SecureNet>();
     _allocated = true;
+    _finalizer.attach(this, _secureNetPtr);
   }
 
   /// Frees memory for the pointer.
@@ -46,5 +52,6 @@ class SecureNetVault implements ISecureNetVault {
   void close() {
     _pointerManager.zeroOutAndFree(_secureNetPtr, 1);
     _allocated = false;
+    _finalizer.detach(this);
   }
 }

@@ -27,7 +27,7 @@ void main() {
       verify(() => mockPointerManager.allocate<SecureNet>()).called(1);
     });
 
-    test('open exists when already allocated', () {
+    test('open exits when already allocated', () {
       secureNetVault.open();
       verifyNever(() => mockPointerManager.allocate<SecureNet>());
     });
