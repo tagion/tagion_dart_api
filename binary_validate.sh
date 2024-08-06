@@ -3,6 +3,7 @@
 # Variables
 root_folder=""
 checksum_file="checksum.json"
+all_successful=true
 
 # Step 1: Go to the root folder
 cd "$root_folder" || { echo "Failed to enter $root_folder"; exit 1; }
@@ -21,15 +22,21 @@ for arch in $archs; do
 
         # Step 4: Compare the checksums
         if [ "$file_hash" == "$expected_checksum" ]; then
-            echo "The checksums match for $arch ($file_path)."
+            echo "The checksums matche for $arch ($file_path)."
         else
             echo "The checksums do not match for $arch ($file_path)."
-            exit 1
+            all_successful=false
         fi
     else
         echo "File not found for $arch: $file_path"
-        exit 1
+        all_successful=false
     fi
 done
 
-echo "All checksums match."
+# Print success message if all checksums matched
+if $all_successful; then
+    echo "All checksums match."
+else
+    echo "There were errors verifying some checksums."
+    exit 1
+fi
