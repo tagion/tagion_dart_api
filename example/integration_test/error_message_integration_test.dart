@@ -34,8 +34,8 @@ void errorMessageIntegrationTest(DynamicLibrary dyLib) {
     final ErrorMessage errorMessage = ErrorMessage(errorMessageFfi, pointerManager);
 
     // Arrange
-    const TagionErrorCode errorCode = TagionErrorCode.error;
-    const String expectdErrorText = "Empty or none hibon instance";
+    const TagionErrorCode errorCode = TagionErrorCode.exception;
+    const String expectdErrorText = "Element member key already exists";
 
     group('getErrorText', () {
       test('returns an empty string, when no errors', () {
@@ -45,8 +45,10 @@ void errorMessageIntegrationTest(DynamicLibrary dyLib) {
 
       test('returns a correct error text', () {
         Hibon hibon = Hibon(HibonFfi(dyLib), errorMessage, const PointerManager());
+        hibon.create();
+        hibon.addString('key', 'value');
         expect(
-          () => hibon.getAsString(),
+          () => hibon.addString('key', 'value'),
           throwsA(isA<HibonException>()
               .having(
                 (e) => e.errorCode,
