@@ -29,20 +29,11 @@ class Hibon implements IHibon, Finalizable {
         HibonFfi(FFILibraryUtil.load()).tagion_hibon_free(pointer), // free memory for the Hibon object in a finalizer.
   );
 
-  /// Throws a [HibonException] if the operation is not successful.
-  /// Allocates [_hibonPtr] for the Hibon object.
   Hibon(
     this._hibonFfi,
     this._errorMessage,
     this._pointerManager,
-  ) {
-    _hibonPtr = _pointerManager.allocate<HiBONT>(); // allocate memory for the Hibon object.
-    int status = _hibonFfi.tagion_hibon_create(_hibonPtr);
-    if (status != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-    _finalizer.attach(this, _hibonPtr);
-  }
+  );
 
   /// Checks the status of the operation and throws an exception if it is not successful.
   /// If the operation is successful, returns the result of the [onDone] function.
@@ -67,6 +58,21 @@ class Hibon implements IHibon, Finalizable {
     }
   }
 
+  /// Throws a [HibonException] if the operation is not successful.
+  /// Allocates [_hibonPtr] for the Hibon object.
+  /// Attaches the finalizer to the Hibon object.
+  @override
+  void create() {
+    _hibonPtr = _pointerManager.allocate<HiBONT>(); // allocate memory for the Hibon object.
+    int status = _hibonFfi.tagion_hibon_create(_hibonPtr);
+    if (status != TagionErrorCode.none.value) {
+      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+    }
+    _finalizer.attach(this, _hibonPtr);
+  }
+
+  /// Detaches the finalizer from the Hibon object.
+  /// Frees the memory for the Hibon object.
   @override
   void dispose() {
     _finalizer.detach(this);
@@ -74,7 +80,7 @@ class Hibon implements IHibon, Finalizable {
   }
 
   @override
-  Pointer<HiBONT> getPointer() => _hibonPtr;
+  Pointer<HiBONT> get pointer => _hibonPtr;
 
   @override
   void addString(String key, String value) {
@@ -204,7 +210,7 @@ class Hibon implements IHibon, Finalizable {
       _hibonPtr,
       keyPtr,
       key.length,
-      hibon.getPointer(),
+      hibon.pointer,
     );
 
     _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
@@ -215,7 +221,7 @@ class Hibon implements IHibon, Finalizable {
     final int status = _hibonFfi.tagion_hibon_add_index_hibon(
       _hibonPtr,
       index,
-      hibon.getPointer(),
+      hibon.pointer,
     );
 
     _checkStatusOrThrow<void>(status, () {});

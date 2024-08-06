@@ -4,8 +4,6 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
-import 'package:tagion_dart_api/document/document.dart';
-import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
@@ -33,7 +31,7 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
   group('Hibon-HibonFfi-DynamicLibrary Integration.', () {
     final ErrorMessageFfi errorMessageFfi = ErrorMessageFfi(dyLib);
     const IPointerManager pointerManager = PointerManager();
-    IErrorMessage errorMessage = ErrorMessage(errorMessageFfi, pointerManager);
+    final IErrorMessage errorMessage = ErrorMessage(errorMessageFfi, pointerManager);
 
     //create a Hibon object
     final HibonFfi hibonFfi = HibonFfi(dyLib);
@@ -42,6 +40,9 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
         '_QMBAiRABUhpUlBDAwIkWSEDGuaPS9u3r22WHd93J2uEquHBv_A4qE9g9ca5qxL5JrwCBCRtc2f9AhQCaWThzpPzBQEGbWV0aG9kBnN1Ym1pdAIGcGFyYW1z2wIBAiRAA1NTQwIJJGNvbnRyYWN0-QEBAiRAA1NNQwIDJGluJAMAACChE1h7ONUZg6hyDzwM1qqtf45FhgHKy8zWWgpN_sj2VwIEJHJ1br8BAQIkQANwYXkCBSR2YWxzrgECAABTAQIkQANUR04CAiRWChIBJICwr4yJoAEDAiRZIQLg1niES5tE941z3cyVO7ohtAZr4SAr11ZXFjMqRkXgzwkCJHTW8vHjpvar7ggDAiR4BMaIdRACAAFTAQIkQANUR04CAiRWChIBJICgt-yD_QADAiRZIQKYkUOPyywdDJ6G8OZ5eMLBKhvMhr4O3nuxfUiq1sO3BAkCJHSO6PTjpvar7ggDAiR4BPSQmA0CBiRzaWduc0QDAABAZRhWEMrAzAVqBJKa-pQIMf0O5PqDOLd62vzka6Z_MYaZq5rk39M47EdMeycnTNfGUot7Z1HdutgrNvcHme2KnAMFJHNpZ25AhgGz68Pq9LWPcnQPKeumtLYh0mGnnNsBk764abVvBYGthZDOYebP7zyz95wf-e2Kc7XqKOw3delXWcMwWXTEjA=='));
 
     test('Hibon adds values of all supported standard types', () {
+
+      hibon.create();
+
       /// Add string.
       const addStringKey = 'addStringKey';
       expect(() => hibon.addString(addStringKey, 'value'), returnsNormally);
@@ -97,6 +98,7 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
       /// Hibon test.
       const nestedHibonKey = 'nestedHibonKey';
       final Hibon nestedHibon = Hibon(hibonFfi, errorMessage, pointerManager);
+      nestedHibon.create();
       nestedHibon.addString(nestedHibonKey, 'value');
 
       const array = [1, 2, 3];

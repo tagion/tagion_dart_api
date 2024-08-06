@@ -9,11 +9,14 @@ import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 /// Hibon is a binary format for storing data.
 /// It is used to store data in the Tagion network.
 abstract class IHibon {
+  /// Initializes the Hibon object.
+  void create();
+
   /// Frees the memory externally allocated for the Hibon object.
   void dispose();
 
   /// Returns the stored pointer of the Hibon object.
-  Pointer<HiBONT> getPointer();
+  Pointer<HiBONT> get pointer;
 
   /// Adds a string to the Hibon object.
   void addString(String key, String value);
