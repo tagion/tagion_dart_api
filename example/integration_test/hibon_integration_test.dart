@@ -40,7 +40,6 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
         '_QMBAiRABUhpUlBDAwIkWSEDGuaPS9u3r22WHd93J2uEquHBv_A4qE9g9ca5qxL5JrwCBCRtc2f9AhQCaWThzpPzBQEGbWV0aG9kBnN1Ym1pdAIGcGFyYW1z2wIBAiRAA1NTQwIJJGNvbnRyYWN0-QEBAiRAA1NNQwIDJGluJAMAACChE1h7ONUZg6hyDzwM1qqtf45FhgHKy8zWWgpN_sj2VwIEJHJ1br8BAQIkQANwYXkCBSR2YWxzrgECAABTAQIkQANUR04CAiRWChIBJICwr4yJoAEDAiRZIQLg1niES5tE941z3cyVO7ohtAZr4SAr11ZXFjMqRkXgzwkCJHTW8vHjpvar7ggDAiR4BMaIdRACAAFTAQIkQANUR04CAiRWChIBJICgt-yD_QADAiRZIQKYkUOPyywdDJ6G8OZ5eMLBKhvMhr4O3nuxfUiq1sO3BAkCJHSO6PTjpvar7ggDAiR4BPSQmA0CBiRzaWduc0QDAABAZRhWEMrAzAVqBJKa-pQIMf0O5PqDOLd62vzka6Z_MYaZq5rk39M47EdMeycnTNfGUot7Z1HdutgrNvcHme2KnAMFJHNpZ25AhgGz68Pq9LWPcnQPKeumtLYh0mGnnNsBk764abVvBYGthZDOYebP7zyz95wf-e2Kc7XqKOw3delXWcMwWXTEjA=='));
 
     test('Hibon adds values of all supported standard types', () {
-
       hibon.create();
 
       /// Add string.
@@ -151,7 +150,43 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
     });
 
     test('Hibon get as a string', () {
-      expect(hibon.getAsString(), isNotEmpty);
+      var hibonAsString = '{\n'
+          '    "addBigIntKey": [\n'
+          '        "*",\n'
+          '        "@N2ZmZmZmZmZmZmZmZmZmZg=="\n'
+          '    ],\n'
+          '    "addBoolKey": true,\n'
+          '    "addDoubleKey": [\n'
+          '        "f64",\n'
+          '        "0x1.edd2f1a9fbe77p+6"\n'
+          '    ],\n'
+          '    "addFloatKey": [\n'
+          '        "f32",\n'
+          '        "0x1.edd2f2p+6"\n'
+          '    ],\n'
+          '    "addInt32Key": [\n'
+          '        "i32",\n'
+          '        10\n'
+          '    ],\n'
+          '    "addInt64Key": [\n'
+          '        "i64",\n'
+          '        "0x7fffffffffffffff"\n'
+          '    ],\n'
+          '    "addStringKey": "value",\n'
+          '    "addTimeKey": [\n'
+          '        "time",\n'
+          '        "2024-07-29T12:40:03.890415+03:00"\n'
+          '    ],\n'
+          '    "addUint32Key": [\n'
+          '        "u32",\n'
+          '        4294967286\n'
+          '    ],\n'
+          '    "addUint64Key": [\n'
+          '        "u64",\n'
+          '        "0x8000000000000000"\n'
+          '    ]\n'
+          '}';
+      expect(hibon.getAsString(), hibonAsString);
     });
 
     test('Hibon disposes normally', () {
