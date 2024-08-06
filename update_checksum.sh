@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-root_folder="path/to/root/folder"
+root_folder=""
 checksum_file="checksums.json"
 temp_file=$(mktemp)
 
@@ -23,6 +23,7 @@ for arch in $archs; do
         jq --arg arch "$arch" --arg new_checksum "$file_hash" '(.[$arch].checksum) |= $new_checksum' "$checksum_file" > "$temp_file" && mv "$temp_file" "$checksum_file"
     else
         echo "File not found for $arch: $file_path"
+        exit 1
     fi
 done
 
