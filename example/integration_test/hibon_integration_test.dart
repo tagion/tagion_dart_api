@@ -146,7 +146,7 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
     });
 
     test('Get hibon as a document', () {
-      expect(() => hibon.getDocument(), returnsNormally);
+      expect(() => hibon.getAsDocumentBuffer(), returnsNormally);
     });
 
     test('Hibon get as a string', () {
