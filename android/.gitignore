@@ -7,3 +7,8 @@
 /build
 /captures
 .cxx
+
+# /src/main/jniLibs/*
+/src/main/jniLibs/arm64-v8a/libtauonapi.so
+/src/main/jniLibs/armeabi-v7a/libtauonapi.so
+/src/main/jniLibs/x86-64/libtauonapi.so
