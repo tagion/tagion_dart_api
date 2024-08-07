@@ -389,7 +389,7 @@ void main() {
       verify(() => mockPointerManager.free(keyPtr)).called(1);
     });
 
-    test('getDocument returns the correct value and throws HibonException when an error occurs', () {
+    test('getAsDocumentBuffer returns the correct value and throws HibonException when an error occurs', () {
       // Arrange
       final value = Uint8List.fromList([1, 2, 3, 4, 5]);
       final valueLen = value.length;
