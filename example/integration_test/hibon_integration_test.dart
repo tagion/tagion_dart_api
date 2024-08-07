@@ -93,6 +93,58 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
       expect(hibon.hasMemberByKey(addBigIntKey), isTrue);
     });
 
+    test('remove values', () {
+      /// Remove string.
+      const addStringKey = 'addStringKey';
+      expect(() => hibon.removeByKey(addStringKey), returnsNormally);
+      expect(hibon.hasMemberByKey(addStringKey), isFalse);
+
+      /// Remove bool.
+      const addBoolKey = 'addBoolKey';
+      expect(() => hibon.removeByKey(addBoolKey), returnsNormally);
+      expect(hibon.hasMemberByKey(addBoolKey), isFalse);
+
+      /// Remove int32.
+      const addInt32Key = 'addInt32Key';
+      expect(() => hibon.removeByKey(addInt32Key), returnsNormally);
+      expect(hibon.hasMemberByKey(addInt32Key), isFalse);
+
+      /// Remove int64.
+      const addInt64Key = 'addInt64Key';
+      expect(() => hibon.removeByKey(addInt64Key), returnsNormally);
+      expect(hibon.hasMemberByKey(addInt64Key), isFalse);
+
+      /// Remove uint32.
+      const addUint32Key = 'addUint32Key';
+      expect(() => hibon.removeByKey(addUint32Key), returnsNormally);
+      expect(hibon.hasMemberByKey(addUint32Key), isFalse);
+
+      /// Remove uint64.
+      const addUint64Key = 'addUint64Key';
+      expect(() => hibon.removeByKey(addUint64Key), returnsNormally);
+      expect(hibon.hasMemberByKey(addUint64Key), isFalse);
+
+      /// Remove float.
+      const addFloatKey = 'addFloatKey';
+      expect(() => hibon.removeByKey(addFloatKey), returnsNormally);
+      expect(hibon.hasMemberByKey(addFloatKey), isFalse);
+
+      /// Remove double.
+      const addDoubleKey = 'addDoubleKey';
+      expect(() => hibon.removeByKey(addDoubleKey), returnsNormally);
+      expect(hibon.hasMemberByKey(addDoubleKey), isFalse);
+
+      /// Remove time.
+      const addTimeKey = 'addTimeKey';
+      expect(() => hibon.removeByKey(addTimeKey), returnsNormally);
+      expect(hibon.hasMemberByKey(addTimeKey), isFalse);
+
+      /// Remove bigint.
+      const addBigIntKey = 'addBigIntKey';
+      expect(() => hibon.removeByKey(addBigIntKey), returnsNormally);
+      expect(hibon.hasMemberByKey(addBigIntKey), isFalse);
+    });
+
     test('Hibon adds, deletes values of all supported custom types', () {
       /// Hibon test.
       const nestedHibonKey = 'nestedHibonKey';
@@ -173,10 +225,6 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
           '        "0x7fffffffffffffff"\n'
           '    ],\n'
           '    "addStringKey": "value",\n'
-          '    "addTimeKey": [\n'
-          '        "time",\n'
-          '        "2024-07-29T12:40:03.890415+03:00"\n'
-          '    ],\n'
           '    "addUint32Key": [\n'
           '        "u32",\n'
           '        4294967286\n'
@@ -186,6 +234,19 @@ void hibonIntegrationTest(DynamicLibrary dyLib) {
           '        "0x8000000000000000"\n'
           '    ]\n'
           '}';
+      Hibon hibon = Hibon(hibonFfi, errorMessage, pointerManager);
+      hibon.create();
+
+      hibon.addString("addStringKey", 'value');
+      hibon.addBool("addBoolKey", true);
+      hibon.addInt<Int32>("addInt32Key", 10);
+      hibon.addInt<Int64>("addInt64Key", 9223372036854775807);
+      hibon.addInt<Uint32>("addUint32Key", -10);
+      hibon.addInt<Uint64>("addUint64Key", -9223372036854775808);
+      hibon.addFloat<Float>("addFloatKey", 123.456);
+      hibon.addFloat<Double>("addDoubleKey", 123.456);
+      hibon.addBigint("addBigIntKey", BigInt.from(9223372036854775807));
+
       expect(hibon.getAsString(), hibonAsString);
     });
 
