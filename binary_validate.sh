@@ -22,7 +22,7 @@ for arch in $archs; do
 
         # Step 4: Compare the checksums
         if [ "$file_hash" == "$expected_checksum" ]; then
-            echo "The checksums matche for $arch ($file_path)."
+            echo "The checksums match for $arch ($file_path)."
         else
             echo "The checksums do not match for $arch ($file_path)."
             all_successful=false
