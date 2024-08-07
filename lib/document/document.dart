@@ -32,6 +32,11 @@ class Document implements IDocument {
   );
 
   @override
+  Uint8List getData() {
+    return _hibonBuffer;
+  }
+
+  @override
   IDocumentElement getElementByKey(String key) {
     final dataLen = _hibonBuffer.lengthInBytes;
     final keyLen = key.length;
