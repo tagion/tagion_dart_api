@@ -9,7 +9,7 @@ all_successful=true
 cd "$root_folder" || { echo "Failed to enter $root_folder"; exit 1; }
 
 # Step 2: Read JSON and iterate over each architecture (ignoring version and description)
-archs=$(jq -r 'keys | map(select(. != "version" and . != "description"))[]' "$checksum_file")
+archs=$(jq -r 'keys | map(select(. != "version" and . != "description" and . != "url"))[]' "$checksum_file")
 
 for arch in $archs; do
     # Extract the file path and expected checksum for the current architecture

@@ -1,24 +1,25 @@
 {
   "version": "1.2.1",
   "description": "ci: add transaction test to acceptance stage #3194",
+  "url": "https://github.com/tagion/tagion/actions/runs/10214033976",
   "arm64-v8a": {
-    "checksum": "8f33b9e1b5b1d7a6f4e44fbb1bcb0fcef2b372cf4e06c24f5338dc70bf6e7cf5",
+    "checksum": "d4e5a9d57520570fb181a6ce31430545199583c51e16bc2cbdf40101b17f13a4",
     "path": "android/src/main/jniLibs/arm64-v8a/libtauonapi.so"
   },
   "armeabi-v7a": {
-    "checksum": "8681328f04a00fb5f9f8875dd3cd7b0e8bdc626b80298d091c51215c034e85fa",
+    "checksum": "5addb81afc39a609057515599bbbfbe872b73199c52ce148097c8946c309d19f",
     "path": "android/src/main/jniLibs/armeabi-v7a/libtauonapi.so"
   },
   "x86-64": {
-    "checksum": "7d165af2a66f4eac23691e31a5703e646b281817e0ccbcc4187cc76df51bdab1",
+    "checksum": "ea7d85d7b5d420953e21118edaeb669208e3f73b77bb538b43bbd4156f05f760",
     "path": "android/src/main/jniLibs/x86-64/libtauonapi.so"
   },
   "ios-arm64": {
-    "checksum": "cb23d89cbe280c99c02309478a17d43c24973660f5832bb1c0f4cbda2432b8ff",
+    "checksum": "221bf3e9bf723645828cacd45e0d51792588ed60d412dacbfc68cdf427953269",
     "path": "ios/libtauonapi.xcframework/ios-arm64/libtauonapi.framework/libtauonapi"
   },
   "ios-x86_64-simulator": {
-    "checksum": "998857dfad2fc9be82629d3ca2bfb6a6f6c1f238190fb452cb8565a2d651012c",
+    "checksum": "76221dfa2620ed3e2321f9d1ff11a26268e76dbcc809bdbed9cb5b5f45ed07d8",
     "path": "ios/libtauonapi.xcframework/ios-x86_64-simulator/libtauonapi.framework/libtauonapi"
   }
 }
