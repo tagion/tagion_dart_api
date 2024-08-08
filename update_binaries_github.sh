@@ -71,10 +71,13 @@ done
 # Step 3: Copy the binaries to the desired location
 # ANDROID
 # aarch64-linux-android
+mkdir -p ./android/src/main/jniLibs/arm64-v8a
 cp $TEMP_DIR/aarch64-linux-android/libtauonapi.so ./android/src/main/jniLibs/arm64-v8a/libtauonapi.so
 # armv7a-linux-android
+mkdir ./android/src/main/jniLibs/armeabi-v7a
 cp $TEMP_DIR/armv7a-linux-android/libtauonapi.so ./android/src/main/jniLibs/armeabi-v7a/libtauonapi.so
 # x86_64-linux-android
+mkdir ./android/src/main/jniLibs/x86-64
 cp $TEMP_DIR/x86_64-linux-android/libtauonapi.so ./android/src/main/jniLibs/x86-64/libtauonapi.so
 
 # IOS
