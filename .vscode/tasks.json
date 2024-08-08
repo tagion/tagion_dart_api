@@ -115,5 +115,14 @@
                 "./update_checksum.sh",
             ]
         },
+        {
+            "label": "UPDATE_BINARIES_GITHUB",
+            "type": "shell",
+            "group": "build",
+            "command": [
+                "chmod +x update_binaries_github.sh &&",
+                "./update_binaries_github.sh",
+            ]
+        },
     ]
 }
