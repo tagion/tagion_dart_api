@@ -34,6 +34,8 @@
             "type": "shell",
             "group": "build",
             "command": [
+                "chmod +x binary_validate.sh &&",
+                "./binary_validate.sh &&",
                 "cd example &&",
                 "flutter test integration_test/entry_point_integration_test.dart --reporter expanded | sed -E 's/^([0-9]{2}:[0-9]{2}) [^:]+:[^:]+: (.+)/\\1 \\2/'",
             ]
@@ -49,51 +51,31 @@
             ],
         },
         {
-            "label": "UPDATE_BINARIES",
+            "label": "VALIDATE_BINARY",
             "type": "shell",
             "group": "build",
             "command": [
-                //
-                // ANDROID
-                //
-                //aarch64-linux-android
-                "cp /Users/maximspiridonov/Projects/tagion_dart_api_file_container/aarch64-linux-android/libtauonapi.so /Users/maximspiridonov/Projects/tagion_dart_api_file_container/tagion_dart_api/android/src/main/jniLibs/arm64-v8a/libtauonapi.so &&",
-                //armv7a-linux-android
-                "cp /Users/maximspiridonov/Projects/tagion_dart_api_file_container/armv7a-linux-android/libtauonapi.so /Users/maximspiridonov/Projects/tagion_dart_api_file_container/tagion_dart_api/android/src/main/jniLibs/armeabi-v7a/libtauonapi.so &&",
-                //x86_64-linux-android
-                "cp /Users/maximspiridonov/Projects/tagion_dart_api_file_container/x86_64-linux-android/libtauonapi.so /Users/maximspiridonov/Projects/tagion_dart_api_file_container/tagion_dart_api/android/src/main/jniLibs/x86-64/libtauonapi.so &&",
-                //
-                //
-                //IOS
-                //
-                //arm64-apple-ios
-                // copy
-                "cp /Users/maximspiridonov/Projects/tagion_dart_api_file_container/arm64-apple-ios/libtauonapi.dylib /Users/maximspiridonov/Projects/tagion_dart_api_file_container/tagion_dart_api/ios/libtauonapi.xcframework/ios-arm64/libtauonapi.framework/libtauonapi.dylib &&",
-                // change directory
-                "cd /Users/maximspiridonov/Projects/tagion_dart_api_file_container/tagion_dart_api/ios/libtauonapi.xcframework/ios-arm64/libtauonapi.framework &&",
-                // modify the binary
-                "lipo -create libtauonapi.dylib -output libtauonapi &&",
-                // update path
-                "install_name_tool -id '@rpath/libtauonapi.framework/libtauonapi' libtauonapi &&",
-                // check
-                "otool -L libtauonapi &&",
-                // remove unmodified binary
-                "rm libtauonapi.dylib &&",
-                //
-                //x86_64-apple-ios-simulator
-                // change directory
-                "cd /Users/maximspiridonov/Projects/tagion_dart_api_file_container/tagion_dart_api/ios/libtauonapi.xcframework/ios-x86_64-simulator/libtauonapi.framework &&",
-                // copy
-                "cp /Users/maximspiridonov/Projects/tagion_dart_api_file_container/x86_64-apple-ios-simulator/libtauonapi.dylib /Users/maximspiridonov/Projects/tagion_dart_api_file_container/tagion_dart_api/ios/libtauonapi.xcframework/ios-x86_64-simulator/libtauonapi.framework/libtauonapi.dylib &&",
-                // modify the binary
-                "lipo -create libtauonapi.dylib -output libtauonapi &&",
-                // update path
-                "install_name_tool -id '@rpath/libtauonapi.framework/libtauonapi' libtauonapi &&",
-                // check
-                "otool -L libtauonapi &&",
-                // remove unmodified binary
-                "rm libtauonapi.dylib",
-            ],
+                "chmod +x binary_validate.sh &&",
+                "./binary_validate.sh",
+            ]
+        },
+        {
+            "label": "UPDATE_CHECKSUM_JSON",
+            "type": "shell",
+            "group": "build",
+            "command": [
+                "chmod +x binary_validate.sh &&",
+                "./update_checksum.sh",
+            ]
+        },
+        {
+            "label": "UPDATE_BINARIES_GITHUB",
+            "type": "shell",
+            "group": "build",
+            "command": [
+                "chmod +x update_binaries_github.sh &&",
+                "./update_binaries_github.sh",
+            ]
         },
     ]
 }

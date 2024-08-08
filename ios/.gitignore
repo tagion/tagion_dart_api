@@ -36,3 +36,6 @@ Icon?
 /Flutter/Generated.xcconfig
 /Flutter/ephemeral/
 /Flutter/flutter_export_environment.sh
+
+/libtauonapi.xcframework/ios-arm64/libtauonapi.framework/libtauonapi
+/libtauonapi.xcframework/ios-x86_64-simulator/libtauonapi.framework/libtauonapi
