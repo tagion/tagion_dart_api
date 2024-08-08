@@ -68,41 +68,41 @@ done
 # Step 3: Copy the binaries to the desired location
 # ANDROID
 # aarch64-linux-android
-cp $TEMP_DIR/aarch64-linux-android/libtauonapi.so ./android/src/main/jniLibs/arm64-v8a/libtauonapi.so &&
+cp $TEMP_DIR/aarch64-linux-android/libtauonapi.so ./android/src/main/jniLibs/arm64-v8a/libtauonapi.so
 # armv7a-linux-android
-cp $TEMP_DIR/armv7a-linux-android/libtauonapi.so ./android/src/main/jniLibs/armeabi-v7a/libtauonapi.so &&
+cp $TEMP_DIR/armv7a-linux-android/libtauonapi.so ./android/src/main/jniLibs/armeabi-v7a/libtauonapi.so
 # x86_64-linux-android
-cp $TEMP_DIR/x86_64-linux-android/libtauonapi.so ./android/src/main/jniLibs/x86-64/libtauonapi.so &&
+cp $TEMP_DIR/x86_64-linux-android/libtauonapi.so ./android/src/main/jniLibs/x86-64/libtauonapi.so
 
 # IOS
 # arm64-apple-ios
 # copy
-cp $TEMP_DIR/arm64-apple-ios/libtauonapi.dylib ./ios/libtauonapi.xcframework/ios-arm64/libtauonapi.framework/libtauonapi.dylib &&
+cp $TEMP_DIR/arm64-apple-ios/libtauonapi.dylib ./ios/libtauonapi.xcframework/ios-arm64/libtauonapi.framework/libtauonapi.dylib
 # change directory
-cd ./ios/libtauonapi.xcframework/ios-arm64/libtauonapi.framework &&
+cd ./ios/libtauonapi.xcframework/ios-arm64/libtauonapi.framework
 # modify the binary
-lipo -create libtauonapi.dylib -output libtauonapi &&
+lipo -create libtauonapi.dylib -output libtauonapi
 # update path
-install_name_tool -id '@rpath/libtauonapi.framework/libtauonapi' libtauonapi &&
+install_name_tool -id '@rpath/libtauonapi.framework/libtauonapi' libtauonapi
 # check
-otool -L libtauonapi &&
+otool -L libtauonapi
 # remove unmodified binary
-rm libtauonapi.dylib &&
-cd - &&
+rm libtauonapi.dylib
+cd -
 
 # x86_64-apple-ios-simulator
 # copy
-cp $TEMP_DIR/x86_64-apple-ios-simulator/libtauonapi.dylib ./ios/libtauonapi.xcframework/ios-x86_64-simulator/libtauonapi.framework/libtauonapi.dylib &&
+cp $TEMP_DIR/x86_64-apple-ios-simulator/libtauonapi.dylib ./ios/libtauonapi.xcframework/ios-x86_64-simulator/libtauonapi.framework/libtauonapi.dylib
 # change directory
-cd ./ios/libtauonapi.xcframework/ios-x86_64-simulator/libtauonapi.framework &&
+cd ./ios/libtauonapi.xcframework/ios-x86_64-simulator/libtauonapi.framework
 # modify the binary
-lipo -create libtauonapi.dylib -output libtauonapi &&
+lipo -create libtauonapi.dylib -output libtauonapi
 # update path
-install_name_tool -id '@rpath/libtauonapi.framework/libtauonapi' libtauonapi &&
+install_name_tool -id '@rpath/libtauonapi.framework/libtauonapi' libtauonapi
 # check
-otool -L libtauonapi &&
+otool -L libtauonapi
 # remove unmodified binary
-rm libtauonapi.dylib &&
+rm libtauonapi.dylib
 cd -
 
 # Step 4: Update checksum.json with the RUN_ID
