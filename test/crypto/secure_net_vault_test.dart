@@ -4,6 +4,8 @@ import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault.dart';
+import 'package:tagion_dart_api/enums/tagion_error_code.dart';
+import 'package:tagion_dart_api/exception/tagion_exception.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:test/test.dart';
 
@@ -27,9 +29,15 @@ void main() {
       verify(() => mockPointerManager.allocate<SecureNet>()).called(1);
     });
 
-    test('open exits when already allocated', () {
-      secureNetVault.open();
-      verifyNever(() => mockPointerManager.allocate<SecureNet>());
+    test('open throws Exception when already allocated', () {
+      expect(
+        () => secureNetVault.open(),
+        throwsA(isA<TagionDartApiException>().having(
+          (e) => e.errorCode,
+          '',
+          equals(TagionErrorCode.exception),
+        )),
+      );
     });
 
     test('zeroes out secureNetPtr on close', () {
