@@ -61,6 +61,9 @@ for ARTIFACT_NAME in "${ARTIFACT_NAMES[@]}"; do
         unzip $TEMP_DIR/$ARTIFACT_NAME.zip -d $TEMP_DIR/$ARTIFACT_NAME
     else
         echo "Artifact $ARTIFACT_NAME not found"
+        # Delete the temporary folder
+        rm -rf $TEMP_DIR
+        echo "Deleted temporary directory: $TEMP_DIR"
         exit 1
     fi
 done
