@@ -89,6 +89,14 @@ otool -L libtauonapi &&
 rm libtauonapi.dylib &&
 cd -
 
-# Step 4: Delete the temporary folder
+# Step 4: Update checksum.json with the RUN_ID
+jq --arg run_id "$RUN_ID" '.run_id = $run_id' checksum.json > checksum.tmp && mv checksum.tmp checksum.json
+echo "Updated checksum.json with run_id: $RUN_ID"
+
+# Step 5: Delete the temporary folder
 rm -rf $TEMP_DIR
 echo "Deleted temporary directory: $TEMP_DIR"
+
+# Step 6: Run a separate script to update the checksums in the checksum.json file
+chmod +x ./update_checksum.sh
+./update_checksum.sh
