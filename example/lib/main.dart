@@ -82,6 +82,9 @@ class _MyAppState extends State<MyApp> {
   Uint8List _devicePin = Uint8List.fromList([]);
   String decrypted = '';
   String signature = '';
+  //
+  int _openCount = 0;
+  int _closeCount = 0;
 
   @override
   void initState() {
@@ -117,6 +120,18 @@ class _MyAppState extends State<MyApp> {
         decrypted = '${e.runtimeType}: ${e.errorCode.toString()} - ${e.message}';
       });
     }
+  }
+
+  void closeVault() {
+    _secureNetVault.close();
+    _closeCount++;
+    setState(() {});
+  }
+
+  void openVault() {
+    _secureNetVault.open();
+    _openCount++;
+    setState(() {});
   }
 
   void signData() {
@@ -157,6 +172,27 @@ class _MyAppState extends State<MyApp> {
                   ),
                   const SizedBox(height: 20),
                   Text('Device pin: $_devicePin\n'),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () => closeVault(),
+                        child: const Text('Close'),
+                      ),
+                      Text('$_closeCount'),
+                      const SizedBox(width: 20),
+                      OutlinedButton(
+                        onPressed: () => openVault(),
+                        child: const Text('Open'),
+                      ),
+                      Text('$_openCount'),
+                    ],
+                  ),
                 ],
               ),
               Column(
