@@ -9,6 +9,7 @@ workflow:
 stages:
   - update_binaries_on_remote
   - unit_test
+  - validate_binaries
   - integration_test_android_emulator
   - integration_test_ios_simulator
 
@@ -19,6 +20,11 @@ update_binaries_on_remote:
     - ./update_binaries_github.sh RUN_ID=10320472014
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_COMMIT_REF_NAME == 'binaries_update'
+
+validate_binaries:
+  stage: validate_binaries
+  script:
+    - ./binary_validate.sh
 
 unit_test:
   stage: unit_test
