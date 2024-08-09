@@ -1,6 +1,0 @@
-output: '../lib/hirpc/ffi/hirpc_ffi.dart'
-headers:
-  entry-points:
-  - '../lib/hirpc/ffi/hirpc.h'
-name: 'HiRPCFfi'
-description: 'Dart API for using HiRPC Tagion functions'
