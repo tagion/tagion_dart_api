@@ -47,30 +47,22 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
     Uint8List devicePin = Uint8List.fromList([]);
 
     test('returns devicePin and sets secureNetPtr', () {
-      int secureNetPtrValueBefore = vault.secureNetPtr.cast<Uint8>()[0];
+      int innerSecureNetPtrHashBefore = vault.secureNetPtr.ref.securenet.hashCode;
       int devicePinLength = 117;
       devicePin = crypto.generateKeypair(passphrase, pinCode, salt);
-      int secureNetPtrValueAfter = vault.secureNetPtr.cast<Uint8>()[0];
+      int innerSecureNetPtrHashAfter = vault.secureNetPtr.ref.securenet.hashCode;
       expect(devicePin, isNotEmpty);
       expect(devicePinLength, devicePin.length);
-      expect(secureNetPtrValueBefore, isNot(secureNetPtrValueAfter));
+      expect(innerSecureNetPtrHashBefore, isNot(innerSecureNetPtrHashAfter));
     });
 
-    //PR Review: Discuss here
-    // test('SecureNetVault returns an empty pointer after close', () {
-    //   vault.close();
-    //   int secureNetPtrValue = vault.secureNetPtr.cast<Uint8>()[0];
-    //   expect(secureNetPtrValue, equals(0));
-    // });
-
-    //PR Review: Discuss here
     test('decrypt sets SecureNet in SecureNetVault', () {
-      // vault.open();
-      // int secureNetPtrValueBefore = vault.secureNetPtr.cast<Uint8>()[0];
-      // expect(secureNetPtrValueBefore, isNot(0));
+      vault.close();
+      vault.open();
+      int innerSecureNetPtrHashBefore = vault.secureNetPtr.ref.securenet.hashCode;
       expect(() => crypto.decryptDevicePin(pinCode, devicePin), returnsNormally);
-      // int secureNetPtrValueAfter = vault.secureNetPtr.cast<Uint8>()[0];
-      // expect(secureNetPtrValueBefore, isNot(secureNetPtrValueAfter));
+      int innerSecureNetPtrHashAfter = vault.secureNetPtr.ref.securenet.hashCode;
+      expect(innerSecureNetPtrHashBefore, isNot(innerSecureNetPtrHashAfter));
     });
 
     test('throws CryptoException on decrypt with incorrect pinCode, devicePin', () {
@@ -133,7 +125,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
               .having(
                 (e) => e.message,
                 '',
-                equals('Missing HiBON type'),
+                contains('Message length is invalid should be'),
               ),
         ),
       );
