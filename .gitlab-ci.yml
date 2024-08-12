@@ -17,7 +17,7 @@ stages:
 update_binaries_on_remote:
   stage: update_binaries_on_remote
   script:
-    - ./update_binaries_github.sh RUN_ID=10320472014
+    - ./update_binaries_github.sh 10320472014
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_COMMIT_REF_NAME == 'binaries_update'
 
