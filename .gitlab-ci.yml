@@ -7,9 +7,24 @@ workflow:
     - if: $CI_COMMIT_BRANCH == "main"
 
 stages:
+  - update_binaries_on_remote
   - unit_test
+  - validate_binaries
   - integration_test_android_emulator
   - integration_test_ios_simulator
+
+
+update_binaries_on_remote:
+  stage: update_binaries_on_remote
+  script:
+    - ./update_binaries_github.sh 10320472014
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_COMMIT_REF_NAME == 'binaries_update'
+
+validate_binaries:
+  stage: validate_binaries
+  script:
+    - ./binary_validate.sh
 
 unit_test:
   stage: unit_test
@@ -28,3 +43,4 @@ integration_test_ios_simulator:
   script:
     - cd example
     - 'fvm flutter test integration_test/entry_point_integration_test.dart -d F88A2BC9-E730-49D9-9015-8245583D3877 --reporter expanded | sed -E ''s/^([0-9]{2}:[0-9]{2}) [^:]+:[^:]+: (.+)/\1 \2/'''
+
