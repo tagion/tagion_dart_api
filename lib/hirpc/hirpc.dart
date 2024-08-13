@@ -22,13 +22,13 @@ class TagionHiRPC implements IHiRPC {
     this._errorMessage,
   );
 
-  /// Create a sender.
-  /// Returns a [Uint8List] sender.
+  /// Create a hirpc request.
+  /// Returns a resulting hirpc as a document buffer of [Uint8List] type.
   /// Throws a [TagionException] if an error occurs.
   /// The [method] parameter is a string.
   /// The [docBuffer] optional parameter is a [Uint8List].
   @override
-  Uint8List createSender(String method, [Uint8List? docBuffer]) {
+  Uint8List createRequest(String method, [Uint8List? docBuffer]) {
     final int methodLen = method.length;
     final Pointer<Char> methodPtr = _pointerManager.allocate<Char>(methodLen);
     _pointerManager.stringToPointer(methodPtr, method);
@@ -70,15 +70,15 @@ class TagionHiRPC implements IHiRPC {
     return result;
   }
 
-  /// Create a signed sender.
-  /// Returns a [Uint8List] signed sender.
+  /// Create a signed hirpc request.
+  /// Returns a resulting hirpc as a document buffer of [Uint8List] type.
   /// Throws a [TagionException] if an error occurs.
   /// The [method] parameter is a string.
   /// The [vault] parameter is a [SecureNetVault].
   /// The [docBuffer] optional parameter is a [Uint8List].
   /// The [deriver] optional parameter is a [Uint8List].
   @override
-  Uint8List createSignedSender(String method, SecureNetVault vault, [Uint8List? docBuffer, Uint8List? deriver]) {
+  Uint8List createSignedRequest(String method, SecureNetVault vault, [Uint8List? docBuffer, Uint8List? deriver]) {
     final int methodLen = method.length;
     final Pointer<Char> methodPtr = _pointerManager.allocate<Char>(methodLen);
     _pointerManager.stringToPointer(methodPtr, method);
