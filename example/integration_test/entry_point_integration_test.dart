@@ -31,10 +31,11 @@ void main() {
       expect(startDRuntimeResult, true);
     });
 
+    // Error message integration test must be first to check that it returns an empty error message, when no errors occured yet.
+    errorMessageIntegrationTest(dyLib);
     basicIntegrationTest(dyLib);
     cryptoIntegrationTest(dyLib);
     documentIntegrationTest(dyLib);
-    errorMessageIntegrationTest(dyLib);
     hibonIntegrationTest(dyLib);
 
     test('D runtime stopped', () {
