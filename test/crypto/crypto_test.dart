@@ -5,7 +5,6 @@ import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tagion_dart_api/crypto/crypto.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
-import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/crypto_exception.dart';
@@ -19,14 +18,11 @@ class MockPointerManager extends Mock implements IPointerManager {}
 
 class MockErrorMessage extends Mock implements IErrorMessage {}
 
-class MockSecureNetVault extends Mock implements ISecureNetVault {}
-
 void main() {
   group('Crypto', () {
     late MockCryptoFfi mockCryptoFfi;
     late MockPointerManager mockPointerManager;
     late MockErrorMessage mockErrorMessage;
-    late MockSecureNetVault mockSecureNetVault;
     late Crypto crypto;
 
     setUp(() {
@@ -40,7 +36,6 @@ void main() {
       mockCryptoFfi = MockCryptoFfi();
       mockPointerManager = MockPointerManager();
       mockErrorMessage = MockErrorMessage();
-      mockSecureNetVault = MockSecureNetVault();
       crypto = Crypto(
         mockCryptoFfi,
         mockPointerManager,
@@ -66,7 +61,6 @@ void main() {
       when(() => mockPointerManager.allocate<Char>(passphrase.length)).thenReturn(passphrasePtr);
       when(() => mockPointerManager.allocate<Char>(pinCode.length)).thenReturn(pinCodePtr);
       when(() => mockPointerManager.allocate<Char>(salt.length)).thenReturn(saltPtr);
-      when(() => mockSecureNetVault.secureNetPtr).thenReturn(securenetPtr);
       when(() => mockPointerManager.allocate<Pointer<Uint8>>()).thenReturn(devicePinPtr);
       when(() => mockPointerManager.allocate<Uint64>()).thenReturn(devicePinLenPtr);
 
@@ -85,7 +79,7 @@ void main() {
       });
 
       // Act
-      final result = crypto.generateKeypair(passphrase, pinCode, salt, mockSecureNetVault.secureNetPtr);
+      final result = crypto.generateKeypair(passphrase, pinCode, salt, securenetPtr);
 
       // Assert
       expect(result, isA<Uint8List>());
@@ -118,7 +112,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => crypto.generateKeypair(passphrase, pinCode, salt, mockSecureNetVault.secureNetPtr),
+        () => crypto.generateKeypair(passphrase, pinCode, salt, securenetPtr),
         throwsA(isA<CryptoException>()
             .having(
               (e) => e.errorCode,
@@ -151,7 +145,6 @@ void main() {
 
       when(() => mockPointerManager.allocate<Char>(pinCode.length)).thenReturn(pinCodePtr);
       when(() => mockPointerManager.allocate<Uint8>(devicePinBytes.length)).thenReturn(devicePinPtr);
-      when(() => mockSecureNetVault.secureNetPtr).thenReturn(securenetPtr);
 
       when(() => mockCryptoFfi.tagion_decrypt_devicepin(any(), any(), any(), any(), any())).thenAnswer((invocation) {
         final Pointer<Uint8> devicePinPtr = invocation.positionalArguments[2];
@@ -164,12 +157,11 @@ void main() {
       });
 
       // Act
-      crypto.decryptDevicePin(pinCode, devicePinBytes, mockSecureNetVault.secureNetPtr);
+      crypto.decryptDevicePin(pinCode, devicePinBytes, securenetPtr);
 
       // Verify
       verify(() => mockPointerManager.allocate<Char>(pinCode.length)).called(1);
       verify(() => mockPointerManager.allocate<Uint8>(devicePinBytes.length)).called(1);
-      verify(() => mockSecureNetVault.secureNetPtr).called(1);
       verify(() => mockPointerManager.stringToPointer(pinCodePtr, pinCode)).called(1);
       verify(() => mockPointerManager.uint8ListToPointer(devicePinPtr, devicePinBytes)).called(1);
       verify(() => mockPointerManager.zeroOutAndFree(pinCodePtr, pinCode.length)).called(1);
@@ -186,7 +178,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => crypto.decryptDevicePin(pinCode, devicePinBytes, mockSecureNetVault.secureNetPtr),
+        () => crypto.decryptDevicePin(pinCode, devicePinBytes, securenetPtr),
         throwsA(isA<CryptoException>()
             .having(
               (e) => e.errorCode,
@@ -216,7 +208,6 @@ void main() {
       final Pointer<Uint64> signedDataLenPtr = malloc<Uint64>();
 
       when(() => mockPointerManager.allocate<Uint8>(dataToSign.length)).thenReturn(dataToSignPtr);
-      when(() => mockSecureNetVault.secureNetPtr).thenReturn(secureNetPtr);
       when(() => mockPointerManager.allocate<Pointer<Uint8>>()).thenReturn(signedDataPtr);
       when(() => mockPointerManager.allocate<Uint64>()).thenReturn(signedDataLenPtr);
 
@@ -235,7 +226,7 @@ void main() {
       });
 
       // Act
-      final result = crypto.sign(dataToSign, mockSecureNetVault.secureNetPtr);
+      final result = crypto.sign(dataToSign, secureNetPtr);
 
       // Assert
       expect(result, isA<Uint8List>());
@@ -260,7 +251,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => crypto.sign(dataToSign, mockSecureNetVault.secureNetPtr),
+        () => crypto.sign(dataToSign, secureNetPtr),
         throwsA(isA<CryptoException>()
             .having(
               (e) => e.errorCode,

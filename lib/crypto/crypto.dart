@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:tagion_dart_api/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
-import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/crypto_exception.dart';
@@ -15,7 +14,6 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 /// Uses the [CryptoFfi] class to call the native functions.
 /// Uses the [IPointerManager] interface to manage the memory.
 /// Uses the [IErrorMessage] inteface to get the error message.
-/// Uses the [SecureNetVault] class to set or get access to a stored keypair pointer.
 class Crypto implements ICrypto {
   final CryptoFfi _cryptoFfi;
   final IPointerManager _pointerManager;
@@ -59,7 +57,7 @@ class Crypto implements ICrypto {
       passphraseLen,
       saltPtr,
       saltLen,
-      pointerSecureNet, // Uses the secureNetPtr field in the SecureNetVault class.
+      pointerSecureNet,
       pinCodePtr,
       pinCodeLen,
       devicePinPtr,
@@ -113,7 +111,7 @@ class Crypto implements ICrypto {
       pinCodeLen,
       devicePinPtr,
       devicePinLen,
-      pointerSecureNet, // Uses the secureNetPtr field in the SecureNetVault class.
+      pointerSecureNet,
     );
 
     /// Free memory.
@@ -146,7 +144,7 @@ class Crypto implements ICrypto {
     _pointerManager.uint8ListToPointer(dataToSignPtr, dataToSign);
 
     int status = _cryptoFfi.tagion_sign_message(
-      pointerSecureNet, // Uses the secureNetPtr field in the SecureNetVault class.
+      pointerSecureNet,
       dataToSignPtr,
       dataToSignLen,
       signaturePtr,

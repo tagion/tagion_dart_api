@@ -6,8 +6,6 @@ import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
 import 'package:tagion_dart_api/crypto/crypto.dart';
 import 'package:tagion_dart_api/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
-import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault.dart';
-import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
@@ -32,13 +30,13 @@ void main() {
 }
 
 void cryptoIntegrationTest(DynamicLibrary dyLib) {
-  group('Crypto-CryptoFfi-SecureNetVault_DynamicLibrary Integration.', () {
+  group('Crypto-CryptoFfi-DynamicLibrary Integration.', () {
     //create a Crypto object
     final CryptoFfi cryptoFfi = CryptoFfi(dyLib);
     const IPointerManager pointerManager = PointerManager();
     final IErrorMessage errorMessage = ErrorMessage(ErrorMessageFfi(dyLib), pointerManager);
-    final ISecureNetVault vault = SecureNetVault(pointerManager);
     final ICrypto crypto = Crypto(cryptoFfi, pointerManager, errorMessage);
+    Pointer<SecureNet> secureNetPtr = pointerManager.allocate<SecureNet>();
 
     const String passphrase = 'passphrase';
     const String pinCode = 'pinCode';
@@ -47,21 +45,21 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
     Uint8List devicePin = Uint8List.fromList([]);
 
     test('returns devicePin and sets secureNetPtr', () {
-      int innerSecureNetPtrHashBefore = vault.secureNetPtr.ref.securenet.hashCode;
+      int innerSecureNetPtrHashBefore = secureNetPtr.ref.securenet.hashCode;
       int devicePinLength = 117;
-      devicePin = crypto.generateKeypair(passphrase, pinCode, salt, vault.secureNetPtr);
-      int innerSecureNetPtrHashAfter = vault.secureNetPtr.ref.securenet.hashCode;
+      devicePin = crypto.generateKeypair(passphrase, pinCode, salt, secureNetPtr);
+      int innerSecureNetPtrHashAfter = secureNetPtr.ref.securenet.hashCode;
       expect(devicePin, isNotEmpty);
       expect(devicePinLength, devicePin.length);
       expect(innerSecureNetPtrHashBefore, isNot(innerSecureNetPtrHashAfter));
     });
 
-    test('decrypt sets SecureNet in SecureNetVault', () {
-      vault.removePtr();
-      vault.allocatePtr();
-      int innerSecureNetPtrHashBefore = vault.secureNetPtr.ref.securenet.hashCode;
-      expect(() => crypto.decryptDevicePin(pinCode, devicePin, vault.secureNetPtr), returnsNormally);
-      int innerSecureNetPtrHashAfter = vault.secureNetPtr.ref.securenet.hashCode;
+    test('decrypt sets SecureNet in pointer', () {
+      pointerManager.zeroOutAndFree(secureNetPtr, 1);
+      secureNetPtr = pointerManager.allocate<SecureNet>();
+      int innerSecureNetPtrHashBefore = secureNetPtr.ref.securenet.hashCode;
+      expect(() => crypto.decryptDevicePin(pinCode, devicePin, secureNetPtr), returnsNormally);
+      int innerSecureNetPtrHashAfter = secureNetPtr.ref.securenet.hashCode;
       expect(innerSecureNetPtrHashBefore, isNot(innerSecureNetPtrHashAfter));
     });
 
@@ -70,7 +68,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
       Uint8List incorrectDevicePin = Uint8List.fromList([0, 1, 2, 3]);
 
       expect(
-        () => crypto.decryptDevicePin(incorrectPinCode, devicePin, vault.secureNetPtr),
+        () => crypto.decryptDevicePin(incorrectPinCode, devicePin, secureNetPtr),
         throwsA(
           isA<CryptoException>()
               .having(
@@ -87,7 +85,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
       );
 
       expect(
-        () => crypto.decryptDevicePin(pinCode, incorrectDevicePin, vault.secureNetPtr),
+        () => crypto.decryptDevicePin(pinCode, incorrectDevicePin, secureNetPtr),
         throwsA(
           isA<CryptoException>()
               .having(
@@ -106,7 +104,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
 
     test('sign returns signature', () {
       Uint8List dataToSign = Uint8List(32);
-      Uint8List signature = crypto.sign(dataToSign, vault.secureNetPtr);
+      Uint8List signature = crypto.sign(dataToSign, secureNetPtr);
       expect(signature, isNotEmpty);
     });
 
@@ -114,7 +112,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
       Uint8List dataToSign = Uint8List(10);
 
       expect(
-        () => crypto.sign(dataToSign, vault.secureNetPtr),
+        () => crypto.sign(dataToSign, secureNetPtr),
         throwsA(
           isA<CryptoException>()
               .having(

@@ -7,8 +7,6 @@ import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
 import 'package:tagion_dart_api/crypto/crypto.dart';
 import 'package:tagion_dart_api/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
-import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault.dart';
-import 'package:tagion_dart_api/crypto/secure_net_vault/secure_net_vault_interface.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
@@ -16,6 +14,8 @@ import 'package:tagion_dart_api/exception/crypto_exception.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:tagion_dart_api/utils/ffi_library_util.dart';
+import 'package:tagion_dart_api_example/secure_net_vault/secure_net_vault.dart';
+import 'package:tagion_dart_api_example/secure_net_vault/secure_net_vault_interface.dart';
 
 void main() {
   runApp(const MyApp());
