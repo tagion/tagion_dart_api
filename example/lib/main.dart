@@ -98,20 +98,20 @@ class _MyAppState extends State<MyApp> {
     //
     _cryptoFfi = CryptoFfi(_dyLib);
     _secureNetVault = SecureNetVault(_pointerManager);
-    _crypto = Crypto(_cryptoFfi, _pointerManager, _errorMessage, _secureNetVault);
+    _crypto = Crypto(_cryptoFfi, _pointerManager, _errorMessage);
     //
     _basic.startDRuntime();
   }
 
   void generateKeypair() {
     setState(() {
-      _devicePin = _crypto.generateKeypair(passPhrase, pinCode, salt);
+      _devicePin = _crypto.generateKeypair(passPhrase, pinCode, salt, _secureNetVault.secureNetPtr);
     });
   }
 
   void decryptDevicePin() {
     try {
-      _crypto.decryptDevicePin(pinCode, _devicePin);
+      _crypto.decryptDevicePin(pinCode, _devicePin, _secureNetVault.secureNetPtr);
       setState(() {
         decrypted = 'Success';
       });
@@ -123,13 +123,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   void closeVault() {
-    _secureNetVault.close();
+    _secureNetVault.removePtr();
     _closeCount++;
     setState(() {});
   }
 
   void openVault() {
-    _secureNetVault.open();
+    _secureNetVault.allocatePtr();
     _openCount++;
     setState(() {});
   }
@@ -137,7 +137,7 @@ class _MyAppState extends State<MyApp> {
   void signData() {
     try {
       setState(() {
-        signature = _crypto.sign(dataToSign).toString();
+        signature = _crypto.sign(dataToSign, _secureNetVault.secureNetPtr).toString();
       });
     } on CryptoException catch (e) {
       setState(() {

@@ -31,7 +31,7 @@ void main() {
 
     test('open throws Exception when already allocated', () {
       expect(
-        () => secureNetVault.open(),
+        () => secureNetVault.allocatePtr(),
         throwsA(isA<TagionDartApiException>().having(
           (e) => e.errorCode,
           '',
@@ -42,7 +42,7 @@ void main() {
 
     test('zeroes out secureNetPtr on close', () {
       when(() => mockPointerManager.zeroOutAndFree(any(), any())).thenAnswer((_) {});
-      secureNetVault.close();
+      secureNetVault.removePtr();
 
       verify(() => mockPointerManager.zeroOutAndFree(secureNetPtr, 1)).called(1);
     });

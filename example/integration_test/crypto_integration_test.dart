@@ -38,7 +38,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
     const IPointerManager pointerManager = PointerManager();
     final IErrorMessage errorMessage = ErrorMessage(ErrorMessageFfi(dyLib), pointerManager);
     final ISecureNetVault vault = SecureNetVault(pointerManager);
-    final ICrypto crypto = Crypto(cryptoFfi, pointerManager, errorMessage, vault);
+    final ICrypto crypto = Crypto(cryptoFfi, pointerManager, errorMessage);
 
     const String passphrase = 'passphrase';
     const String pinCode = 'pinCode';
@@ -49,7 +49,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
     test('returns devicePin and sets secureNetPtr', () {
       int innerSecureNetPtrHashBefore = vault.secureNetPtr.ref.securenet.hashCode;
       int devicePinLength = 117;
-      devicePin = crypto.generateKeypair(passphrase, pinCode, salt);
+      devicePin = crypto.generateKeypair(passphrase, pinCode, salt, vault.secureNetPtr);
       int innerSecureNetPtrHashAfter = vault.secureNetPtr.ref.securenet.hashCode;
       expect(devicePin, isNotEmpty);
       expect(devicePinLength, devicePin.length);
@@ -57,10 +57,10 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
     });
 
     test('decrypt sets SecureNet in SecureNetVault', () {
-      vault.close();
-      vault.open();
+      vault.removePtr();
+      vault.allocatePtr();
       int innerSecureNetPtrHashBefore = vault.secureNetPtr.ref.securenet.hashCode;
-      expect(() => crypto.decryptDevicePin(pinCode, devicePin), returnsNormally);
+      expect(() => crypto.decryptDevicePin(pinCode, devicePin, vault.secureNetPtr), returnsNormally);
       int innerSecureNetPtrHashAfter = vault.secureNetPtr.ref.securenet.hashCode;
       expect(innerSecureNetPtrHashBefore, isNot(innerSecureNetPtrHashAfter));
     });
@@ -70,7 +70,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
       Uint8List incorrectDevicePin = Uint8List.fromList([0, 1, 2, 3]);
 
       expect(
-        () => crypto.decryptDevicePin(incorrectPinCode, devicePin),
+        () => crypto.decryptDevicePin(incorrectPinCode, devicePin, vault.secureNetPtr),
         throwsA(
           isA<CryptoException>()
               .having(
@@ -87,7 +87,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
       );
 
       expect(
-        () => crypto.decryptDevicePin(pinCode, incorrectDevicePin),
+        () => crypto.decryptDevicePin(pinCode, incorrectDevicePin, vault.secureNetPtr),
         throwsA(
           isA<CryptoException>()
               .having(
@@ -106,7 +106,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
 
     test('sign returns signature', () {
       Uint8List dataToSign = Uint8List(32);
-      Uint8List signature = crypto.sign(dataToSign);
+      Uint8List signature = crypto.sign(dataToSign, vault.secureNetPtr);
       expect(signature, isNotEmpty);
     });
 
@@ -114,7 +114,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
       Uint8List dataToSign = Uint8List(10);
 
       expect(
-        () => crypto.sign(dataToSign),
+        () => crypto.sign(dataToSign, vault.secureNetPtr),
         throwsA(
           isA<CryptoException>()
               .having(

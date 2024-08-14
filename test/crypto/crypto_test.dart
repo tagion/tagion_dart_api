@@ -45,7 +45,6 @@ void main() {
         mockCryptoFfi,
         mockPointerManager,
         mockErrorMessage,
-        mockSecureNetVault,
       );
     });
 
@@ -86,7 +85,7 @@ void main() {
       });
 
       // Act
-      final result = crypto.generateKeypair(passphrase, pinCode, salt);
+      final result = crypto.generateKeypair(passphrase, pinCode, salt, mockSecureNetVault.secureNetPtr);
 
       // Assert
       expect(result, isA<Uint8List>());
@@ -119,7 +118,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => crypto.generateKeypair(passphrase, pinCode, salt),
+        () => crypto.generateKeypair(passphrase, pinCode, salt, mockSecureNetVault.secureNetPtr),
         throwsA(isA<CryptoException>()
             .having(
               (e) => e.errorCode,
@@ -165,7 +164,7 @@ void main() {
       });
 
       // Act
-      crypto.decryptDevicePin(pinCode, devicePinBytes);
+      crypto.decryptDevicePin(pinCode, devicePinBytes, mockSecureNetVault.secureNetPtr);
 
       // Verify
       verify(() => mockPointerManager.allocate<Char>(pinCode.length)).called(1);
@@ -187,7 +186,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => crypto.decryptDevicePin(pinCode, devicePinBytes),
+        () => crypto.decryptDevicePin(pinCode, devicePinBytes, mockSecureNetVault.secureNetPtr),
         throwsA(isA<CryptoException>()
             .having(
               (e) => e.errorCode,
@@ -236,7 +235,7 @@ void main() {
       });
 
       // Act
-      final result = crypto.sign(dataToSign);
+      final result = crypto.sign(dataToSign, mockSecureNetVault.secureNetPtr);
 
       // Assert
       expect(result, isA<Uint8List>());
@@ -261,7 +260,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => crypto.sign(dataToSign),
+        () => crypto.sign(dataToSign, mockSecureNetVault.secureNetPtr),
         throwsA(isA<CryptoException>()
             .having(
               (e) => e.errorCode,

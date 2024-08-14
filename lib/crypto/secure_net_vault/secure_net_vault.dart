@@ -18,7 +18,7 @@ class SecureNetVault implements ISecureNetVault {
   static SecureNetVault? _instance;
 
   SecureNetVault._(this._pointerManager) {
-    open();
+    allocatePtr();
   }
 
   factory SecureNetVault(IPointerManager pointerManager) {
@@ -40,7 +40,7 @@ class SecureNetVault implements ISecureNetVault {
   /// Sets [_allocated] flag to true.
   /// If already allocated, does nothing.
   @override
-  void open() {
+  void allocatePtr() {
     if (_allocated) {
       throw TagionDartApiException(
           TagionErrorCode.exception, '_secureNetPtr already allocated. Call close() before opening again.');
@@ -54,7 +54,7 @@ class SecureNetVault implements ISecureNetVault {
   /// Sets [_allocated] flag to false.
   /// If not allocated, does nothing.
   @override
-  void close() {
+  void removePtr() {
     _pointerManager.zeroOutAndFree(_secureNetPtr, 1);
     _allocated = false;
     _finalizer.detach(this);
