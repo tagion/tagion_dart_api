@@ -154,77 +154,79 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('Passphrase: $passPhrase\nPincode: $pinCode\nSalt: $salt'),
-                      OutlinedButton(
-                        onPressed: () => generateKeypair(),
-                        child: const Text('Generate keypair'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Text('Device pin: $_devicePin\n'),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      OutlinedButton(
-                        onPressed: () => closeVault(),
-                        child: const Text('Close'),
-                      ),
-                      Text('$_closeCount'),
-                      const SizedBox(width: 20),
-                      OutlinedButton(
-                        onPressed: () => openVault(),
-                        child: const Text('Open'),
-                      ),
-                      Text('$_openCount'),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('Pincode: $pinCode\nDevicePin: See above'),
-                      OutlinedButton(
-                        onPressed: () => decryptDevicePin(),
-                        child: const Text('Decrypt device pin'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Text('Decrypted: $decrypted'),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Data: $dataToSign'),
-                  OutlinedButton(
-                    onPressed: () => signData(),
-                    child: const Text('Sign data'),
-                  ),
-                  const SizedBox(height: 20),
-                  Text('Signature: $signature'),
-                ],
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text('Passphrase: $passPhrase\nPincode: $pinCode\nSalt: $salt'),
+                        OutlinedButton(
+                          onPressed: () => generateKeypair(),
+                          child: const Text('Generate keypair'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Text('Device pin: $_devicePin\n'),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        OutlinedButton(
+                          onPressed: () => closeVault(),
+                          child: const Text('Close'),
+                        ),
+                        Text('$_closeCount'),
+                        const SizedBox(width: 20),
+                        OutlinedButton(
+                          onPressed: () => openVault(),
+                          child: const Text('Open'),
+                        ),
+                        Text('$_openCount'),
+                      ],
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text('Pincode: $pinCode\nDevicePin: See above'),
+                        OutlinedButton(
+                          onPressed: () => decryptDevicePin(),
+                          child: const Text('Decrypt device pin'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Text('Decrypted: $decrypted'),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Data: $dataToSign'),
+                    OutlinedButton(
+                      onPressed: () => signData(),
+                      child: const Text('Sign data'),
+                    ),
+                    const SizedBox(height: 20),
+                    Text('Signature: $signature'),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
