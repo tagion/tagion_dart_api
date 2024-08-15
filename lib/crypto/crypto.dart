@@ -3,10 +3,9 @@ import 'dart:typed_data';
 
 import 'package:tagion_dart_api/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
-import 'package:tagion_dart_api/crypto/secure_net_vault.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
-import 'package:tagion_dart_api/exception/tagion_exception.dart';
+import 'package:tagion_dart_api/exception/crypto_exception.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// Crypto class.
@@ -15,28 +14,25 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 /// Uses the [CryptoFfi] class to call the native functions.
 /// Uses the [IPointerManager] interface to manage the memory.
 /// Uses the [IErrorMessage] inteface to get the error message.
-/// Uses the [SecureNetVault] class to set or get access to a stored keypair pointer.
 class Crypto implements ICrypto {
   final CryptoFfi _cryptoFfi;
   final IPointerManager _pointerManager;
   final IErrorMessage _errorMessage;
-  final SecureNetVault _vault;
 
   const Crypto(
     this._cryptoFfi,
     this._pointerManager,
     this._errorMessage,
-    this._vault,
   );
 
   /// Generates a keypair.
   /// Returns a [Uint8List] device pin.
-  /// Throws a [TagionException] if an error occurs.
+  /// Throws a [CryptoException] if an error occurs.
   /// The [passphrase] parameter is a string.
   /// The [pinCode] parameter is a string.
   /// The [salt] parameter is a string.
   @override
-  Uint8List generateKeypair(String passphrase, String pinCode, String salt) {
+  Uint8List generateKeypair(String passphrase, String pinCode, String salt, Pointer<SecureNet> pointerSecureNet) {
     /// Data lengths.
     final passphraseLen = passphrase.length;
     final pinCodeLen = pinCode.length;
@@ -61,7 +57,7 @@ class Crypto implements ICrypto {
       passphraseLen,
       saltPtr,
       saltLen,
-      _vault.secureNetPtr, // Uses the secureNetPtr field in the SecureNetVault class.
+      pointerSecureNet,
       pinCodePtr,
       pinCodeLen,
       devicePinPtr,
@@ -76,11 +72,11 @@ class Crypto implements ICrypto {
       _pointerManager.free(devicePinPtr);
       _pointerManager.free(devicePinLenPtr);
 
-      throw TagionException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw CryptoException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the values.
-    final devicePin = devicePinPtr.value.asTypedList(devicePinLenPtr.value);
+    final devicePin = devicePinPtr[0].asTypedList(devicePinLenPtr.value);
 
     /// Free memory.
     _pointerManager.zeroOutAndFree(passphrasePtr, passphraseLen);
@@ -93,11 +89,11 @@ class Crypto implements ICrypto {
   }
 
   /// Decrypts a device pin.
-  /// Throws a [TagionException] if an error occurs.
+  /// Throws a [CryptoException] if an error occurs.
   /// The [pinCode] parameter is a string.
   /// The [devicepin] parameter is a Uint8List.
   @override
-  void decryptDevicePin(String pinCode, Uint8List devicepin) {
+  void decryptDevicePin(String pinCode, Uint8List devicepin, Pointer<SecureNet> pointerSecureNet) {
     /// Data lengths.
     final pinCodeLen = pinCode.length;
     final devicePinLen = devicepin.length;
@@ -115,7 +111,7 @@ class Crypto implements ICrypto {
       pinCodeLen,
       devicePinPtr,
       devicePinLen,
-      _vault.secureNetPtr, // Uses the secureNetPtr field in the SecureNetVault class.
+      pointerSecureNet,
     );
 
     /// Free memory.
@@ -124,16 +120,16 @@ class Crypto implements ICrypto {
 
     /// Check the status.
     if (status != TagionErrorCode.none.value) {
-      throw TagionException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw CryptoException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
   }
 
   /// Signs a given [Uint8List] typed list.
   /// Returns a signed data as a [Uint8List] typed list.
-  /// Throws a [TagionException] if an error occurs.
+  /// Throws a [CryptoException] if an error occurs.
   /// The [dataToSign] parameter is a Uint8List.
   @override
-  Uint8List sign(Uint8List dataToSign) {
+  Uint8List sign(Uint8List dataToSign, Pointer<SecureNet> pointerSecureNet) {
     /// Data lengths.
     final dataToSignLen = dataToSign.length;
 
@@ -148,7 +144,7 @@ class Crypto implements ICrypto {
     _pointerManager.uint8ListToPointer(dataToSignPtr, dataToSign);
 
     int status = _cryptoFfi.tagion_sign_message(
-      _vault.secureNetPtr, // Uses the secureNetPtr field in the SecureNetVault class.
+      pointerSecureNet,
       dataToSignPtr,
       dataToSignLen,
       signaturePtr,
@@ -160,7 +156,7 @@ class Crypto implements ICrypto {
       _pointerManager.free(dataToSignPtr);
       _pointerManager.free(signaturePtr);
 
-      throw TagionException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw CryptoException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the values.
