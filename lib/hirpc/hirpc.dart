@@ -2,7 +2,6 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
-import 'package:tagion_dart_api/crypto/secure_net_vault.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/tagion_exception.dart';
@@ -24,8 +23,8 @@ class TagionHiRPC implements IHiRPC {
 
   /// Create a hirpc request.
   /// Returns a resulting hirpc as a document buffer of [Uint8List] type.
-  /// Throws a [TagionException] if an error occurs.
-  /// The [method] parameter is a string.
+  /// Throws a [TagionDartApiException] if an error occurs.
+  /// The [method] parameter is a [String].
   /// The [docBuffer] optional parameter is a [Uint8List].
   @override
   Uint8List createRequest(String method, [Uint8List? docBuffer]) {
@@ -58,7 +57,7 @@ class TagionHiRPC implements IHiRPC {
       _pointerManager.free(methodPtr);
       _pointerManager.free(docBufferPtr);
       _pointerManager.free(resultPtr);
-      throw TagionException(TagionErrorCode.values[status], _errorMessage.getErrorText());
+      throw TagionDartApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     final result = resultPtr.value.asTypedList(resultLenPtr.value);
@@ -72,13 +71,13 @@ class TagionHiRPC implements IHiRPC {
 
   /// Create a signed hirpc request.
   /// Returns a resulting hirpc as a document buffer of [Uint8List] type.
-  /// Throws a [TagionException] if an error occurs.
-  /// The [method] parameter is a string.
-  /// The [vault] parameter is a [SecureNetVault].
+  /// Throws a [TagionDartApiException] if an error occurs.
+  /// The [method] parameter is a [String].
+  /// The [secureNetPtr] parameter is a [Pointer] to [SecureNet].
   /// The [docBuffer] optional parameter is a [Uint8List].
   /// The [deriver] optional parameter is a [Uint8List].
   @override
-  Uint8List createSignedRequest(String method, SecureNetVault vault, [Uint8List? docBuffer, Uint8List? deriver]) {
+  Uint8List createSignedRequest(String method, Pointer<SecureNet> secureNetPtr, [Uint8List? docBuffer, Uint8List? deriver]) {
     final int methodLen = method.length;
     final Pointer<Char> methodPtr = _pointerManager.allocate<Char>(methodLen);
     _pointerManager.stringToPointer(methodPtr, method);
@@ -109,7 +108,7 @@ class TagionHiRPC implements IHiRPC {
       methodLen,
       docBufferPtr,
       docBufferLen,
-      vault.secureNetPtr,
+      secureNetPtr,
       deriverPtr,
       deriverLen,
       resultPtr,
@@ -121,7 +120,7 @@ class TagionHiRPC implements IHiRPC {
       _pointerManager.free(docBufferPtr);
       _pointerManager.free(deriverPtr);
       _pointerManager.free(resultPtr);
-      throw TagionException(TagionErrorCode.values[status], _errorMessage.getErrorText());
+      throw TagionDartApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     final result = resultPtr.value.asTypedList(resultLenPtr.value);
