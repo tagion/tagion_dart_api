@@ -4,17 +4,17 @@ import 'dart:typed_data';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/crypto/secure_net_vault.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
-import 'package:tagion_dart_api/error_message/error_message.dart';
+import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/tagion_exception.dart';
 import 'package:tagion_dart_api/hirpc/hirpc_interface.dart';
-import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// HiRPC class.
 /// Provides functionality for HiRPC messages creation.
 class TagionHiRPC implements IHiRPC {
   final CryptoFfi _ffi;
-  final PointerManager _pointerManager;
-  final ErrorMessage _errorMessage;
+  final IPointerManager _pointerManager;
+  final IErrorMessage _errorMessage;
 
   TagionHiRPC(
     this._ffi,
