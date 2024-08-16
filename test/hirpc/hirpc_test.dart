@@ -91,7 +91,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(any())).thenReturn(null);
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
 
       // Act
       Uint8List result = hirpc.createSignedRequest(method, secureNetPtr, docBufferMock, deriverMock);
@@ -120,7 +120,7 @@ void main() {
             any(),
           )).called(1);
 
-      verify(() => mockPointerManager.free(any())).called(4);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
@@ -175,7 +175,7 @@ void main() {
             any(),
             any(),
           )).called(1);
-      verify(() => mockPointerManager.free(any())).called(4);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
 
     // createRequest.
@@ -222,7 +222,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(any())).thenReturn(null);
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
 
       // Act
       Uint8List result = hirpc.createRequest(method, docBufferMock);
@@ -247,7 +247,54 @@ void main() {
             any(),
           )).called(1);
 
-      verify(() => mockPointerManager.free(any())).called(3);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
+
+      // Arrange
+      when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
+
+      when(() => mockCryptoFfi.tagion_hirpc_create_sender(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          )).thenAnswer((_) {
+        return TagionErrorCode.error.value;
+      });
+
+      // Act & Assert
+      expect(
+        () => hirpc.createRequest('method', Uint8List.fromList([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])),
+        throwsA(isA<TagionDartApiException>()
+            .having(
+              (e) => e.errorCode,
+              '',
+              equals(errorCode),
+            )
+            .having(
+              (e) => e.message,
+              '',
+              equals(errorMessage),
+            )),
+      );
+
+      // Verify
+      verify(() => mockPointerManager.allocate<Char>(methodLen)).called(1);
+      verify(() => mockPointerManager.allocate<Uint8>(docBufferMockLen)).called(1);
+      verify(() => mockPointerManager.allocate<Pointer<Uint8>>()).called(1);
+      verify(() => mockPointerManager.allocate<Uint64>()).called(1);
+      verify(() => mockPointerManager.stringToPointer(methodPtr, method)).called(1);
+      verify(() => mockPointerManager.uint8ListToPointer(docBufferPtr, docBufferMock)).called(1);
+      verify(() => mockCryptoFfi.tagion_hirpc_create_sender(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          )).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
   });
 }
