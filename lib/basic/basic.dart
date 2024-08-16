@@ -44,7 +44,7 @@ class Basic implements IBasic {
       _pointerManager.free(strPtr);
       _pointerManager.free(strLenPtr);
 
-      throw BasicException(TagionErrorCode.fromInt(result), _errorMessage.getErrorText());
+      throw BasicApiException(TagionErrorCode.fromInt(result), _errorMessage.getErrorText());
     }
 
     String resultString = strPtr[0].toDartString(length: strLenPtr.value);
@@ -67,7 +67,7 @@ class Basic implements IBasic {
       _pointerManager.free(strPtr);
       _pointerManager.free(strLenPtr);
 
-      throw BasicException(TagionErrorCode.fromInt(result), _errorMessage.getErrorText());
+      throw BasicApiException(TagionErrorCode.fromInt(result), _errorMessage.getErrorText());
     }
 
     String resultString = strPtr[0].toDartString(length: strLenPtr.value);

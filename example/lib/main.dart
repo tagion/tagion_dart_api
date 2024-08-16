@@ -115,7 +115,7 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         decrypted = 'Success';
       });
-    } on CryptoException catch (e) {
+    } on CryptoApiException catch (e) {
       setState(() {
         decrypted = '${e.runtimeType}: ${e.errorCode.toString()} - ${e.message}';
       });
@@ -139,7 +139,7 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         signature = _crypto.sign(dataToSign, _secureNetVault.secureNetPtr).toString();
       });
-    } on CryptoException catch (e) {
+    } on CryptoApiException catch (e) {
       setState(() {
         signature = '${e.runtimeType}: ${e.errorCode.toString()} - ${e.message}';
       });

@@ -113,7 +113,7 @@ void main() {
       // Act & Assert
       expect(
         () => crypto.generateKeypair(passphrase, pinCode, salt, securenetPtr),
-        throwsA(isA<CryptoException>()
+        throwsA(isA<CryptoApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -179,7 +179,7 @@ void main() {
       // Act & Assert
       expect(
         () => crypto.decryptDevicePin(pinCode, devicePinBytes, securenetPtr),
-        throwsA(isA<CryptoException>()
+        throwsA(isA<CryptoApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -252,7 +252,7 @@ void main() {
       // Act & Assert
       expect(
         () => crypto.sign(dataToSign, secureNetPtr),
-        throwsA(isA<CryptoException>()
+        throwsA(isA<CryptoApiException>()
             .having(
               (e) => e.errorCode,
               '',

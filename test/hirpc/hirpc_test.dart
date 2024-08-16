@@ -142,7 +142,7 @@ void main() {
       // Act & Assert
       expect(
         () => hirpc.createSignedRequest(method, secureNetPtr, docBufferMock, deriverMock),
-        throwsA(isA<TagionDartApiException>()
+        throwsA(isA<TagionApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -266,7 +266,7 @@ void main() {
       // Act & Assert
       expect(
         () => hirpc.createRequest('method', Uint8List.fromList([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])),
-        throwsA(isA<TagionDartApiException>()
+        throwsA(isA<TagionApiException>()
             .having(
               (e) => e.errorCode,
               '',

@@ -27,7 +27,7 @@ class Crypto implements ICrypto {
 
   /// Generates a keypair.
   /// Returns a [Uint8List] device pin.
-  /// Throws a [CryptoException] if an error occurs.
+  /// Throws a [CryptoApiException] if an error occurs.
   /// The [passphrase] parameter is a string.
   /// The [pinCode] parameter is a string.
   /// The [salt] parameter is a string.
@@ -72,7 +72,7 @@ class Crypto implements ICrypto {
       _pointerManager.free(devicePinPtr);
       _pointerManager.free(devicePinLenPtr);
 
-      throw CryptoException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw CryptoApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the values.
@@ -89,7 +89,7 @@ class Crypto implements ICrypto {
   }
 
   /// Decrypts a device pin.
-  /// Throws a [CryptoException] if an error occurs.
+  /// Throws a [CryptoApiException] if an error occurs.
   /// The [pinCode] parameter is a string.
   /// The [devicepin] parameter is a Uint8List.
   @override
@@ -120,13 +120,13 @@ class Crypto implements ICrypto {
 
     /// Check the status.
     if (status != TagionErrorCode.none.value) {
-      throw CryptoException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw CryptoApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
   }
 
   /// Signs a given [Uint8List] typed list.
   /// Returns a signed data as a [Uint8List] typed list.
-  /// Throws a [CryptoException] if an error occurs.
+  /// Throws a [CryptoApiException] if an error occurs.
   /// The [dataToSign] parameter is a Uint8List.
   @override
   Uint8List sign(Uint8List dataToSign, Pointer<SecureNet> pointerSecureNet) {
@@ -156,7 +156,7 @@ class Crypto implements ICrypto {
       _pointerManager.free(dataToSignPtr);
       _pointerManager.free(signaturePtr);
 
-      throw CryptoException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw CryptoApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the values.

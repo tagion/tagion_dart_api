@@ -106,7 +106,7 @@ void main() {
       // Act & Assert
       expect(
         () => document.getElementByKey(key),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -180,7 +180,7 @@ void main() {
       // Act & Assert
       expect(
         () => document.getElementByIndex(index),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -244,7 +244,7 @@ void main() {
       // Act & Assert
       expect(
         () => document.getVersion(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -308,7 +308,7 @@ void main() {
       // Act & Assert
       expect(
         () => document.validate(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -383,7 +383,7 @@ void main() {
       // Act & Assert
       expect(
         () => document.getAsString(textFormat),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -457,7 +457,7 @@ void main() {
       // Act & Assert
       expect(
         () => document.getRecordName(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',

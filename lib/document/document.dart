@@ -63,7 +63,7 @@ class Document implements IDocument {
       _pointerManager.free(dataPtr);
       _pointerManager.free(keyPtr);
       _pointerManager.free(elementPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Free the memory.
@@ -99,7 +99,7 @@ class Document implements IDocument {
       /// Free the memory.
       _pointerManager.free(dataPtr);
       _pointerManager.free(elementPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     return DocumentElement(
@@ -135,7 +135,7 @@ class Document implements IDocument {
       _pointerManager.free(dataPtr);
       _pointerManager.free(recordNamePtr);
       _pointerManager.free(recordNameLenPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the record name value.
@@ -174,7 +174,7 @@ class Document implements IDocument {
       _pointerManager.free(dataPtr);
       _pointerManager.free(textPtr);
       _pointerManager.free(textLenPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the text value.
@@ -209,7 +209,7 @@ class Document implements IDocument {
       /// Free the memory.
       _pointerManager.free(dataPtr);
       _pointerManager.free(versionPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the version.
@@ -239,7 +239,7 @@ class Document implements IDocument {
       /// Free memory.
       _pointerManager.free(dataPtr);
       _pointerManager.free(errorCodePtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Ghe the error code.

@@ -92,7 +92,7 @@ void main() {
       // Act & Assert
       expect(
         () => basic.encodeBase64Url(textAsByteArray),
-        throwsA(isA<BasicException>()
+        throwsA(isA<BasicApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -153,7 +153,7 @@ void main() {
       // Act & Assert
       expect(
         () => basic.tagionRevision(),
-        throwsA(isA<BasicException>()
+        throwsA(isA<BasicApiException>()
             .having(
               (e) => e.errorCode,
               '',

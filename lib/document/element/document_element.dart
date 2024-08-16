@@ -39,7 +39,7 @@ class DocumentElement implements IDocumentElement {
       /// Free the allocated pointers.
       _pointerManager.free(bigIntPtr);
       _pointerManager.free(bigIntLenPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     // /// Get the byte data from the pointer.
@@ -71,7 +71,7 @@ class DocumentElement implements IDocumentElement {
       /// Free the allocated pointers.
       _pointerManager.free(binaryPtr);
       _pointerManager.free(binaryLenPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the byte data from the pointer.
@@ -94,7 +94,7 @@ class DocumentElement implements IDocumentElement {
     if (status != TagionErrorCode.none.value) {
       /// Free the allocated pointer.
       _pointerManager.free(boolPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the bool value.
@@ -116,7 +116,7 @@ class DocumentElement implements IDocumentElement {
     if (status != TagionErrorCode.none.value) {
       /// Free the allocated pointer.
       _pointerManager.free(intPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the int value.
@@ -138,7 +138,7 @@ class DocumentElement implements IDocumentElement {
     if (status != TagionErrorCode.none.value) {
       /// Free the allocated pointer.
       _pointerManager.free(intPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the int value.
@@ -160,7 +160,7 @@ class DocumentElement implements IDocumentElement {
     if (status != TagionErrorCode.none.value) {
       /// Free the allocated pointer.
       _pointerManager.free(intPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the int value.
@@ -182,7 +182,7 @@ class DocumentElement implements IDocumentElement {
     if (status != TagionErrorCode.none.value) {
       /// Free the allocated pointer.
       _pointerManager.free(intPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the int value.
@@ -204,7 +204,7 @@ class DocumentElement implements IDocumentElement {
     if (status != TagionErrorCode.none.value) {
       /// Free the allocated pointer.
       _pointerManager.free(floatPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the double value.
@@ -226,7 +226,7 @@ class DocumentElement implements IDocumentElement {
     if (status != TagionErrorCode.none.value) {
       /// Free the allocated pointer.
       _pointerManager.free(doublePtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the double value.
@@ -250,7 +250,7 @@ class DocumentElement implements IDocumentElement {
       /// Free the allocated pointers.
       _pointerManager.free(stringPtr);
       _pointerManager.free(stringLenPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the string value.
@@ -275,7 +275,7 @@ class DocumentElement implements IDocumentElement {
       /// Free the allocated pointers.
       _pointerManager.free(subDocumentPtr);
       _pointerManager.free(subDocumentLenPtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the byte data from the pointer.
@@ -298,7 +298,7 @@ class DocumentElement implements IDocumentElement {
     if (status != TagionErrorCode.none.value) {
       /// Free the allocated pointer.
       _pointerManager.free(timePtr);
-      throw DocumentException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
 
     /// Get the time value.

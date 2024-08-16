@@ -92,7 +92,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getBigInt(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -161,7 +161,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getU8Array(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -217,7 +217,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getBool(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -280,7 +280,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getFloat32(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -334,7 +334,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getFloat64(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -388,7 +388,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getInt32(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -442,7 +442,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getInt64(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -496,7 +496,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getUint32(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -550,7 +550,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getUint64(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -613,7 +613,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getString(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -680,7 +680,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getSubDocument(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -735,7 +735,7 @@ void main() {
       // Act & Assert
       expect(
         () => documentElement.getTime(),
-        throwsA(isA<DocumentException>()
+        throwsA(isA<DocumentApiException>()
             .having(
               (e) => e.errorCode,
               '',

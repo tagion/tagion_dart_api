@@ -22,7 +22,7 @@ class TagionHiRPC extends Module implements IHiRPC {
 
   /// Create a hirpc request.
   /// Returns a resulting hirpc as a document buffer of [Uint8List] type.
-  /// Throws a [TagionDartApiException] if an error occurs.
+  /// Throws a [TagionApiException] if an error occurs.
   /// The [method] parameter is a [String].
   /// The [docBuffer] optional parameter is a [Uint8List].
   @override
@@ -58,7 +58,7 @@ class TagionHiRPC extends Module implements IHiRPC {
 
   /// Create a signed hirpc request.
   /// Returns a resulting hirpc as a document buffer of [Uint8List] type.
-  /// Throws a [TagionDartApiException] if an error occurs.
+  /// Throws a [TagionApiException] if an error occurs.
   /// The [method] parameter is a [String].
   /// The [secureNetPtr] parameter is a [Pointer] to [SecureNet].
   /// The [docBuffer] optional parameter is a [Uint8List].

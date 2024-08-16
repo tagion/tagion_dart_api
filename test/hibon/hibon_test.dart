@@ -67,7 +67,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.create(),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -135,7 +135,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addString(key, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -200,7 +200,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.getAsString(),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -276,7 +276,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addInt<Int32>(key, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -291,7 +291,7 @@ void main() {
 
       expect(
         () => hibon.addInt<Int64>(key, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -306,7 +306,7 @@ void main() {
 
       expect(
         () => hibon.addInt<Uint32>(key, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -321,7 +321,7 @@ void main() {
 
       expect(
         () => hibon.addInt<Uint64>(key, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -372,7 +372,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addBool(key, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -435,7 +435,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.getAsDocumentBuffer(),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -494,7 +494,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addDocumentBufferByKey(key, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -547,7 +547,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addDocumentBufferByIndex(index, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -602,7 +602,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addHibonByKey(key, nHibon),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -649,7 +649,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addHibonByIndex(index, nHibon),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -705,7 +705,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addFloat<Float>(key, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -720,7 +720,7 @@ void main() {
 
       expect(
         () => hibon.addFloat<Double>(key, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -779,7 +779,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addArrayByKey(key, array),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -833,7 +833,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addArrayByIndex(index, array),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -884,7 +884,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.addTime(key, value),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -943,7 +943,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.hasMemberByKey(key),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -998,7 +998,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.hasMemberByIndex(index),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -1049,7 +1049,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.removeByKey(key),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
@@ -1090,7 +1090,7 @@ void main() {
       // Act & Assert
       expect(
         () => hibon.removeByIndex(index),
-        throwsA(isA<HibonException>()
+        throwsA(isA<HibonApiException>()
             .having(
               (e) => e.errorCode,
               '',
