@@ -1892,6 +1892,87 @@ class CryptoFfi {
   late final _tagion_sign_message = _tagion_sign_messagePtr.asFunction<
       int Function(ffi.Pointer<SecureNet>, ffi.Pointer<ffi.Uint8>, int,
           ffi.Pointer<ffi.Pointer<ffi.Uint8>>, ffi.Pointer<ffi.Uint64>)>();
+
+  int tagion_hirpc_create_sender(
+    ffi.Pointer<ffi.Char> method,
+    int method_len,
+    ffi.Pointer<ffi.Uint8> param,
+    int param_len,
+    ffi.Pointer<ffi.Pointer<ffi.Uint8>> out_doc,
+    ffi.Pointer<ffi.Uint64> out_doc_len,
+  ) {
+    return _tagion_hirpc_create_sender(
+      method,
+      method_len,
+      param,
+      param_len,
+      out_doc,
+      out_doc_len,
+    );
+  }
+
+  late final _tagion_hirpc_create_senderPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Uint64,
+              ffi.Pointer<ffi.Uint8>,
+              ffi.Uint64,
+              ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
+              ffi.Pointer<ffi.Uint64>)>>('tagion_hirpc_create_sender');
+  late final _tagion_hirpc_create_sender =
+      _tagion_hirpc_create_senderPtr.asFunction<
+          int Function(ffi.Pointer<ffi.Char>, int, ffi.Pointer<ffi.Uint8>, int,
+              ffi.Pointer<ffi.Pointer<ffi.Uint8>>, ffi.Pointer<ffi.Uint64>)>();
+
+  int tagion_hirpc_create_signed_sender(
+    ffi.Pointer<ffi.Char> method,
+    int method_len,
+    ffi.Pointer<ffi.Uint8> param,
+    int param_len,
+    ffi.Pointer<SecureNet> root_net,
+    ffi.Pointer<ffi.Uint8> deriver,
+    int deriver_len,
+    ffi.Pointer<ffi.Pointer<ffi.Uint8>> out_doc,
+    ffi.Pointer<ffi.Uint64> out_doc_len,
+  ) {
+    return _tagion_hirpc_create_signed_sender(
+      method,
+      method_len,
+      param,
+      param_len,
+      root_net,
+      deriver,
+      deriver_len,
+      out_doc,
+      out_doc_len,
+    );
+  }
+
+  late final _tagion_hirpc_create_signed_senderPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int32 Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Uint64,
+              ffi.Pointer<ffi.Uint8>,
+              ffi.Uint64,
+              ffi.Pointer<SecureNet>,
+              ffi.Pointer<ffi.Uint8>,
+              ffi.Uint64,
+              ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
+              ffi.Pointer<ffi.Uint64>)>>('tagion_hirpc_create_signed_sender');
+  late final _tagion_hirpc_create_signed_sender =
+      _tagion_hirpc_create_signed_senderPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.Char>,
+              int,
+              ffi.Pointer<ffi.Uint8>,
+              int,
+              ffi.Pointer<SecureNet>,
+              ffi.Pointer<ffi.Uint8>,
+              int,
+              ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
+              ffi.Pointer<ffi.Uint64>)>();
 }
 
 final class __float2 extends ffi.Struct {
@@ -2201,6 +2282,8 @@ const int __MAC_14_3 = 140300;
 
 const int __MAC_14_4 = 140400;
 
+const int __MAC_14_5 = 140500;
+
 const int __IPHONE_2_0 = 20000;
 
 const int __IPHONE_2_1 = 20100;
@@ -2357,6 +2440,8 @@ const int __IPHONE_17_3 = 170300;
 
 const int __IPHONE_17_4 = 170400;
 
+const int __IPHONE_17_5 = 170500;
+
 const int __WATCHOS_1_0 = 10000;
 
 const int __WATCHOS_2_0 = 20000;
@@ -2448,6 +2533,8 @@ const int __WATCHOS_10_2 = 100200;
 const int __WATCHOS_10_3 = 100300;
 
 const int __WATCHOS_10_4 = 100400;
+
+const int __WATCHOS_10_5 = 100500;
 
 const int __TVOS_9_0 = 90000;
 
@@ -2543,6 +2630,8 @@ const int __TVOS_17_3 = 170300;
 
 const int __TVOS_17_4 = 170400;
 
+const int __TVOS_17_5 = 170500;
+
 const int __BRIDGEOS_2_0 = 20000;
 
 const int __BRIDGEOS_3_0 = 30000;
@@ -2593,6 +2682,8 @@ const int __BRIDGEOS_8_3 = 80300;
 
 const int __BRIDGEOS_8_4 = 80400;
 
+const int __BRIDGEOS_8_5 = 80500;
+
 const int __DRIVERKIT_19_0 = 190000;
 
 const int __DRIVERKIT_20_0 = 200000;
@@ -2617,9 +2708,13 @@ const int __DRIVERKIT_23_3 = 230300;
 
 const int __DRIVERKIT_23_4 = 230400;
 
+const int __DRIVERKIT_23_5 = 230500;
+
 const int __VISIONOS_1_0 = 10000;
 
 const int __VISIONOS_1_1 = 10100;
+
+const int __VISIONOS_1_2 = 10200;
 
 const int MAC_OS_X_VERSION_10_0 = 1000;
 
@@ -2741,9 +2836,11 @@ const int MAC_OS_VERSION_14_3 = 140300;
 
 const int MAC_OS_VERSION_14_4 = 140400;
 
+const int MAC_OS_VERSION_14_5 = 140500;
+
 const int __MAC_OS_X_VERSION_MIN_REQUIRED = 140000;
 
-const int __MAC_OS_X_VERSION_MAX_ALLOWED = 140400;
+const int __MAC_OS_X_VERSION_MAX_ALLOWED = 140500;
 
 const int __ENABLE_LEGACY_MAC_AVAILABILITY = 1;
 

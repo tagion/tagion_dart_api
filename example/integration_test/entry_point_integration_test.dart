@@ -15,6 +15,7 @@ import 'crypto_integration_test.dart';
 import 'document_integration_test.dart';
 import 'error_message_integration_test.dart';
 import 'hibon_integration_test.dart';
+import 'hirpc_integration_test.dart';
 
 void main() {
   group('', () {
@@ -37,6 +38,7 @@ void main() {
     cryptoIntegrationTest(dyLib);
     documentIntegrationTest(dyLib);
     hibonIntegrationTest(dyLib);
+    hirpcIntegrationTest(dyLib);
 
     test('D runtime stopped', () {
       final bool stopDRuntimeResult = basic.stopDRuntime();

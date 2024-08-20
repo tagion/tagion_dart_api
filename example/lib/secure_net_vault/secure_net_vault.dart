@@ -43,7 +43,7 @@ class SecureNetVault implements ISecureNetVault {
   @override
   void allocatePtr() {
     if (_allocated) {
-      throw TagionDartApiException(
+      throw TagionApiException(
           TagionErrorCode.exception, '_secureNetPtr already allocated. Call close() before opening again.');
     }
     _secureNetPtr = _pointerManager.allocate<SecureNet>();

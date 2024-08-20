@@ -30,7 +30,14 @@ class PointerManager implements IPointerManager {
   }
 
   @override
-  void zeroOutAndFree(Pointer pointer, int size, {Allocator allocator = malloc}) {
+  void freeAll(List<Pointer> pointers, [Allocator allocator = malloc]) {
+    for (var ptr in pointers) {
+      free(ptr, allocator);
+    }
+  }
+
+  @override
+  void zeroOutAndFree(Pointer pointer, int size, [Allocator allocator = malloc]) {
     zeroOutPointer(pointer, size);
     free(pointer, allocator);
   }

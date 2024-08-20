@@ -26,7 +26,7 @@ class Hibon implements IHibon, Finalizable {
   //   (pointer) => HibonFfi(FFILibraryUtil.load()).tagion_hibon_free(pointer),
   // );
 
-  /// Throws a [HibonException] if the operation is not successful.
+  /// Throws a [HibonApiException] if the operation is not successful.
   /// Allocates [_hibonPtr] for the Hibon object.
   Hibon(
     this._hibonFfi,
@@ -44,7 +44,7 @@ class Hibon implements IHibon, Finalizable {
   ]) {
     try {
       if (status != TagionErrorCode.none.value) {
-        throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+        throw HibonApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
       }
       return onDone();
     } catch (_) {
@@ -62,7 +62,7 @@ class Hibon implements IHibon, Finalizable {
   void create() {
     int status = _hibonFfi.tagion_hibon_create(_hibonPtr);
     if (status != TagionErrorCode.none.value) {
-      throw HibonException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
+      throw HibonApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
     // _finalizer.attach(this, _hibonPtr);
   }

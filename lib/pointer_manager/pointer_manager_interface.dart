@@ -17,6 +17,9 @@ abstract interface class IPointerManager {
   /// Method to free the memory.
   void free(Pointer pointer, [Allocator allocator]);
 
+  /// Method to free all pointers in the list.
+  void freeAll(List<Pointer> pointers, [Allocator allocator]);
+
   /// Method to zero out and free the memory.
-  void zeroOutAndFree(Pointer pointer, int size, {Allocator allocator});
+  void zeroOutAndFree(Pointer pointer, int size, [Allocator allocator]);
 }

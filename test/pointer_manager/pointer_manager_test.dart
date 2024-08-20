@@ -54,6 +54,22 @@ void main() {
       verify(() => mockAllocator.free(pointer)).called(1);
     });
 
+    test('Free all deallocates all provided pointers correctly', () {
+      final pointerA = malloc<Uint8>(10).cast<Uint8>();
+      final pointerB = malloc<Uint8>(10).cast<Uint8>();
+      final pointerC = malloc<Uint8>(10).cast<Uint8>();
+
+      when(() => mockAllocator.free(pointerA)).thenReturn(null);
+      when(() => mockAllocator.free(pointerB)).thenReturn(null);
+      when(() => mockAllocator.free(pointerC)).thenReturn(null);
+
+      pointerManager.freeAll([pointerA, pointerB, pointerC], mockAllocator);
+
+      verify(() => mockAllocator.free(pointerA)).called(1);
+      verify(() => mockAllocator.free(pointerB)).called(1);
+      verify(() => mockAllocator.free(pointerC)).called(1);
+    });
+
     test('ZeroOutAndFree zeroes out and then frees memory', () {
       final int typeSize = sizeOf<Float>();
       final Pointer<Uint8> pointer = malloc<Float>(typeSize).cast<Uint8>();
@@ -62,7 +78,7 @@ void main() {
       }
       when(() => mockAllocator.free(pointer)).thenReturn(null);
 
-      pointerManager.zeroOutAndFree(pointer, typeSize, allocator: mockAllocator);
+      pointerManager.zeroOutAndFree(pointer, typeSize, mockAllocator);
 
       for (var i = 0; i < typeSize; i++) {
         expect(pointer[i], 0);

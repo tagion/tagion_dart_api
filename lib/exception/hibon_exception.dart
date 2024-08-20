@@ -1,6 +1,6 @@
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/exception/tagion_exception.dart';
 
-class HibonException extends TagionDartApiException {
-  HibonException(TagionErrorCode errorCode, String message) : super(errorCode, message);
+class HibonApiException extends TagionApiException {
+  HibonApiException(TagionErrorCode errorCode, String message) : super(errorCode, message);
 }

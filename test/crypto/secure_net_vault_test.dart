@@ -33,7 +33,7 @@ void main() {
     test('open throws Exception when already allocated', () {
       expect(
         () => secureNetVault.allocatePtr(),
-        throwsA(isA<TagionDartApiException>().having(
+        throwsA(isA<TagionApiException>().having(
           (e) => e.errorCode,
           '',
           equals(TagionErrorCode.exception),

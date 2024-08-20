@@ -49,7 +49,7 @@ void errorMessageIntegrationTest(DynamicLibrary dyLib) {
         hibon.addString('key', 'value');
         expect(
           () => hibon.addString('key', 'value'),
-          throwsA(isA<HibonException>()
+          throwsA(isA<HibonApiException>()
               .having(
                 (e) => e.errorCode,
                 '',

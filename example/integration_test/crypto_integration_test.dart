@@ -70,7 +70,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
       expect(
         () => crypto.decryptDevicePin(incorrectPinCode, devicePin, secureNetPtr),
         throwsA(
-          isA<CryptoException>()
+          isA<CryptoApiException>()
               .having(
                 (e) => e.errorCode,
                 '',
@@ -87,7 +87,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
       expect(
         () => crypto.decryptDevicePin(pinCode, incorrectDevicePin, secureNetPtr),
         throwsA(
-          isA<CryptoException>()
+          isA<CryptoApiException>()
               .having(
                 (e) => e.errorCode,
                 '',
@@ -114,7 +114,7 @@ void cryptoIntegrationTest(DynamicLibrary dyLib) {
       expect(
         () => crypto.sign(dataToSign, secureNetPtr),
         throwsA(
-          isA<CryptoException>()
+          isA<CryptoApiException>()
               .having(
                 (e) => e.errorCode,
                 '',
