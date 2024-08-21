@@ -18,7 +18,7 @@ class TagionHiRPC extends Module implements IHiRPC {
     this._ffi,
     this._pointerManager,
     IErrorMessage errorMessage,
-  ) : super(_pointerManager, errorMessage);
+  ) : super(errorMessage);
 
   /// Create a hirpc request.
   /// Returns a resulting hirpc as a document buffer of [Uint8List] type.
@@ -52,8 +52,8 @@ class TagionHiRPC extends Module implements IHiRPC {
       resultLenPtr,
     );
 
-    return scope
-        .onExit(status, () => resultPtr.value.asTypedList(resultLenPtr.value), [methodPtr, docBufferPtr, resultPtr]);
+    return scope.onExit(status, () => resultPtr.value.asTypedList(resultLenPtr.value),
+        () => _pointerManager.freeAll([methodPtr, docBufferPtr, resultPtr]));
   }
 
   /// Create a signed hirpc request.
@@ -104,6 +104,6 @@ class TagionHiRPC extends Module implements IHiRPC {
     );
 
     return scope.onExit(status, () => resultPtr.value.asTypedList(resultLenPtr.value),
-        [methodPtr, docBufferPtr, deriverPtr, resultPtr, resultLenPtr]);
+        () => _pointerManager.freeAll([methodPtr, docBufferPtr, deriverPtr, resultPtr, resultLenPtr]));
   }
 }

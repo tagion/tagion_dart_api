@@ -7,248 +7,158 @@ import 'package:tagion_dart_api/document/element/document_element_interface.dart
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
 import 'package:tagion_dart_api/enums/document_text_format.dart';
-import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/document_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
+import 'package:tagion_dart_api/module.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
-/// Document’s purpose is to get data from a serialized HiBON.
-/// [_hibonBuffer] is HiBON in form of byte array.
-/// HiBON’s byte array can be obtained from HiBON.getDocument().
+/// Document’s purpose is to read data from a serialized HiBON.
 /// Document guarantees immutability of HiBON.
-class Document implements IDocument {
+class Document extends Module implements IDocument, Finalizable {
   final DocumentFfi _documentFfi;
   final IPointerManager _pointerManager;
   final IErrorMessage _errorMessage;
 
-  final Uint8List _hibonBuffer;
+  final Pointer<Uint8> _hibonPtr;
+  final int _hibonLen;
 
-  const Document(
+  static final _finalizer = Finalizer<void Function()>((f) => f());
+
+  Document(
     this._documentFfi,
     this._pointerManager,
     this._errorMessage,
-    this._hibonBuffer,
-  );
+    Uint8List hibonBuffer,
+  )   : _hibonPtr = _pointerManager.allocate<Uint8>(hibonBuffer.lengthInBytes), // Allocate memory for the HiBON.
+        _hibonLen = hibonBuffer.lengthInBytes,
+        super(_errorMessage) {
+    _pointerManager.uint8ListToPointer<Uint8>(_hibonPtr, hibonBuffer); // Fill the pointer with data.
+    _finalizer.attach(this, dispose, detach: this); // Attach the finalizer with a dispose function.
+  }
 
   @override
-  Uint8List getData() {
-    return _hibonBuffer;
+  void dispose() {
+    _pointerManager.free(_hibonPtr); // Free the memory.
+    _finalizer.detach(this);
   }
 
   @override
   IDocumentElement getElementByKey(String key) {
-    final dataLen = _hibonBuffer.lengthInBytes;
     final keyLen = key.length;
 
-    /// Allocate memory for the data and key.
-    final dataPtr = _pointerManager.allocate<Uint8>(dataLen);
+    /// Allocate memory for the key and the element.
     final keyPtr = _pointerManager.allocate<Char>(keyLen);
     final elementPtr = _pointerManager.allocate<Element>();
 
     /// Fill necessary pointers with data.
-    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
     _pointerManager.stringToPointer<Char>(keyPtr, key);
 
     int status = _documentFfi.tagion_document_element_by_key(
-      dataPtr,
-      dataLen,
+      _hibonPtr,
+      _hibonLen,
       keyPtr,
       keyLen,
       elementPtr,
     );
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the memory.
-      _pointerManager.free(dataPtr);
-      _pointerManager.free(keyPtr);
-      _pointerManager.free(elementPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Free the memory.
-    _pointerManager.free(keyPtr);
-
-    return DocumentElement(
-      _documentFfi,
-      _pointerManager,
-      _errorMessage,
-      elementPtr,
+    return scope.onExit<DocumentElement, DocumentApiException>(
+      status,
+      () => DocumentElement(_documentFfi, _pointerManager, _errorMessage, elementPtr),
+      () => _pointerManager.free(keyPtr),
     );
   }
 
   @override
   IDocumentElement getElementByIndex(int index) {
-    final dataLen = _hibonBuffer.lengthInBytes;
-
-    /// Allocate memory for the data and key.
-    final dataPtr = _pointerManager.allocate<Uint8>(dataLen);
     final elementPtr = _pointerManager.allocate<Element>();
 
-    /// Fill necessary pointers with data.
-    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
-
     int status = _documentFfi.tagion_document_element_by_index(
-      dataPtr,
-      dataLen,
+      _hibonPtr,
+      _hibonLen,
       index,
       elementPtr,
     );
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the memory.
-      _pointerManager.free(dataPtr);
-      _pointerManager.free(elementPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    return DocumentElement(
-      _documentFfi,
-      _pointerManager,
-      _errorMessage,
-      elementPtr,
+    return scope.onExit<DocumentElement, DocumentApiException>(
+      status,
+      () => DocumentElement(_documentFfi, _pointerManager, _errorMessage, elementPtr),
+      null,
     );
   }
 
   @override
   String getRecordName() {
-    /// Get the length of the data.
-    final dataLen = _hibonBuffer.lengthInBytes;
-
-    /// Allocate memory.
-    final dataPtr = _pointerManager.allocate<Uint8>(dataLen);
+    /// Allocate memory for the record name and its length.
     final recordNamePtr = _pointerManager.allocate<Pointer<Char>>();
     final recordNameLenPtr = _pointerManager.allocate<Uint64>();
 
-    /// Fill necessary pointers with data.
-    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
-
     int status = _documentFfi.tagion_document_get_record_name(
-      dataPtr,
-      dataLen,
+      _hibonPtr,
+      _hibonLen,
       recordNamePtr,
       recordNameLenPtr,
     );
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the memory.
-      _pointerManager.free(dataPtr);
-      _pointerManager.free(recordNamePtr);
-      _pointerManager.free(recordNameLenPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the record name value.
-    final resultString = recordNamePtr[0].toDartString(length: recordNameLenPtr.value);
-
-    /// Free the memory.
-    _pointerManager.free(dataPtr);
-    _pointerManager.free(recordNamePtr);
-    _pointerManager.free(recordNameLenPtr);
-
-    return resultString;
+    return scope.onExit<String, DocumentApiException>(
+      status,
+      () => recordNamePtr[0].toDartString(length: recordNameLenPtr.value),
+      () => _pointerManager.freeAll([recordNamePtr, recordNameLenPtr]),
+    );
   }
 
   @override
   String getAsString(DocumentTextFormat textFormat) {
-    final dataLen = _hibonBuffer.lengthInBytes;
-
-    /// Allocate memory.
-    final dataPtr = _pointerManager.allocate<Uint8>(dataLen);
+    /// Allocate memory for the text and its length.
     final textPtr = _pointerManager.allocate<Pointer<Char>>();
     final textLenPtr = _pointerManager.allocate<Uint64>();
 
-    /// Fill necessary pointers with data.
-    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
-
     int status = _documentFfi.tagion_document_get_text(
-      dataPtr,
-      dataLen,
+      _hibonPtr,
+      _hibonLen,
       textFormat.index,
       textPtr,
       textLenPtr,
     );
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the memory.
-      _pointerManager.free(dataPtr);
-      _pointerManager.free(textPtr);
-      _pointerManager.free(textLenPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the text value.
-    final resultString = textPtr[0].toDartString(length: textLenPtr.value);
-
-    /// Free the memory.
-    _pointerManager.free(dataPtr);
-    _pointerManager.free(textPtr);
-    _pointerManager.free(textLenPtr);
-
-    return resultString;
+    return scope.onExit<String, DocumentApiException>(
+      status,
+      () => textPtr[0].toDartString(length: textLenPtr.value),
+      () => _pointerManager.freeAll([textPtr, textLenPtr]),
+    );
   }
 
   @override
   int getVersion() {
-    final dataLen = _hibonBuffer.lengthInBytes;
-
-    /// Allocate memory for the data and version.
-    final dataPtr = _pointerManager.allocate<Uint8>(dataLen);
     final versionPtr = _pointerManager.allocate<Uint32>();
 
-    /// Fill necessary pointers with data.
-    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
-
     int status = _documentFfi.tagion_document_get_version(
-      dataPtr,
-      dataLen,
+      _hibonPtr,
+      _hibonLen,
       versionPtr,
     );
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the memory.
-      _pointerManager.free(dataPtr);
-      _pointerManager.free(versionPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the version.
-    final version = versionPtr.value;
-
-    /// Free the memory.
-    _pointerManager.free(dataPtr);
-    _pointerManager.free(versionPtr);
-
-    return version;
+    return scope.onExit<int, DocumentApiException>(
+      status,
+      () => versionPtr.value,
+      () => _pointerManager.free(versionPtr),
+    );
   }
 
   @override
   DocumentErrorCode validate() {
-    final dataLen = _hibonBuffer.lengthInBytes;
-
-    /// Allocate memory for the data and error code.
-    final dataPtr = _pointerManager.allocate<Uint8>(dataLen);
     final errorCodePtr = _pointerManager.allocate<Int32>();
 
-    /// Fill necessary pointers with data.
-    _pointerManager.uint8ListToPointer<Uint8>(dataPtr, _hibonBuffer);
+    int status = _documentFfi.tagion_document_valid(
+      _hibonPtr,
+      _hibonLen,
+      errorCodePtr,
+    );
 
-    int status = _documentFfi.tagion_document_valid(dataPtr, dataLen, errorCodePtr);
-
-    if (status != TagionErrorCode.none.value) {
-      /// Free memory.
-      _pointerManager.free(dataPtr);
-      _pointerManager.free(errorCodePtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Ghe the error code.
-    int errorCode = errorCodePtr.value;
-
-    /// Free memory.
-    _pointerManager.free(dataPtr);
-    _pointerManager.free(errorCodePtr);
-
-    return DocumentErrorCode.values[errorCode];
+    return scope.onExit<DocumentErrorCode, DocumentApiException>(
+      status,
+      () => DocumentErrorCode.values[errorCodePtr.value],
+      () => _pointerManager.free(errorCodePtr),
+    );
   }
 }
