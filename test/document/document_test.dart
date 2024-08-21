@@ -406,5 +406,16 @@ void main() {
       // Verify
       verify(() => mockPointerManager.freeAll(any())).called(1);
     });
+
+    test('dispose calls tagion_hibon_free', () {
+      // Arrange
+      when(() => mockPointerManager.free(any())).thenReturn(null);
+
+      // Act & Assert
+      expect(() => document.dispose(), returnsNormally);
+
+      // Verify
+      verify(() => mockPointerManager.free(any())).called(1);
+    });
   });
 }
