@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:tagion_dart_api/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
-import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/crypto_exception.dart';
+import 'package:tagion_dart_api/module.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// Crypto class.
@@ -13,17 +13,15 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 /// Provides methods for generating a keypair, decrypting a device pin, and signing a message.
 /// Uses the [CryptoFfi] class to call the native functions.
 /// Uses the [IPointerManager] interface to manage the memory.
-/// Uses the [IErrorMessage] inteface to get the error message.
-class Crypto implements ICrypto {
+class Crypto extends Module implements ICrypto {
   final CryptoFfi _cryptoFfi;
   final IPointerManager _pointerManager;
-  final IErrorMessage _errorMessage;
 
-  const Crypto(
+  Crypto(
     this._cryptoFfi,
     this._pointerManager,
-    this._errorMessage,
-  );
+    IErrorMessage errorMessage,
+  ) : super(errorMessage);
 
   /// Generates a keypair.
   /// Returns a [Uint8List] device pin.
@@ -64,28 +62,13 @@ class Crypto implements ICrypto {
       devicePinLenPtr,
     );
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free memory.
+    return scope.onExit<Uint8List, CryptoApiException>(status, () => devicePinPtr[0].asTypedList(devicePinLenPtr.value),
+        () {
       _pointerManager.zeroOutAndFree(passphrasePtr, passphraseLen);
       _pointerManager.zeroOutAndFree(pinCodePtr, pinCodeLen);
       _pointerManager.zeroOutAndFree(saltPtr, saltLen);
-      _pointerManager.free(devicePinPtr);
-      _pointerManager.free(devicePinLenPtr);
-
-      throw CryptoApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the values.
-    final devicePin = devicePinPtr[0].asTypedList(devicePinLenPtr.value);
-
-    /// Free memory.
-    _pointerManager.zeroOutAndFree(passphrasePtr, passphraseLen);
-    _pointerManager.zeroOutAndFree(pinCodePtr, pinCodeLen);
-    _pointerManager.zeroOutAndFree(saltPtr, saltLen);
-    _pointerManager.free(devicePinPtr);
-    _pointerManager.free(devicePinLenPtr);
-
-    return devicePin;
+      _pointerManager.freeAll([devicePinPtr, devicePinLenPtr]);
+    });
   }
 
   /// Decrypts a device pin.
@@ -114,14 +97,10 @@ class Crypto implements ICrypto {
       pointerSecureNet,
     );
 
-    /// Free memory.
-    _pointerManager.zeroOutAndFree(pinCodePtr, pinCodeLen);
-    _pointerManager.zeroOutAndFree(devicePinPtr, devicePinLen);
-
-    /// Check the status.
-    if (status != TagionErrorCode.none.value) {
-      throw CryptoApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
+    scope.onExit<void, CryptoApiException>(status, () {}, () {
+      _pointerManager.zeroOutAndFree(pinCodePtr, pinCodeLen);
+      _pointerManager.zeroOutAndFree(devicePinPtr, devicePinLen);
+    });
   }
 
   /// Signs a given [Uint8List] typed list.
@@ -151,21 +130,10 @@ class Crypto implements ICrypto {
       signatureLenPtr,
     );
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free memory.
-      _pointerManager.free(dataToSignPtr);
-      _pointerManager.free(signaturePtr);
-
-      throw CryptoApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the values.
-    final signature = signaturePtr.value.asTypedList(signatureLenPtr.value);
-
-    /// Free memory.
-    _pointerManager.free(dataToSignPtr);
-    _pointerManager.free(signaturePtr);
-
-    return signature;
+    return scope.onExit<Uint8List, CryptoApiException>(
+      status,
+      () => signaturePtr.value.asTypedList(signatureLenPtr.value),
+      () => _pointerManager.freeAll([dataToSignPtr, signaturePtr, signatureLenPtr]),
+    );
   }
 }

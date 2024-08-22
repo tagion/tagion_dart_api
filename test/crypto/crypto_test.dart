@@ -78,6 +78,8 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
+
       // Act
       final result = crypto.generateKeypair(passphrase, pinCode, salt, securenetPtr);
 
@@ -97,8 +99,7 @@ void main() {
       verify(() => mockPointerManager.zeroOutAndFree(passphrasePtr, passphrase.length)).called(1);
       verify(() => mockPointerManager.zeroOutAndFree(pinCodePtr, pinCode.length)).called(1);
       verify(() => mockPointerManager.zeroOutAndFree(saltPtr, salt.length)).called(1);
-      verify(() => mockPointerManager.free(devicePinPtr)).called(1);
-      verify(() => mockPointerManager.free(devicePinLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
@@ -130,8 +131,7 @@ void main() {
       verify(() => mockPointerManager.zeroOutAndFree(passphrasePtr, passphrase.length)).called(1);
       verify(() => mockPointerManager.zeroOutAndFree(pinCodePtr, pinCode.length)).called(1);
       verify(() => mockPointerManager.zeroOutAndFree(saltPtr, salt.length)).called(1);
-      verify(() => mockPointerManager.free(devicePinPtr)).called(1);
-      verify(() => mockPointerManager.free(devicePinLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
 
     test('decryptDevicePin succeeds and throws CryptoException when an error occurs', () {
@@ -225,6 +225,8 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
+
       // Act
       final result = crypto.sign(dataToSign, secureNetPtr);
 
@@ -237,8 +239,7 @@ void main() {
       verify(() => mockPointerManager.allocate<Pointer<Uint8>>()).called(1);
       verify(() => mockPointerManager.allocate<Uint64>()).called(1);
       verify(() => mockPointerManager.uint8ListToPointer<Uint8>(dataToSignPtr, dataToSign)).called(1);
-      verify(() => mockPointerManager.free(dataToSignPtr)).called(1);
-      verify(() => mockPointerManager.free(signedDataPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
@@ -266,8 +267,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(dataToSignPtr)).called(1);
-      verify(() => mockPointerManager.free(signedDataPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
   });
 }
