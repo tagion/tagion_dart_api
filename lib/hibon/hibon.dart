@@ -9,15 +9,17 @@ import 'package:tagion_dart_api/exception/hibon_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/hibon/hibon_interface.dart';
+import 'package:tagion_dart_api/module.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
-/// [_hibonPtr] is the pointer to the Hibon object.
-class Hibon implements IHibon, Finalizable {
+/// Implements [Finalizable] and uses a [Finalizer] to maintain Hibon object resources.
+/// Extends [Module] to use the [scope} feature.
+class Hibon extends Module implements IHibon, Finalizable {
   final HibonFfi _hibonFfi;
   final IErrorMessage _errorMessage;
   final IPointerManager _pointerManager;
 
-  final Pointer<HiBONT> _hibonPtr;
+  final Pointer<HiBONT> _hibonPtr; // The pointer to the Hibon object.
 
   @override
   Pointer<HiBONT> get pointer => _hibonPtr;
@@ -30,30 +32,8 @@ class Hibon implements IHibon, Finalizable {
     this._hibonFfi,
     this._errorMessage,
     this._pointerManager,
-  ) : _hibonPtr = _pointerManager.allocate<HiBONT>(); // allocate memory for the Hibon object.
-
-  /// Checks the status of the operation and throws an exception if it is not successful.
-  /// If the operation is successful, returns the result of the [onDone] function.
-  /// Guarantees freeing the memory of the pointers in the [ptrs] list.
-  T _checkStatusOrThrow<T>(
-    int status,
-    T Function() onDone, [
-    List<Pointer> ptrs = const [],
-  ]) {
-    try {
-      if (status != TagionErrorCode.none.value) {
-        throw HibonApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-      }
-      return onDone();
-    } catch (_) {
-      rethrow;
-    } finally {
-      /// Loop through pointers list and free the memory.
-      for (var ptr in ptrs) {
-        _pointerManager.free(ptr);
-      }
-    }
-  }
+  )   : _hibonPtr = _pointerManager.allocate<HiBONT>(), // Allocate memory for the Hibon object.
+        super(_errorMessage);
 
   /// Attaches the finalizer to the Hibon object.
   @override
@@ -89,7 +69,11 @@ class Hibon implements IHibon, Finalizable {
       value.length,
     );
 
-    _checkStatusOrThrow<void>(status, () {}, [keyPtr, valuePtr]);
+    scope.onExit<void, HibonApiException>(
+      status,
+      () {},
+      () => _pointerManager.freeAll([keyPtr, valuePtr]),
+    );
   }
 
   @override
@@ -104,10 +88,10 @@ class Hibon implements IHibon, Finalizable {
       charArrayLenPtr,
     );
 
-    return _checkStatusOrThrow<String>(
+    return scope.onExit<String, HibonApiException>(
       status,
       () => charArrayPtr[0].toDartString(length: charArrayLenPtr.value),
-      [charArrayPtr, charArrayLenPtr],
+      () => _pointerManager.freeAll([charArrayPtr, charArrayLenPtr]),
     );
   }
 
@@ -131,7 +115,7 @@ class Hibon implements IHibon, Finalizable {
       value,
     );
 
-    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
+    scope.onExit<void, HibonApiException>(status, () {}, () => _pointerManager.free(keyPtr));
   }
 
   @override
@@ -145,10 +129,10 @@ class Hibon implements IHibon, Finalizable {
       bufferLenPtr,
     );
 
-    return _checkStatusOrThrow<Uint8List>(
+    return scope.onExit<Uint8List, HibonApiException>(
       status,
       () => bufferPtr[0].asTypedList(bufferLenPtr.value),
-      [bufferPtr, bufferLenPtr],
+      () => _pointerManager.freeAll([bufferPtr, bufferLenPtr]),
     );
   }
 
@@ -168,7 +152,11 @@ class Hibon implements IHibon, Finalizable {
       buffer.length,
     );
 
-    _checkStatusOrThrow<void>(status, () {}, [keyPtr, documentPtr]);
+    scope.onExit<void, HibonApiException>(
+      status,
+      () {},
+      () => _pointerManager.freeAll([keyPtr, documentPtr]),
+    );
   }
 
   @override
@@ -184,7 +172,11 @@ class Hibon implements IHibon, Finalizable {
       buffer.length,
     );
 
-    _checkStatusOrThrow<void>(status, () {}, [documentPtr]);
+    scope.onExit<void, HibonApiException>(
+      status,
+      () {},
+      () => _pointerManager.free(documentPtr),
+    );
   }
 
   @override
@@ -200,7 +192,11 @@ class Hibon implements IHibon, Finalizable {
       hibon.pointer,
     );
 
-    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
+    scope.onExit<void, HibonApiException>(
+      status,
+      () {},
+      () => _pointerManager.free(keyPtr),
+    );
   }
 
   @override
@@ -211,7 +207,7 @@ class Hibon implements IHibon, Finalizable {
       hibon.pointer,
     );
 
-    _checkStatusOrThrow<void>(status, () {});
+    scope.onExit<void, HibonApiException>(status, () {}, null);
   }
 
   @override
@@ -242,7 +238,11 @@ class Hibon implements IHibon, Finalizable {
         throw Exception('Unsupported type');
     }
 
-    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
+    scope.onExit<void, HibonApiException>(
+      status,
+      () {},
+      () => _pointerManager.free(keyPtr),
+    );
   }
 
   @override
@@ -289,7 +289,11 @@ class Hibon implements IHibon, Finalizable {
         throw Exception('Unsupported type');
     }
 
-    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
+    scope.onExit<void, HibonApiException>(
+      status,
+      () {},
+      () => _pointerManager.free(keyPtr),
+    );
   }
 
   @override
@@ -308,7 +312,11 @@ class Hibon implements IHibon, Finalizable {
       array.length,
     );
 
-    _checkStatusOrThrow<void>(status, () {}, [keyPtr, arrayPtr]);
+    scope.onExit<void, HibonApiException>(
+      status,
+      () {},
+      () => _pointerManager.freeAll([keyPtr, arrayPtr]),
+    );
   }
 
   @override
@@ -324,7 +332,11 @@ class Hibon implements IHibon, Finalizable {
       array.length,
     );
 
-    _checkStatusOrThrow<void>(status, () {}, [arrayPtr]);
+    scope.onExit<void, HibonApiException>(
+      status,
+      () {},
+      () => _pointerManager.free(arrayPtr),
+    );
   }
 
   @override
@@ -339,7 +351,11 @@ class Hibon implements IHibon, Finalizable {
       time,
     );
 
-    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
+    scope.onExit<void, HibonApiException>(
+      status,
+      () {},
+      () => _pointerManager.free(keyPtr),
+    );
   }
 
   @override
@@ -355,7 +371,11 @@ class Hibon implements IHibon, Finalizable {
       resultPtr,
     );
 
-    return _checkStatusOrThrow<bool>(status, () => resultPtr.value, [keyPtr, resultPtr]);
+    return scope.onExit<bool, HibonApiException>(
+      status,
+      () => resultPtr.value,
+      () => _pointerManager.freeAll([keyPtr, resultPtr]),
+    );
   }
 
   @override
@@ -368,7 +388,11 @@ class Hibon implements IHibon, Finalizable {
       resultPtr,
     );
 
-    return _checkStatusOrThrow<bool>(status, () => resultPtr.value, [resultPtr]);
+    return scope.onExit<bool, HibonApiException>(
+      status,
+      () => resultPtr.value,
+      () => _pointerManager.free(resultPtr),
+    );
   }
 
   @override
@@ -382,7 +406,11 @@ class Hibon implements IHibon, Finalizable {
       key.length,
     );
 
-    _checkStatusOrThrow<void>(status, () {}, [keyPtr]);
+    scope.onExit<void, HibonApiException>(
+      status,
+      () {},
+      () => _pointerManager.free(keyPtr),
+    );
   }
 
   @override
@@ -392,6 +420,6 @@ class Hibon implements IHibon, Finalizable {
       index,
     );
 
-    _checkStatusOrThrow<void>(status, () {});
+    scope.onExit<void, HibonApiException>(status, () {}, null);
   }
 }
