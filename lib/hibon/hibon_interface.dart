@@ -5,8 +5,7 @@ import 'package:tagion_dart_api/enums/hibon_string_format.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 
 /// The interface for the Hibon (Hash invariant Binary Object Notation) object.
-/// Hibon is a binary format for storing data.
-/// It is used to store data in the Tagion network.
+/// Hibon is a binary format used for transfering and storing data.
 abstract class IHibon {
   /// Initializes the Hibon object.
   void create();

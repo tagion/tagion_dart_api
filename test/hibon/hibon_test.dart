@@ -111,7 +111,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(any())).thenReturn(null);
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
 
       // Act & Assert
       expect(() => hibon.addString(key, value), returnsNormally);
@@ -122,8 +122,7 @@ void main() {
       verify(() => mockPointerManager.stringToPointer(keyPtr, key)).called(1);
       verify(() => mockPointerManager.stringToPointer(valuePtr, value)).called(1);
       verify(() => mockHibonFfi.tagion_hibon_add_string(any(), any(), any(), any(), any())).called(1);
-      verify(() => mockPointerManager.free(keyPtr)).called(1);
-      verify(() => mockPointerManager.free(valuePtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
@@ -149,8 +148,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(keyPtr)).called(1);
-      verify(() => mockPointerManager.free(valuePtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
 
     test('getAsString returns the correct value and throws HibonException when an error occurs', () {
@@ -177,7 +175,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(any())).thenReturn(null);
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
 
       // Act & Assert
       expect(hibon.getAsString(), equals(testValue));
@@ -187,8 +185,7 @@ void main() {
       verify(() => mockPointerManager.allocate<Uint64>()).called(1);
 
       verify(() => mockHibonFfi.tagion_hibon_get_text(any(), any(), any(), any())).called(1);
-      verify(() => mockPointerManager.free(charArrayPtr)).called(1);
-      verify(() => mockPointerManager.free(charArrayLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
@@ -214,8 +211,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(charArrayPtr)).called(1);
-      verify(() => mockPointerManager.free(charArrayLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
 
     test('addInt adds a value and throws HibonException when an error occurs', () {
@@ -413,7 +409,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(any())).thenReturn(null);
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
 
       // Act & Assert
       expect(hibon.getAsDocumentBuffer(), equals(value));
@@ -422,8 +418,7 @@ void main() {
       verify(() => mockPointerManager.allocate<Pointer<Uint8>>()).called(1);
       verify(() => mockPointerManager.allocate<Uint64>()).called(1);
       verify(() => mockHibonFfi.tagion_hibon_get_document(any(), any(), any())).called(1);
-      verify(() => mockPointerManager.free(keyPtr)).called(1);
-      verify(() => mockPointerManager.free(valuePtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
@@ -449,8 +444,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(keyPtr)).called(1);
-      verify(() => mockPointerManager.free(valuePtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
 
     test('addDocumentBufferByKey adds a value and throws HibonException when an error occurs', () {
@@ -470,7 +464,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(any())).thenReturn(null);
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
 
       // Act & Assert
       expect(() => hibon.addDocumentBufferByKey(key, value), returnsNormally);
@@ -481,8 +475,7 @@ void main() {
       verify(() => mockPointerManager.stringToPointer(keyPtr, key)).called(1);
       verify(() => mockPointerManager.uint8ListToPointer(valuePtr, value)).called(1);
       verify(() => mockHibonFfi.tagion_hibon_add_document(any(), any(), any(), any(), any())).called(1);
-      verify(() => mockPointerManager.free(keyPtr)).called(1);
-      verify(() => mockPointerManager.free(valuePtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
@@ -508,8 +501,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(keyPtr)).called(1);
-      verify(() => mockPointerManager.free(valuePtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
 
     test('addDocumentBufferByIndex adds a value and throws HibonException when an error occurs', () {
@@ -755,7 +747,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(any())).thenReturn(null);
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
 
       // Act & Assert
       expect(() => hibon.addArrayByKey(key, array), returnsNormally);
@@ -766,8 +758,7 @@ void main() {
       verify(() => mockPointerManager.stringToPointer(keyPtr, key)).called(1);
       verify(() => mockPointerManager.uint8ListToPointer(arrayPtr, array)).called(1);
       verify(() => mockHibonFfi.tagion_hibon_add_binary(any(), any(), any(), any(), any())).called(1);
-      verify(() => mockPointerManager.free(keyPtr)).called(1);
-      verify(() => mockPointerManager.free(arrayPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
@@ -793,8 +784,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(keyPtr)).called(1);
-      verify(() => mockPointerManager.free(arrayPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
 
     test('addArrayByIndex adds a value and throws HibonException when an error occurs', () {
@@ -922,7 +912,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(any())).thenReturn(null);
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
 
       // Act & Assert
       expect(hibon.hasMemberByKey(key), isTrue);
@@ -931,7 +921,7 @@ void main() {
       verify(() => mockPointerManager.allocate<Char>(keyLen)).called(1);
       verify(() => mockPointerManager.stringToPointer(keyPtr, key)).called(1);
       verify(() => mockHibonFfi.tagion_hibon_has_member(any(), any(), any(), any())).called(1);
-      verify(() => mockPointerManager.free(keyPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
@@ -957,7 +947,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(keyPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
 
     test('hasMemberByIndex returns the correct value and throws HibonException when an error occurs', () {
