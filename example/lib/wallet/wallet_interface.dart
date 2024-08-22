@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-abstract interface class ITagionWallet {
-  bool create(String passPhrase, String pinCode, String salt);
+abstract interface class ITgnWallet {
+  void create(String passPhrase, String pinCode, String salt);
   bool login(String pinCode);
   void logout();
   bool isLoggedIn();
