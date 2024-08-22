@@ -1,14 +1,13 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tagion_dart_api/module/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/exception/tagion_exception.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
-import 'package:test/test.dart';
-
-import '../../example/lib/secure_net_vault/secure_net_vault.dart';
+import 'package:tagion_dart_api_example/secure_net_vault/secure_net_vault.dart';
 
 class MockPointerManager extends Mock implements IPointerManager {}
 
@@ -19,8 +18,8 @@ void main() {
     Pointer<SecureNet> secureNetPtr = malloc.allocate<SecureNet>(1);
     final MockPointerManager mockPointerManager = MockPointerManager();
     when(() => mockPointerManager.allocate<SecureNet>()).thenReturn(secureNetPtr);
-    final SecureNetVault secureNetVault = SecureNetVault(mockPointerManager);
-    final SecureNetVault secureNetVault2 = SecureNetVault(mockPointerManager);
+    final TgnSecureNetVault secureNetVault = TgnSecureNetVault(mockPointerManager);
+    final TgnSecureNetVault secureNetVault2 = TgnSecureNetVault(mockPointerManager);
 
     test('is a singleton', () {
       int hashCode1 = secureNetVault.hashCode;
