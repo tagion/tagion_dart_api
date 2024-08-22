@@ -10,7 +10,6 @@ import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/hibon/hibon_interface.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
-// import 'package:tagion_dart_api/utils/ffi_library_util.dart';
 
 /// [_hibonPtr] is the pointer to the Hibon object.
 class Hibon implements IHibon, Finalizable {
@@ -20,11 +19,10 @@ class Hibon implements IHibon, Finalizable {
 
   final Pointer<HiBONT> _hibonPtr;
 
-  /// TODO: get HibonFfi as singleton and call tagion_hibon_free method.
-  /// Left commented out for now.
-  // static final Finalizer<Pointer<HiBONT>> _finalizer = Finalizer<Pointer<HiBONT>>(
-  //   (pointer) => HibonFfi(FFILibraryUtil.load()).tagion_hibon_free(pointer),
-  // );
+  @override
+  Pointer<HiBONT> get pointer => _hibonPtr;
+
+  static final _finalizer = Finalizer<void Function()>((f) => f);
 
   /// Throws a [HibonApiException] if the operation is not successful.
   /// Allocates [_hibonPtr] for the Hibon object.
@@ -64,19 +62,16 @@ class Hibon implements IHibon, Finalizable {
     if (status != TagionErrorCode.none.value) {
       throw HibonApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
-    // _finalizer.attach(this, _hibonPtr);
+    _finalizer.attach(this, dispose, detach: this);
   }
 
-  /// Detaches the finalizer from the Hibon object.
   /// Frees the memory for the Hibon object.
+  /// Detaches the finalizer from the Hibon object.
   @override
   void dispose() {
-    // _finalizer.detach(this);
     _hibonFfi.tagion_hibon_free(_hibonPtr);
+    _finalizer.detach(this);
   }
-
-  @override
-  Pointer<HiBONT> get pointer => _hibonPtr;
 
   @override
   void addString(String key, String value) {
