@@ -2,20 +2,27 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tagion_dart_api/error_message/error_message.dart';
+import 'package:tagion_dart_api/error_message/error_message_interface.dart';
+import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
+import 'package:tagion_dart_api/exception/crypto_exception.dart';
 import 'package:tagion_dart_api/module/basic/basic.dart';
 import 'package:tagion_dart_api/module/basic/ffi/basic_ffi.dart';
 import 'package:tagion_dart_api/module/crypto/crypto.dart';
 import 'package:tagion_dart_api/module/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/module/crypto/ffi/crypto_ffi.dart';
-import 'package:tagion_dart_api/error_message/error_message.dart';
-import 'package:tagion_dart_api/error_message/error_message_interface.dart';
-import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
-import 'package:tagion_dart_api/exception/crypto_exception.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:tagion_dart_api/utils/dynamic_library_loader.dart';
+import 'package:tagion_dart_api_example/path_provider.dart';
 import 'package:tagion_dart_api_example/secure_net_vault/secure_net_vault.dart';
 import 'package:tagion_dart_api_example/secure_net_vault/secure_net_vault_interface.dart';
+import 'package:tagion_dart_api_example/wallet/wallet.dart';
+import 'package:tagion_dart_api_example/wallet/wallet_interface.dart';
+import 'package:tagion_dart_api_example/wallet_details/wallet_details.dart';
+import 'package:tagion_dart_api_example/wallet_details/wallet_details_interface.dart';
+import 'package:tagion_dart_api_example/wallet_storage/wallet_storage_interface.dart';
+import 'package:tagion_dart_api_example/wallet_storage/wallet_storage_sqflite.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,6 +40,10 @@ class _MyAppState extends State<MyApp> {
   late final Basic _basic;
   late final ICrypto _crypto;
   late ISecureNetVault _secureNetVault;
+  //
+  late ITgnWallet tagionWallet;
+  final ITgnWalletDetails _walletDetails = TgnWalletDetails();
+  final ITgnWalletStorage _walletStorage = TgnWalletStorageSqflite(PathProvider())..init();
   //
   String passPhrase = 'passPhrase';
   String pinCode = 'pinCode';
@@ -90,9 +101,9 @@ class _MyAppState extends State<MyApp> {
     _crypto = Crypto.init();
   }
 
-  void generateKeypair() {
+  void createWallet() {
     setState(() {
-      _devicePin = _crypto.generateKeypair(passPhrase, pinCode, salt, _secureNetVault.secureNetPtr);
+      tagionWallet.create(passPhrase, pinCode, salt);
     });
   }
 
@@ -153,8 +164,8 @@ class _MyAppState extends State<MyApp> {
                       children: [
                         Text('Passphrase: $passPhrase\nPincode: $pinCode\nSalt: $salt'),
                         OutlinedButton(
-                          onPressed: () => generateKeypair(),
-                          child: const Text('Generate keypair'),
+                          onPressed: () => createWallet(),
+                          child: const Text('Create wallet'),
                         ),
                       ],
                     ),
