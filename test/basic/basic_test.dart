@@ -69,7 +69,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(any())).thenReturn(null);
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
 
       // Act
       String result = basic.encodeBase64Url(textAsByteArray);
@@ -78,9 +78,7 @@ void main() {
       expect(result, text);
 
       // Verify
-      verify(() => mockPointerManager.free(textAsByteArrayPointer)).called(1);
-      verify(() => mockPointerManager.free(textPtr)).called(1);
-      verify(() => mockPointerManager.free(textLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
@@ -106,9 +104,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(textAsByteArrayPointer)).called(1);
-      verify(() => mockPointerManager.free(textPtr)).called(1);
-      verify(() => mockPointerManager.free(textLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
 
     test('tagionRevision returns a string on success & throws on error', () {
@@ -131,7 +127,7 @@ void main() {
         return TagionErrorCode.none.value;
       });
 
-      when(() => mockPointerManager.free(any())).thenReturn(null);
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
 
       // Act
       String result = basic.tagionRevision();
@@ -140,8 +136,7 @@ void main() {
       expect(result, text);
 
       // Verify
-      verify(() => mockPointerManager.free(textPtr)).called(1);
-      verify(() => mockPointerManager.free(textLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
@@ -167,8 +162,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(textPtr)).called(1);
-      verify(() => mockPointerManager.free(textLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll(any())).called(1);
     });
   });
 }
