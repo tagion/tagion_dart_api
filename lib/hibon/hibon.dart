@@ -33,7 +33,9 @@ class Hibon extends Module implements IHibon, Finalizable {
     this._errorMessage,
     this._pointerManager,
   )   : _hibonPtr = _pointerManager.allocate<HiBONT>(), // Allocate memory for the Hibon object.
-        super(_errorMessage);
+        super(_errorMessage) {
+    _finalizer.attach(this, dispose, detach: this);
+  }
 
   /// Attaches the finalizer to the Hibon object.
   @override
@@ -42,7 +44,6 @@ class Hibon extends Module implements IHibon, Finalizable {
     if (status != TagionErrorCode.none.value) {
       throw HibonApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
     }
-    _finalizer.attach(this, dispose, detach: this);
   }
 
   /// Frees the memory for the Hibon object.
