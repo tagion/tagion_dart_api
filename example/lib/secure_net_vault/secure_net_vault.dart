@@ -12,18 +12,18 @@ import 'secure_net_vault_interface.dart';
 /// Designed to store a [_secureNetPtr] pointer, obtained
 /// as a result of keypair generation or device pin decryption.
 /// The [_secureNetPtr] field is a pointer to a [SecureNet] object.
-class SecureNetVault implements ISecureNetVault {
+class TgnSecureNetVault implements ITgnSecureNetVault {
   /// Pointer to the [SecureNet] keypair.
   final IPointerManager _pointerManager;
   late Pointer<SecureNet> _secureNetPtr;
-  static SecureNetVault? _instance;
+  static TgnSecureNetVault? _instance;
 
-  SecureNetVault._(this._pointerManager) {
+  TgnSecureNetVault._(this._pointerManager) {
     allocatePtr();
   }
 
-  factory SecureNetVault(IPointerManager pointerManager) {
-    _instance ??= SecureNetVault._(pointerManager);
+  factory TgnSecureNetVault(IPointerManager pointerManager) {
+    _instance ??= TgnSecureNetVault._(pointerManager);
     return _instance!;
   }
 
