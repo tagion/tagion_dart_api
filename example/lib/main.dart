@@ -104,7 +104,6 @@ class _MyAppState extends State<MyApp> {
   void createWallet() {
     setState(() {
       tagionWallet.create(passPhrase, pinCode, salt);
-      // pipeline test commit
     });
   }
 
