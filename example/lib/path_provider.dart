@@ -6,7 +6,6 @@ abstract interface class IPathProvider<T> {
   Future<T?> getApplpicationDocumentsPath();
 }
 
-// App path prodiver that uses adapter pattern to wrap the path_provider package
 class PathProvider implements IPathProvider<String> {
   PathProvider();
 

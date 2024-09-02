@@ -12,6 +12,7 @@ import 'package:tagion_dart_api_example/wallet/wallet.dart';
 import 'package:tagion_dart_api_example/wallet/wallet_interface.dart';
 import 'package:tagion_dart_api_example/wallet_details/wallet_details_interface.dart';
 import 'package:tagion_dart_api_example/wallet_storage/wallet_entity.dart';
+import 'package:tagion_dart_api_example/wallet_storage/wallet_storage_exception.dart';
 import 'package:tagion_dart_api_example/wallet_storage/wallet_storage_interface.dart';
 
 class MockCrypto extends Mock implements ICrypto {}
@@ -32,7 +33,7 @@ void main() {
   final ITgnWalletDetails mockWalletDetails = MockWalletDetails();
   final ITgnWalletStorage mockWalletStorage = MockWalletStorage();
 
-  final ITgnWallet tagionWallet = TgnWallet(mockCrypto, mockSecureNetVault, mockWalletDetails, mockWalletStorage);
+  final ITgnWallet tagionWallet = TgnWallet('id', mockCrypto, mockSecureNetVault, mockWalletDetails, mockWalletStorage);
 
   const String passphrase = 'passphrase';
   const String pinCode = 'pinCode';
@@ -46,7 +47,7 @@ void main() {
       when(() => mockWalletDetails.setId(any())).thenReturn(null);
       when(() => mockWalletDetails.setDevicePin(any())).thenReturn(null);
       when(() => mockWalletDetails.toEntity()).thenReturn(TgnWalletEntity('id', Uint8List.fromList([0])));
-      when(() => mockWalletStorage.write(any())).thenReturn(null);
+      when(() => mockWalletStorage.write(any())).thenAnswer((_) => Future.value());
       expect(() => tagionWallet.create(passphrase, pinCode, salt), returnsNormally);
     });
 
@@ -57,6 +58,19 @@ void main() {
       expect(
         () => tagionWallet.create(passphrase, pinCode, salt),
         throwsA(isA<CryptoApiException>()),
+      );
+    });
+
+    test('create throws TgnWalletStorageException when failed to write data to a storage', () {
+      when(() => mockSecureNetVault.secureNetPtr).thenReturn(mockSecureNetPtr);
+      when(() => mockCrypto.generateKeypair(any(), any(), any(), any())).thenReturn(Uint8List.fromList([0, 1, 2, 3]));
+      when(() => mockWalletDetails.setId(any())).thenReturn(null);
+      when(() => mockWalletDetails.setDevicePin(any())).thenReturn(null);
+      when(() => mockWalletDetails.toEntity()).thenReturn(TgnWalletEntity('id', Uint8List.fromList([0])));
+      when(() => mockWalletStorage.write(any())).thenThrow(TgnWalletStorageException(''));
+      expect(
+        () => tagionWallet.create(passphrase, pinCode, salt),
+        throwsA(isA<TgnWalletStorageException>()),
       );
     });
   });
