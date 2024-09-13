@@ -122,4 +122,6 @@ keep_github_binaries_test_updated_job:
     - if git show-ref --quiet refs/heads/temp; then git branch -d temp; fi
     - git branch temp
     - git checkout temp
-    - git push --set-upstream origin temp https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git --force
+    - git remote add tmp_origin https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git
+    - git push --set-upstream tmp_origin temp --force
+    - git remote remove tmp_origin
