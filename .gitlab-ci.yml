@@ -123,4 +123,3 @@ keep_github_binaries_test_updated_job:
     - git branch temp
     - git checkout temp
     - git push --set-upstream origin temp --force
-    #
