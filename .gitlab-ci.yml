@@ -119,7 +119,7 @@ keep_github_binaries_test_updated_job:
     - git pull https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git
     - git checkout $BINARIES_TEST_BRANCH_HASH
     - git rebase $MAIN_BRANCH_HASH $BINARIES_TEST_BRANCH_HASH
-    - git branch -D temp
+    - if git show-ref --quiet refs/heads/temp; then git branch -d branch_name
     - git branch temp
     - git checkout temp
     - git push --set-upstream origin temp --force
