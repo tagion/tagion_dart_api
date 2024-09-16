@@ -29,7 +29,7 @@ class Document extends Module implements IDocument, Finalizable {
     this._documentFfi,
     this._pointerManager,
     this._errorMessage,
-    Uint8List hibonBuffer,
+    Uint8List hibonBuffer, // The serialized HiBON.
   )   : _hibonPtr = _pointerManager.allocate<Uint8>(hibonBuffer.lengthInBytes), // Allocate memory for the HiBON.
         _hibonLen = hibonBuffer.lengthInBytes,
         super(_errorMessage) {

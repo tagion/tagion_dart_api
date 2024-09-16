@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 abstract interface class IDocumentElement {
-  /// Get a sub doc from a document.
+  /// Get a sub-document from a parent document.
   Uint8List getSubDocument();
 
   /// Get a string from a document
@@ -11,6 +11,7 @@ abstract interface class IDocumentElement {
   Uint8List getU8Array();
 
   /// Get a time from a document.
+  /// The time format used is std time (hectonanoseconds since 1ad).
   int getTime();
 
   /// Get a bigint from a document. Returned as serialized leb128 ubyte buffer.

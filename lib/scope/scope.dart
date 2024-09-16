@@ -1,7 +1,7 @@
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/exception_factory.dart';
-import 'package:tagion_dart_api/scope_interface.dart';
+import 'package:tagion_dart_api/scope/scope_interface.dart';
 
 /// The [Scope] class provides functionality to perform an action on the end of the operation.
 /// Requires a [_pointerManager] object and an [_errorMessage] object.

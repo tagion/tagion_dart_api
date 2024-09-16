@@ -9,6 +9,7 @@ import 'package:tagion_dart_api/exception/document_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
+/// TODO: Add a scope to functions.
 /// DocumentElement is a part of Document.
 /// Its purpose is to get data from HiBON fields.
 /// [_elementPtr] is a pointer to an Element struct.
