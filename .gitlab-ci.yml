@@ -121,6 +121,7 @@ keep_github_binaries_test_updated_job:
     # - git branch temp
     # - git checkout temp
     # - git pull https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git temp
+    - git checkout $MAIN_BRANCH_HASH
     - git rebase $MAIN_BRANCH_HASH $BINARIES_TEST_BRANCH_HASH
     - git remote add tmp_origin https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git
     - git push --set-upstream tmp_origin temp --force
