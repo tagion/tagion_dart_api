@@ -116,7 +116,8 @@ keep_github_binaries_test_updated_job:
   script:
     - MAIN_BRANCH_HASH=$(curl --header "PRIVATE-TOKEN:$GITLAB_TOKEN" --url "https://gitlab.com/api/v4/projects/59713152/repository/branches/main" | jq -r '.commit.id')
     - BINARIES_TEST_BRANCH_HASH=$(curl --header "PRIVATE-TOKEN:$GITLAB_TOKEN" --url "https://gitlab.com/api/v4/projects/59713152/repository/branches/temp" | jq -r '.commit.id')
-    - git fetch --all https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git
+    - git remote add tmp_origin https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git
+    - git fetch --all
     # - git checkout $BINARIES_TEST_BRANCH_HASH
     # - if git show-ref --quiet refs/heads/temp; then git branch -D temp; fi
     # - git branch temp
@@ -124,6 +125,5 @@ keep_github_binaries_test_updated_job:
     # - git pull https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git temp
     - git checkout $MAIN_BRANCH_HASH
     - git rebase $MAIN_BRANCH_HASH $BINARIES_TEST_BRANCH_HASH
-    - git remote add tmp_origin https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git
     - git push --set-upstream tmp_origin temp --force
     - git remote remove tmp_origin
