@@ -119,11 +119,10 @@ keep_github_binaries_test_updated_job:
     - git remote add tmp_origin https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git
     - git fetch --all
     # - git checkout $BINARIES_TEST_BRANCH_HASH
-    # - if git show-ref --quiet refs/heads/temp; then git branch -D temp; fi
-    # - git branch temp
-    # - git checkout temp
     # - git pull https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git temp
     - git checkout $MAIN_BRANCH_HASH
     - git rebase $MAIN_BRANCH_HASH $BINARIES_TEST_BRANCH_HASH
+    - if git show-ref --quiet refs/heads/temp; then git branch -D temp; fi
+    - git checkout -b temp
     - git push --set-upstream tmp_origin temp --force
     - git remote remove tmp_origin
