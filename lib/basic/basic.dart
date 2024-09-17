@@ -18,41 +18,41 @@ class Basic extends Module implements IBasic {
   final BasicFfi _basicFfi;
   final IPointerManager _pointerManager;
 
-  Basic(this._basicFfi, this._pointerManager, IErrorMessage _errorMessage) : super(_errorMessage);
+  Basic(
+    this._basicFfi,
+    this._pointerManager,
+    IErrorMessage _errorMessage,
+  ) : super(_errorMessage);
 
-  /// Starts the D runtime.
   @override
   bool startDRuntime() {
     int result = _basicFfi.start_rt();
     return result == DRuntimeResponse.success.index;
   }
 
-  /// Stops the D runtime.
   @override
   bool stopDRuntime() {
     int result = _basicFfi.stop_rt();
     return result == DRuntimeResponse.success.index;
   }
 
-  /// Encodes a byte array to a base64 URL string.
   @override
-  String encodeBase64Url(Uint8List documentAsByteArray) {
-    Pointer<Uint8> arrayPointer = _pointerManager.allocate<Uint8>(documentAsByteArray.length);
-    _pointerManager.uint8ListToPointer(arrayPointer, documentAsByteArray);
+  String encodeBase64Url(Uint8List documentBytes) {
+    Pointer<Uint8> arrayPtr = _pointerManager.allocate<Uint8>(documentBytes.length);
+    _pointerManager.uint8ListToPointer(arrayPtr, documentBytes);
 
     Pointer<Pointer<Char>> strPtr = _pointerManager.allocate<Pointer<Char>>();
     Pointer<Uint64> strLenPtr = _pointerManager.allocate<Uint64>();
 
-    int status = _basicFfi.tagion_basic_encode_base64url(arrayPointer, documentAsByteArray.length, strPtr, strLenPtr);
+    int status = _basicFfi.tagion_basic_encode_base64url(arrayPtr, documentBytes.length, strPtr, strLenPtr);
 
     return scope.onExit<String, BasicApiException>(
       status,
       () => strPtr[0].toDartString(length: strLenPtr.value),
-      () => _pointerManager.freeAll([arrayPointer, strPtr, strLenPtr]),
+      () => _pointerManager.freeAll([arrayPtr, strPtr, strLenPtr]),
     );
   }
 
-  /// Returns an information about current binary's version.
   @override
   String tagionRevision() {
     Pointer<Pointer<Char>> strPtr = _pointerManager.allocate<Pointer<Char>>();
@@ -64,6 +64,23 @@ class Basic extends Module implements IBasic {
       status,
       () => strPtr[0].toDartString(length: strLenPtr.value),
       () => _pointerManager.freeAll([strPtr, strLenPtr]),
+    );
+  }
+
+  @override
+  Uint8List createDartIndex(Uint8List documentBytes) {
+    Pointer<Uint8> arrayPtr = _pointerManager.allocate<Uint8>(documentBytes.length);
+    _pointerManager.uint8ListToPointer(arrayPtr, documentBytes);
+
+    Pointer<Pointer<Uint8>> indexPtr = _pointerManager.allocate<Pointer<Uint8>>();
+    Pointer<Uint64> indexLenPtr = _pointerManager.allocate<Uint64>();
+
+    int status = _basicFfi.tagion_create_dartindex(arrayPtr, documentBytes.length, indexPtr, indexLenPtr);
+
+    return scope.onExit<Uint8List, BasicApiException>(
+      status,
+      () => indexPtr.value.asTypedList(indexLenPtr.value),
+      () => _pointerManager.freeAll([arrayPtr, indexPtr, indexLenPtr]),
     );
   }
 }
