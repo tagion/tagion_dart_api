@@ -9,7 +9,7 @@ import 'package:tagion_dart_api/exception/hibon_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/module/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/module/hibon/hibon_interface.dart';
-import 'package:tagion_dart_api/module.dart';
+import 'package:tagion_dart_api/module/module.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// Implements [Finalizable] and uses a [Finalizer] to maintain Hibon object resources.

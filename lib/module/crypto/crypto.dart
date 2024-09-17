@@ -5,7 +5,7 @@ import 'package:tagion_dart_api/module/crypto/crypto_interface.dart';
 import 'package:tagion_dart_api/module/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/crypto_exception.dart';
-import 'package:tagion_dart_api/module.dart';
+import 'package:tagion_dart_api/module/module.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// Crypto class.

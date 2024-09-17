@@ -10,7 +10,7 @@ import 'package:tagion_dart_api/enums/text_format.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/document_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
-import 'package:tagion_dart_api/module.dart';
+import 'package:tagion_dart_api/module/module.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 /// Document’s purpose is to read data from a serialized HiBON.
