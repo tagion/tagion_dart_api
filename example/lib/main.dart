@@ -2,11 +2,11 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tagion_dart_api/basic/basic.dart';
-import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
-import 'package:tagion_dart_api/crypto/crypto.dart';
-import 'package:tagion_dart_api/crypto/crypto_interface.dart';
-import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
+import 'package:tagion_dart_api/module/basic/basic.dart';
+import 'package:tagion_dart_api/module/basic/ffi/basic_ffi.dart';
+import 'package:tagion_dart_api/module/crypto/crypto.dart';
+import 'package:tagion_dart_api/module/crypto/crypto_interface.dart';
+import 'package:tagion_dart_api/module/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';

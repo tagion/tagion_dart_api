@@ -2,8 +2,8 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tagion_dart_api/basic/basic.dart';
-import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
+import 'package:tagion_dart_api/module/basic/basic.dart';
+import 'package:tagion_dart_api/module/basic/ffi/basic_ffi.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';

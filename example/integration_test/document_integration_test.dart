@@ -3,10 +3,10 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tagion_dart_api/basic/basic.dart';
-import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
-import 'package:tagion_dart_api/document/document.dart';
-import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
+import 'package:tagion_dart_api/module/basic/basic.dart';
+import 'package:tagion_dart_api/module/basic/ffi/basic_ffi.dart';
+import 'package:tagion_dart_api/module/document/document.dart';
+import 'package:tagion_dart_api/module/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
 import 'package:tagion_dart_api/enums/text_format.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
