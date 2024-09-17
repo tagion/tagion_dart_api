@@ -14,7 +14,7 @@ import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
 import 'package:tagion_dart_api/module/hirpc/hirpc.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
-import 'package:tagion_dart_api/utils/ffi_library_util.dart';
+import 'package:tagion_dart_api/utils/dynamic_library_loader.dart';
 
 void main() {
   final DynamicLibrary dyLib = DynamicLibraryLoader.load();
