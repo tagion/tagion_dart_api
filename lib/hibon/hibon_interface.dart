@@ -1,7 +1,7 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/enums/hibon_string_format.dart';
+import 'package:tagion_dart_api/enums/text_format.dart';
 import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
 
 /// The interface for a Hibon (Hash invariant Binary Object Notation) object.
@@ -20,7 +20,7 @@ abstract class IHibon {
   void addString(String key, String value);
 
   /// Returns the Hibon object as a string.
-  String getAsString([HibonAsStringFormat format]);
+  String getAsString([TextFormat format]);
 
   /// Returns the current Hibon object as a document buffer.
   Uint8List getAsDocumentBuffer();

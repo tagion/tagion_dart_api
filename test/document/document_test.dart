@@ -8,7 +8,7 @@ import 'package:tagion_dart_api/document/document.dart';
 import 'package:tagion_dart_api/document/element/document_element.dart';
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
-import 'package:tagion_dart_api/enums/document_text_format.dart';
+import 'package:tagion_dart_api/enums/text_format.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/document_exception.dart';
@@ -285,7 +285,7 @@ void main() {
       // Arrange
       const text = 'Test text';
       final Pointer<Utf8> textUtf8Ptr = text.toNativeUtf8();
-      const textFormat = DocumentTextFormat.base64;
+      const textFormat = TextFormat.base64;
 
       final Pointer<Pointer<Char>> textPtr = malloc<Pointer<Char>>();
       final Pointer<Uint64> textLenPtr = malloc<Uint64>();

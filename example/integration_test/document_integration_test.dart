@@ -57,13 +57,13 @@ void documentIntegrationTest(DynamicLibrary dyLib) {
     });
 
     test("Document as string in different text formats", () {
-      String docAsJson = hibonDoc.getAsString(DocumentTextFormat.json);
+      String docAsJson = hibonDoc.getAsString(TextFormat.json);
       expect(docAsJson, isNotEmpty);
-      String docAsPrettyJson = hibonDoc.getAsString(DocumentTextFormat.prettyJson);
+      String docAsPrettyJson = hibonDoc.getAsString(TextFormat.prettyJson);
       expect(docAsPrettyJson, isNotEmpty);
-      String docAsBase64 = hibonDoc.getAsString(DocumentTextFormat.base64);
+      String docAsBase64 = hibonDoc.getAsString(TextFormat.base64);
       expect(docAsBase64, isNotEmpty);
-      String docAsHex = hibonDoc.getAsString(DocumentTextFormat.hex);
+      String docAsHex = hibonDoc.getAsString(TextFormat.hex);
       expect(docAsHex, isNotEmpty);
     });
 

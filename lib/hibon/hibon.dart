@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/enums/hibon_string_format.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
+import 'package:tagion_dart_api/enums/text_format.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/hibon_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
@@ -78,7 +78,7 @@ class Hibon extends Module implements IHibon, Finalizable {
   }
 
   @override
-  String getAsString([HibonAsStringFormat format = HibonAsStringFormat.prettyJson]) {
+  String getAsString([TextFormat format = TextFormat.prettyJson]) {
     final Pointer<Pointer<Char>> charArrayPtr = _pointerManager.allocate<Pointer<Char>>();
     final Pointer<Uint64> charArrayLenPtr = _pointerManager.allocate<Uint64>();
 

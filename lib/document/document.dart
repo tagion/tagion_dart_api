@@ -6,7 +6,7 @@ import 'package:tagion_dart_api/document/element/document_element.dart';
 import 'package:tagion_dart_api/document/element/document_element_interface.dart';
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
-import 'package:tagion_dart_api/enums/document_text_format.dart';
+import 'package:tagion_dart_api/enums/text_format.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/document_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
@@ -108,7 +108,7 @@ class Document extends Module implements IDocument, Finalizable {
   }
 
   @override
-  String getAsString(DocumentTextFormat textFormat) {
+  String getAsString(TextFormat textFormat) {
     /// Allocate memory for the text and its length.
     final textPtr = _pointerManager.allocate<Pointer<Char>>();
     final textLenPtr = _pointerManager.allocate<Uint64>();
