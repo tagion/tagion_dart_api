@@ -3,30 +3,27 @@ import 'dart:typed_data';
 
 import 'package:tagion_dart_api/document/element/document_element_interface.dart';
 import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
-import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/document_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
+import 'package:tagion_dart_api/module.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
-/// TODO: Add a scope to functions.
 /// DocumentElement is a part of Document.
 /// Its purpose is to get data from HiBON fields.
 /// [_elementPtr] is a pointer to an Element struct.
-class DocumentElement implements IDocumentElement {
+class DocumentElement extends Module implements IDocumentElement {
   final DocumentFfi _documentFfi;
   final IPointerManager _pointerManager;
-  final IErrorMessage _errorMessage;
-
   final Pointer<Element> _elementPtr;
   Pointer<Element> get elementPtr => _elementPtr;
 
-  const DocumentElement(
+  DocumentElement(
     this._documentFfi,
     this._pointerManager,
-    this._errorMessage,
+    IErrorMessage errorMessage,
     this._elementPtr,
-  );
+  ) : super(errorMessage);
 
   @override
   BigInt getBigInt() {
@@ -36,28 +33,17 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_bigint(_elementPtr, bigIntPtr, bigIntLenPtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointers.
-      _pointerManager.free(bigIntPtr);
-      _pointerManager.free(bigIntLenPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
+    return scope.onExit<BigInt, DocumentApiException>(status, () {
+      final bigIntBytes = bigIntPtr.value.asTypedList(bigIntLenPtr.value);
 
-    // /// Get the byte data from the pointer.
-    final bigIntBytes = bigIntPtr.value.asTypedList(bigIntLenPtr.value);
-
-    /// Construct the BigInt from the byte data
-    var bigInt = BigInt.zero;
-    for (var byte in bigIntBytes.reversed) {
-      bigInt <<= 8;
-      bigInt |= BigInt.from(byte);
-    }
-
-    /// Free the allocated pointers
-    _pointerManager.free(bigIntPtr);
-    _pointerManager.free(bigIntLenPtr);
-
-    return bigInt;
+      /// Construct the BigInt from the byte data
+      var bigInt = BigInt.zero;
+      for (var byte in bigIntBytes.reversed) {
+        bigInt <<= 8;
+        bigInt |= BigInt.from(byte);
+      }
+      return bigInt;
+    }, () => _pointerManager.freeAll([bigIntPtr, bigIntLenPtr]));
   }
 
   @override
@@ -68,21 +54,11 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_u8_array(_elementPtr, binaryPtr, binaryLenPtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointers.
-      _pointerManager.free(binaryPtr);
-      _pointerManager.free(binaryLenPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the byte data from the pointer.
-    final binary = binaryPtr.value.asTypedList(binaryLenPtr.value);
-
-    /// Free the allocated pointers
-    _pointerManager.free(binaryPtr);
-    _pointerManager.free(binaryLenPtr);
-
-    return binary;
+    return scope.onExit<Uint8List, DocumentApiException>(
+      status,
+      () => binaryPtr.value.asTypedList(binaryLenPtr.value),
+      () => _pointerManager.freeAll([binaryPtr, binaryLenPtr]),
+    );
   }
 
   @override
@@ -92,19 +68,11 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_bool(_elementPtr, boolPtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointer.
-      _pointerManager.free(boolPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the bool value.
-    final boolValue = boolPtr.value;
-
-    /// Free the allocated pointer.
-    _pointerManager.free(boolPtr);
-
-    return boolValue;
+    return scope.onExit<bool, DocumentApiException>(
+      status,
+      () => boolPtr.value,
+      () => _pointerManager.free(boolPtr),
+    );
   }
 
   @override
@@ -114,19 +82,11 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_int32(_elementPtr, intPtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointer.
-      _pointerManager.free(intPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the int value.
-    final intValue = intPtr.value;
-
-    /// Free the allocated pointer.
-    _pointerManager.free(intPtr);
-
-    return intValue;
+    return scope.onExit<int, DocumentApiException>(
+      status,
+      () => intPtr.value,
+      () => _pointerManager.free(intPtr),
+    );
   }
 
   @override
@@ -136,19 +96,11 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_int64(_elementPtr, intPtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointer.
-      _pointerManager.free(intPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the int value.
-    final intValue = intPtr.value;
-
-    /// Free the allocated pointer.
-    _pointerManager.free(intPtr);
-
-    return intValue;
+    return scope.onExit<int, DocumentApiException>(
+      status,
+      () => intPtr.value,
+      () => _pointerManager.free(intPtr),
+    );
   }
 
   @override
@@ -158,19 +110,11 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_uint32(_elementPtr, intPtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointer.
-      _pointerManager.free(intPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the int value.
-    final intValue = intPtr.value;
-
-    /// Free the allocated pointer.
-    _pointerManager.free(intPtr);
-
-    return intValue;
+    return scope.onExit<int, DocumentApiException>(
+      status,
+      () => intPtr.value,
+      () => _pointerManager.free(intPtr),
+    );
   }
 
   @override
@@ -180,19 +124,11 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_uint64(_elementPtr, intPtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointer.
-      _pointerManager.free(intPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the int value.
-    final intValue = intPtr.value;
-
-    /// Free the allocated pointer.
-    _pointerManager.free(intPtr);
-
-    return intValue;
+    return scope.onExit<int, DocumentApiException>(
+      status,
+      () => intPtr.value,
+      () => _pointerManager.free(intPtr),
+    );
   }
 
   @override
@@ -202,19 +138,11 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_float32(_elementPtr, floatPtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointer.
-      _pointerManager.free(floatPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the double value.
-    final floatValue = floatPtr.value;
-
-    /// Free the allocated pointer.
-    _pointerManager.free(floatPtr);
-
-    return floatValue;
+    return scope.onExit<double, DocumentApiException>(
+      status,
+      () => floatPtr.value,
+      () => _pointerManager.free(floatPtr),
+    );
   }
 
   @override
@@ -224,19 +152,11 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_float64(_elementPtr, doublePtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointer.
-      _pointerManager.free(doublePtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the double value.
-    final doubleValue = doublePtr.value;
-
-    /// Free the allocated pointer.
-    _pointerManager.free(doublePtr);
-
-    return doubleValue;
+    return scope.onExit<double, DocumentApiException>(
+      status,
+      () => doublePtr.value,
+      () => _pointerManager.free(doublePtr),
+    );
   }
 
   @override
@@ -247,21 +167,11 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_string(_elementPtr, stringPtr, stringLenPtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointers.
-      _pointerManager.free(stringPtr);
-      _pointerManager.free(stringLenPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the string value.
-    final resultString = stringPtr[0].toDartString(length: stringLenPtr.value);
-
-    /// Free the allocated pointers.
-    _pointerManager.free(stringPtr);
-    _pointerManager.free(stringLenPtr);
-
-    return resultString;
+    return scope.onExit<String, DocumentApiException>(
+      status,
+      () => stringPtr[0].toDartString(length: stringLenPtr.value),
+      () => _pointerManager.freeAll([stringPtr, stringLenPtr]),
+    );
   }
 
   @override
@@ -272,21 +182,11 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_document(_elementPtr, subDocumentPtr, subDocumentLenPtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointers.
-      _pointerManager.free(subDocumentPtr);
-      _pointerManager.free(subDocumentLenPtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the byte data from the pointer.
-    final subDocument = subDocumentPtr.value.asTypedList(subDocumentLenPtr.value);
-
-    /// Free the allocated pointers.
-    _pointerManager.free(subDocumentPtr);
-    _pointerManager.free(subDocumentLenPtr);
-
-    return subDocument;
+    return scope.onExit<Uint8List, DocumentApiException>(
+      status,
+      () => subDocumentPtr.value.asTypedList(subDocumentLenPtr.value),
+      () => _pointerManager.freeAll([subDocumentPtr, subDocumentLenPtr]),
+    );
   }
 
   @override
@@ -296,18 +196,10 @@ class DocumentElement implements IDocumentElement {
 
     int status = _documentFfi.tagion_document_get_time(_elementPtr, timePtr);
 
-    if (status != TagionErrorCode.none.value) {
-      /// Free the allocated pointer.
-      _pointerManager.free(timePtr);
-      throw DocumentApiException(TagionErrorCode.fromInt(status), _errorMessage.getErrorText());
-    }
-
-    /// Get the time value.
-    final time = timePtr.value;
-
-    /// Free the allocated pointer.
-    _pointerManager.free(timePtr);
-
-    return time;
+    return scope.onExit<int, DocumentApiException>(
+      status,
+      () => timePtr.value,
+      () => _pointerManager.free(timePtr),
+    );
   }
 }
