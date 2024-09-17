@@ -1,10 +1,10 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/document/document_interface.dart';
-import 'package:tagion_dart_api/document/element/document_element.dart';
-import 'package:tagion_dart_api/document/element/document_element_interface.dart';
-import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
+import 'package:tagion_dart_api/module/document/document_interface.dart';
+import 'package:tagion_dart_api/module/document/element/document_element.dart';
+import 'package:tagion_dart_api/module/document/element/document_element_interface.dart';
+import 'package:tagion_dart_api/module/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
 import 'package:tagion_dart_api/enums/text_format.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';

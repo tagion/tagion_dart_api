@@ -4,11 +4,11 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
+import 'package:tagion_dart_api/module/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/tagion_exception.dart';
-import 'package:tagion_dart_api/hirpc/hirpc.dart';
+import 'package:tagion_dart_api/module/hirpc/hirpc.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 
 class MockCryptoFfi extends Mock implements CryptoFfi {}

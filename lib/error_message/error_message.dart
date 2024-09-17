@@ -8,7 +8,7 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 // FFI version implementation of the IError interface
 class ErrorMessage implements IErrorMessage {
   final ErrorMessageFfi _errorsMessageFfi;
-  final IPointerManager _pointerManager; // Use the interface
+  final IPointerManager _pointerManager;
 
   ErrorMessage(this._errorsMessageFfi, this._pointerManager);
 

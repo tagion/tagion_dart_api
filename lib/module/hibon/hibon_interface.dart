@@ -2,7 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:tagion_dart_api/enums/text_format.dart';
-import 'package:tagion_dart_api/hibon/ffi/hibon_ffi.dart';
+import 'package:tagion_dart_api/module/hibon/ffi/hibon_ffi.dart';
 
 /// The interface for a Hibon (Hash invariant Binary Object Notation) object.
 /// Hibon is a binary format used for transfering and storing data.

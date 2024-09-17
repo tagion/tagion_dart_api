@@ -1,7 +1,7 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
+import 'package:tagion_dart_api/module/crypto/ffi/crypto_ffi.dart';
 
 abstract interface class ICrypto {
   /// Generate a keypair used from a password / menmonic.

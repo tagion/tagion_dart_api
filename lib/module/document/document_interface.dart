@@ -1,4 +1,4 @@
-import 'package:tagion_dart_api/document/element/document_element_interface.dart';
+import 'package:tagion_dart_api/module/document/element/document_element_interface.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
 import 'package:tagion_dart_api/enums/text_format.dart';
 
