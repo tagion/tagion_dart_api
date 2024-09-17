@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     //
-    _dyLib = FFILibraryUtil.load();
+    _dyLib = DynamicLibraryLoader.load();
     _basicFfi = BasicFfi(_dyLib);
     _errorMessageFfi = ErrorMessageFfi(_dyLib);
     _errorMessage = ErrorMessage(_errorMessageFfi, _pointerManager);

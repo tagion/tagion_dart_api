@@ -19,7 +19,7 @@ import 'hirpc_integration_test.dart';
 
 void main() {
   group('', () {
-    final DynamicLibrary dyLib = FFILibraryUtil.load();
+    final DynamicLibrary dyLib = DynamicLibraryLoader.load();
 
     final BasicFfi basicFfi = BasicFfi(dyLib);
     final ErrorMessageFfi errorMessageFfi = ErrorMessageFfi(dyLib);

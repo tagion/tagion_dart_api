@@ -14,7 +14,7 @@ import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
 import 'package:tagion_dart_api/utils/ffi_library_util.dart';
 
 void main() {
-  final DynamicLibrary dyLib = FFILibraryUtil.load();
+  final DynamicLibrary dyLib = DynamicLibraryLoader.load();
   BasicFfi basicFfi = BasicFfi(dyLib);
   setUpAll(() {
     basicFfi.start_rt();
