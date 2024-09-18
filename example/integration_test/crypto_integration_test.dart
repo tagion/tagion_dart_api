@@ -2,10 +2,10 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
-import 'package:tagion_dart_api/crypto/crypto.dart';
-import 'package:tagion_dart_api/crypto/crypto_interface.dart';
-import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
+import 'package:tagion_dart_api/module/basic/ffi/basic_ffi.dart';
+import 'package:tagion_dart_api/module/crypto/crypto.dart';
+import 'package:tagion_dart_api/module/crypto/crypto_interface.dart';
+import 'package:tagion_dart_api/module/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
@@ -13,10 +13,10 @@ import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
 import 'package:tagion_dart_api/exception/crypto_exception.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
-import 'package:tagion_dart_api/utils/ffi_library_util.dart';
+import 'package:tagion_dart_api/utils/dynamic_library_loader.dart';
 
 void main() {
-  final DynamicLibrary dyLib = FFILibraryUtil.load();
+  final DynamicLibrary dyLib = DynamicLibraryLoader.load();
   BasicFfi basicFfi = BasicFfi(dyLib);
   setUpAll(() {
     basicFfi.start_rt();

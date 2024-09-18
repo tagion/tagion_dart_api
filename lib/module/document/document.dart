@@ -1,17 +1,20 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/document/document_interface.dart';
-import 'package:tagion_dart_api/document/element/document_element.dart';
-import 'package:tagion_dart_api/document/element/document_element_interface.dart';
-import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
+import 'package:tagion_dart_api/error_message/error_message.dart';
+import 'package:tagion_dart_api/module/document/document_interface.dart';
+import 'package:tagion_dart_api/module/document/element/document_element.dart';
+import 'package:tagion_dart_api/module/document/element/document_element_interface.dart';
+import 'package:tagion_dart_api/module/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
-import 'package:tagion_dart_api/enums/document_text_format.dart';
+import 'package:tagion_dart_api/enums/text_format.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/document_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
-import 'package:tagion_dart_api/module.dart';
+import 'package:tagion_dart_api/module/module.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
+import 'package:tagion_dart_api/utils/dynamic_library_loader.dart';
 
 /// Document’s purpose is to read data from a serialized HiBON.
 /// Document guarantees immutability of HiBON.
@@ -29,13 +32,22 @@ class Document extends Module implements IDocument, Finalizable {
     this._documentFfi,
     this._pointerManager,
     this._errorMessage,
-    Uint8List hibonBuffer,
+    Uint8List hibonBuffer, // The serialized HiBON.
   )   : _hibonPtr = _pointerManager.allocate<Uint8>(hibonBuffer.lengthInBytes), // Allocate memory for the HiBON.
         _hibonLen = hibonBuffer.lengthInBytes,
         super(_errorMessage) {
     _pointerManager.uint8ListToPointer<Uint8>(_hibonPtr, hibonBuffer); // Fill the pointer with data.
     _finalizer.attach(this, dispose, detach: this); // Attach the finalizer with a dispose function.
   }
+
+  Document.init(
+    Uint8List hibonBuffer, // The serialized HiBON.
+  ) : this(
+          DocumentFfi(DynamicLibraryLoader.load()),
+          const PointerManager(),
+          ErrorMessage.init(),
+          hibonBuffer,
+        );
 
   @override
   void dispose() {
@@ -108,7 +120,7 @@ class Document extends Module implements IDocument, Finalizable {
   }
 
   @override
-  String getAsString(DocumentTextFormat textFormat) {
+  String getAsString(TextFormat textFormat) {
     /// Allocate memory for the text and its length.
     final textPtr = _pointerManager.allocate<Pointer<Char>>();
     final textLenPtr = _pointerManager.allocate<Uint64>();

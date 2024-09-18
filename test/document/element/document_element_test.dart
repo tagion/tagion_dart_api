@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:tagion_dart_api/document/element/document_element.dart';
-import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
+import 'package:tagion_dart_api/module/document/element/document_element.dart';
+import 'package:tagion_dart_api/module/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/document_exception.dart';
@@ -77,8 +77,7 @@ void main() {
       verify(() => mockPointerManager.allocate<Pointer<Uint8>>()).called(1);
       verify(() => mockPointerManager.allocate<Uint64>()).called(1);
       verify(() => mockDocumentFfi.tagion_document_get_bigint(any(), any(), any())).called(1);
-      verify(() => mockPointerManager.free(bigIntPtr)).called(1);
-      verify(() => mockPointerManager.free(bigIntLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll([bigIntPtr, bigIntLenPtr])).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
@@ -106,8 +105,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(bigIntPtr)).called(1);
-      verify(() => mockPointerManager.free(bigIntLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll([bigIntPtr, bigIntLenPtr])).called(1);
     });
 
     test('getBinary returns the correct Uint8List value and throws DocumentException when an error occurs', () {
@@ -146,8 +144,7 @@ void main() {
       verify(() => mockPointerManager.allocate<Pointer<Uint8>>()).called(1);
       verify(() => mockPointerManager.allocate<Uint64>()).called(1);
       verify(() => mockDocumentFfi.tagion_document_get_u8_array(any(), any(), any())).called(1);
-      verify(() => mockPointerManager.free(testDataPtr)).called(1);
-      verify(() => mockPointerManager.free(testDataLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll([testDataPtr, testDataLenPtr])).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
@@ -175,8 +172,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(testDataPtr)).called(1);
-      verify(() => mockPointerManager.free(testDataLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll([testDataPtr, testDataLenPtr])).called(1);
     });
 
     test('getBool returns the correct bool value and throws DocumentException when an error occurs', () {
@@ -598,8 +594,7 @@ void main() {
       verify(() => mockPointerManager.allocate<Pointer<Char>>()).called(1);
       verify(() => mockPointerManager.allocate<Uint64>()).called(1);
       verify(() => mockDocumentFfi.tagion_document_get_string(any(), any(), any())).called(1);
-      verify(() => mockPointerManager.free(stringPtr)).called(1);
-      verify(() => mockPointerManager.free(stringLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll([stringPtr, stringLenPtr])).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
@@ -627,8 +622,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(stringPtr)).called(1);
-      verify(() => mockPointerManager.free(stringLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll([stringPtr, stringLenPtr])).called(1);
     });
 
     test('getSubDocument returns the correct Uint8List value and throws DocumentException when an error occurs', () {
@@ -665,8 +659,7 @@ void main() {
       verify(() => mockPointerManager.allocate<Pointer<Uint8>>()).called(1);
       verify(() => mockPointerManager.allocate<Uint64>()).called(1);
       verify(() => mockDocumentFfi.tagion_document_get_document(any(), any(), any())).called(1);
-      verify(() => mockPointerManager.free(subDocumentPtr)).called(1);
-      verify(() => mockPointerManager.free(subDocumentLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll([subDocumentPtr, subDocumentLenPtr])).called(1);
 
       // Arrange
       const errorCode = TagionErrorCode.error;
@@ -694,8 +687,7 @@ void main() {
       );
 
       // Verify
-      verify(() => mockPointerManager.free(subDocumentPtr)).called(1);
-      verify(() => mockPointerManager.free(subDocumentLenPtr)).called(1);
+      verify(() => mockPointerManager.freeAll([subDocumentPtr, subDocumentLenPtr])).called(1);
     });
 
     test('getTime returns the correct int value and throws DocumentException when an error occurs', () {

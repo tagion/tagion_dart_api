@@ -2,18 +2,18 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tagion_dart_api/basic/basic.dart';
-import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
-import 'package:tagion_dart_api/crypto/crypto.dart';
-import 'package:tagion_dart_api/crypto/crypto_interface.dart';
-import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
+import 'package:tagion_dart_api/module/basic/basic.dart';
+import 'package:tagion_dart_api/module/basic/ffi/basic_ffi.dart';
+import 'package:tagion_dart_api/module/crypto/crypto.dart';
+import 'package:tagion_dart_api/module/crypto/crypto_interface.dart';
+import 'package:tagion_dart_api/module/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
 import 'package:tagion_dart_api/exception/crypto_exception.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
-import 'package:tagion_dart_api/utils/ffi_library_util.dart';
+import 'package:tagion_dart_api/utils/dynamic_library_loader.dart';
 import 'package:tagion_dart_api_example/secure_net_vault/secure_net_vault.dart';
 import 'package:tagion_dart_api_example/secure_net_vault/secure_net_vault_interface.dart';
 
@@ -30,16 +30,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   //
-  late final DynamicLibrary _dyLib;
-  late final BasicFfi _basicFfi;
   late final Basic _basic;
-  final IPointerManager _pointerManager = const PointerManager();
-  late final ErrorMessageFfi _errorMessageFfi;
-  late final IErrorMessage _errorMessage;
-  //
-  late final CryptoFfi _cryptoFfi;
-  late ISecureNetVault _secureNetVault;
   late final ICrypto _crypto;
+  late ISecureNetVault _secureNetVault;
   //
   String passPhrase = 'passPhrase';
   String pinCode = 'pinCode';
@@ -90,17 +83,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     //
-    _dyLib = FFILibraryUtil.load();
-    _basicFfi = BasicFfi(_dyLib);
-    _errorMessageFfi = ErrorMessageFfi(_dyLib);
-    _errorMessage = ErrorMessage(_errorMessageFfi, _pointerManager);
-    _basic = Basic(_basicFfi, _pointerManager, _errorMessage);
-    //
-    _cryptoFfi = CryptoFfi(_dyLib);
-    _secureNetVault = SecureNetVault(_pointerManager);
-    _crypto = Crypto(_cryptoFfi, _pointerManager, _errorMessage);
-    //
+    _basic = Basic.init();
     _basic.startDRuntime();
+    //
+    _secureNetVault = SecureNetVault(const PointerManager());
+    _crypto = Crypto.init();
   }
 
   void generateKeypair() {

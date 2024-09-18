@@ -3,20 +3,20 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tagion_dart_api/basic/basic.dart';
-import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
-import 'package:tagion_dart_api/document/document.dart';
-import 'package:tagion_dart_api/document/ffi/document_ffi.dart';
+import 'package:tagion_dart_api/module/basic/basic.dart';
+import 'package:tagion_dart_api/module/basic/ffi/basic_ffi.dart';
+import 'package:tagion_dart_api/module/document/document.dart';
+import 'package:tagion_dart_api/module/document/ffi/document_ffi.dart';
 import 'package:tagion_dart_api/enums/document_error_code.dart';
-import 'package:tagion_dart_api/enums/document_text_format.dart';
+import 'package:tagion_dart_api/enums/text_format.dart';
 import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/error_message/ffi/error_message_ffi.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
-import 'package:tagion_dart_api/utils/ffi_library_util.dart';
+import 'package:tagion_dart_api/utils/dynamic_library_loader.dart';
 
 void main() {
-  final DynamicLibrary dyLib = FFILibraryUtil.load();
+  final DynamicLibrary dyLib = DynamicLibraryLoader.load();
   BasicFfi basicFfi = BasicFfi(dyLib);
   setUpAll(() {
     basicFfi.start_rt();
@@ -57,13 +57,13 @@ void documentIntegrationTest(DynamicLibrary dyLib) {
     });
 
     test("Document as string in different text formats", () {
-      String docAsJson = hibonDoc.getAsString(DocumentTextFormat.json);
+      String docAsJson = hibonDoc.getAsString(TextFormat.json);
       expect(docAsJson, isNotEmpty);
-      String docAsPrettyJson = hibonDoc.getAsString(DocumentTextFormat.prettyJson);
+      String docAsPrettyJson = hibonDoc.getAsString(TextFormat.prettyJson);
       expect(docAsPrettyJson, isNotEmpty);
-      String docAsBase64 = hibonDoc.getAsString(DocumentTextFormat.base64);
+      String docAsBase64 = hibonDoc.getAsString(TextFormat.base64);
       expect(docAsBase64, isNotEmpty);
-      String docAsHex = hibonDoc.getAsString(DocumentTextFormat.hex);
+      String docAsHex = hibonDoc.getAsString(TextFormat.hex);
       expect(docAsHex, isNotEmpty);
     });
 

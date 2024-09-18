@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:tagion_dart_api/basic/basic.dart';
-import 'package:tagion_dart_api/basic/ffi/basic_ffi.dart';
+import 'package:tagion_dart_api/module/basic/basic.dart';
+import 'package:tagion_dart_api/module/basic/ffi/basic_ffi.dart';
 import 'package:tagion_dart_api/enums/d_runtime_response.dart';
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
@@ -148,6 +148,71 @@ void main() {
       // Act & Assert
       expect(
         () => basic.tagionRevision(),
+        throwsA(isA<BasicApiException>()
+            .having(
+              (e) => e.errorCode,
+              '',
+              equals(errorCode),
+            )
+            .having(
+              (e) => e.message,
+              '',
+              equals(errorMessage),
+            )),
+      );
+
+      // Verify
+      verify(() => mockPointerManager.freeAll(any())).called(1);
+    });
+
+    test('createDartIndex returns a Uint8List on success and throws on error', () {
+      // Arrange
+      final Uint8List testData = Uint8List.fromList([1, 2, 3, 4]);
+      final Pointer<Uint8> dataPtr = malloc<Uint8>(testData.length);
+
+      final Pointer<Pointer<Uint8>> indexPtr = malloc<Pointer<Uint8>>();
+      final Pointer<Uint64> indexLenPtr = malloc<Uint64>();
+
+      when(() => mockPointerManager.allocate<Uint8>(any())).thenReturn(dataPtr);
+      when(() => mockPointerManager.uint8ListToPointer<Uint8>(any(), any())).thenReturn(null);
+      when(() => mockPointerManager.allocate<Pointer<Uint8>>()).thenReturn(indexPtr);
+      when(() => mockPointerManager.allocate<Uint64>()).thenReturn(indexLenPtr);
+
+      when(() => mockBasicFfi.tagion_create_dartindex(any(), any(), any(), any())).thenAnswer((invocation) {
+        final Pointer<Pointer<Uint8>> indexPtr = invocation.positionalArguments[2];
+        final Pointer<Uint64> indexLenPtr = invocation.positionalArguments[3];
+
+        final pointerToUint8 = malloc<Uint8>(testData.length);
+        for (int i = 0; i < testData.length; i++) {
+          pointerToUint8[i] = testData[i];
+        }
+        indexPtr.value = pointerToUint8;
+        indexLenPtr.value = testData.length;
+
+        return TagionErrorCode.none.value;
+      });
+
+      when(() => mockPointerManager.freeAll(any())).thenReturn(null);
+
+      // Act
+      Uint8List result = basic.createDartIndex(testData);
+
+      // Assert
+      expect(result, testData);
+
+      // Verify
+      verify(() => mockPointerManager.freeAll(any())).called(1);
+
+      // Arrange
+      const errorCode = TagionErrorCode.error;
+      const errorMessage = "Error message";
+
+      when(() => mockBasicFfi.tagion_create_dartindex(any(), any(), any(), any())).thenReturn(errorCode.value);
+      when(() => mockErrorMessage.getErrorText()).thenReturn(errorMessage);
+
+      // Act & Assert
+      expect(
+        () => basic.createDartIndex(testData),
         throwsA(isA<BasicApiException>()
             .having(
               (e) => e.errorCode,

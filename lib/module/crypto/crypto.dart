@@ -1,12 +1,15 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:tagion_dart_api/crypto/crypto_interface.dart';
-import 'package:tagion_dart_api/crypto/ffi/crypto_ffi.dart';
+import 'package:tagion_dart_api/error_message/error_message.dart';
+import 'package:tagion_dart_api/module/crypto/crypto_interface.dart';
+import 'package:tagion_dart_api/module/crypto/ffi/crypto_ffi.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/crypto_exception.dart';
-import 'package:tagion_dart_api/module.dart';
+import 'package:tagion_dart_api/module/module.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
+import 'package:tagion_dart_api/utils/dynamic_library_loader.dart';
 
 /// Crypto class.
 /// Implements the ICrypto interface.
@@ -22,6 +25,11 @@ class Crypto extends Module implements ICrypto {
     this._pointerManager,
     IErrorMessage errorMessage,
   ) : super(errorMessage);
+
+  Crypto.init()
+      : _cryptoFfi = CryptoFfi(DynamicLibraryLoader.load()),
+        _pointerManager = const PointerManager(),
+        super(ErrorMessage.init());
 
   /// Generates a keypair.
   /// Returns a [Uint8List] device pin.
