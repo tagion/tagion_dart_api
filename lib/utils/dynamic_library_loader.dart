@@ -3,23 +3,40 @@ import 'dart:io';
 
 import 'package:tagion_dart_api/global.dart';
 
-/// A utility class to load the library.
+/// A utility class to load the dynamic library.
 class DynamicLibraryLoader {
-  const DynamicLibraryLoader._();
+  DynamicLibraryLoader._();
 
+  static final DynamicLibraryLoader _instance = DynamicLibraryLoader._();
+
+  factory DynamicLibraryLoader() {
+    return _instance;
+  }
+
+  /// Private static variable to hold the loaded DynamicLibrary instance
+  static DynamicLibrary? _library;
+
+  /// Method to load the dynamic library once and return the same instance afterwards
   static DynamicLibrary load() {
+    if (_library != null) {
+      return _library!;
+    }
+
+    /// Load the library based on the platform and cache it
     if (Platform.isAndroid) {
-      return DynamicLibrary.open('lib$libName.so');
+      _library = DynamicLibrary.open('lib$libName.so');
     } else if (Platform.isIOS) {
-      return DynamicLibrary.process();
+      _library = DynamicLibrary.process();
     } else if (Platform.isWindows) {
-      return DynamicLibrary.open('lib$libName.dll');
+      _library = DynamicLibrary.open('lib$libName.dll');
     } else if (Platform.isLinux) {
-      return DynamicLibrary.open('lib$libName.so');
+      _library = DynamicLibrary.open('lib$libName.so');
     } else if (Platform.isMacOS) {
-      return DynamicLibrary.open('lib$libName.dylib');
+      _library = DynamicLibrary.open('lib$libName.dylib');
     } else {
       throw UnsupportedError('Platform not supported');
     }
+
+    return _library!;
   }
 }
