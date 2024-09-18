@@ -77,5 +77,14 @@
                 "./update_binaries_github.sh",
             ]
         },
+        {
+            "label": "UPDATE_RUN_ID_GITHUB",
+            "type": "shell",
+            "group": "build",
+            "command": [
+                "chmod +x update_run_id_github.sh &&",
+                "./update_run_id_github.sh",
+            ]
+        },
     ]
 }

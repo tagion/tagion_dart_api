@@ -1,46 +1,127 @@
 variables:
   GIT_CLEAN_FLAGS: none
-
-workflow:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == "main"
+  #user devined
+  UPDATE_BINARIES_BRANCH: "github_binaries_update"
+  UPDATE_BINARIES_COMMIT_MESSAGE: "Updated binaries"
+  CHECKSUM_FILE_NAME: "checksum.json"
+  PROJECT_NAME: "tagion_dart_api"
+  TEST_BINARIES_PATH: "$CI_BUILDS_DIR/$PROJECT_NAME/binaries_test"
+  DEV_PATH: "$CI_BUILDS_DIR/$PROJECT_NAME/development"
+  DEV_TAG: "development"
+  BINARIES_TEST_JOB_STATUS: "FAILED"
 
 stages:
-  - update_binaries_on_remote
-  - unit_test
+  - github_binary_test
+  - copy_binaries_from_test_to_development
   - validate_binaries
-  - integration_test_android_emulator
-  - integration_test_ios_simulator
+  - unit_test
+  - integration_test
+  - keep_github_binaries_test_updated
 
-
-update_binaries_on_remote:
-  stage: update_binaries_on_remote
-  script:
-    - ./update_binaries_github.sh 10320472014
+github_binary_test_job:
+  tags: ["github_binary_test"]
+  stage: github_binary_test
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_COMMIT_REF_NAME == 'binaries_update'
-
-validate_binaries:
-  stage: validate_binaries
+    - if: '$CI_PIPELINE_SOURCE == "trigger" && ($ref_name == "current" || $ref_name == "master")'
+  variables:
+    GIT_CLONE_PATH: "$TEST_BINARIES_PATH"
   script:
+    # downloads binaries into project, updates checksum.json
+    - ./update_binaries_github.sh $run_id
+    - ./binary_validate.sh
+    #run integration tests
+    - cd example
+    - 'fvm flutter test integration_test/entry_point_integration_test.dart -d emulator-5554 --reporter expanded | sed -E ''s/^([0-9]{2}:[0-9]{2}) [^:]+:[^:]+: (.+)/\1 \2/'''
+    - 'fvm flutter test integration_test/entry_point_integration_test.dart -d F88A2BC9-E730-49D9-9015-8245583D3877 --reporter expanded | sed -E ''s/^([0-9]{2}:[0-9]{2}) [^:]+:[^:]+: (.+)/\1 \2/'''
+    # commit changes
+    - "git remote add tmp_origin https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git"
+    - 'git add ../$CHECKSUM_FILE_NAME && git commit -m "$UPDATE_BINARIES_COMMIT_MESSAGE,  $ref_name: $commit_message, RUN_ID: $run_id" && git push tmp_origin HEAD:$UPDATE_BINARIES_BRANCH'
+    - "git remote remove tmp_origin"
+  after_script:
+    # send notification to slack
+    - 'if [ "$CI_JOB_STATUS" == "success" ]; then BINARIES_TEST_JOB_STATUS="Success  :white_check_mark:"; else BINARIES_TEST_JOB_STATUS="Failed  :exclamation:"; fi'
+    - 'curl -X POST -H "Content-type: application/json" --data "{\"text\": \"*Branch:* $ref_name\n*Commit:* $commit_message\n$sha\n*Status:* $BINARIES_TEST_JOB_STATUS\n*Details:* <$CI_JOB_URL|Job console logs URL>\", \"mrkdwn\": true}" $SLACK_WEBHOOK'
+    # remove build folders
+    - "cd .. && rm -rf example/build && rm -rf example/.dart_tool/flutter_build"
+
+copy_binaries_from_test_to_development_job:
+  tags: ["$DEV_TAG"]
+  stage: copy_binaries_from_test_to_development
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_COMMIT_REF_NAME == $UPDATE_BINARIES_BRANCH
+  variables:
+    GIT_CLONE_PATH: "$DEV_PATH"
+  script:
+    - "chmod +x copy_binaries_from_test_to_develop.sh"
+    - "./copy_binaries_from_test_to_develop.sh"
+
+validate_binaries_job:
+  tags: ["$DEV_TAG"]
+  stage: validate_binaries
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' || $CI_COMMIT_BRANCH == 'main'
+  variables:
+    GIT_CLONE_PATH: "$DEV_PATH"
+  script:
+    - echo $(pwd) - $CI_COMMIT_REF_NAME
     - ./binary_validate.sh
 
-unit_test:
+unit_test_job:
+  tags: ["$DEV_TAG"]
   stage: unit_test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' || $CI_COMMIT_BRANCH == 'main'
+  variables:
+    GIT_CLONE_PATH: "$DEV_PATH"
   script:
     - 'fvm flutter test test/ --reporter expanded | sed -E ''s/([0-9]{2}:[0-9]{2}) \+([0-9]+): ([^:]+): (.+)/\1 \4/'''
+    #remove build folder
+    - "rm -rf build"
 
-integration_test_android_emulator:
-  stage: integration_test_android_emulator
+integration_test_android_emulator_job:
+  tags: ["$DEV_TAG"]
+  stage: integration_test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' || $CI_COMMIT_BRANCH == 'main'
+  variables:
+    GIT_CLONE_PATH: "$DEV_PATH"
   script:
     - cd example
-    - 'fvm flutter test integration_test/entry_point_integration_test.dart -d emulator-5556 --reporter expanded | sed -E ''s/^([0-9]{2}:[0-9]{2}) [^:]+:[^:]+: (.+)/\1 \2/'''
-             
+    - 'fvm flutter test integration_test/entry_point_integration_test.dart -d emulator-5554 --reporter expanded | sed -E ''s/^([0-9]{2}:[0-9]{2}) [^:]+:[^:]+: (.+)/\1 \2/'''
+    #remove build folders
+    - "cd .. && rm -rf example/build && rm -rf example/.dart_tool/flutter_build"
 
-integration_test_ios_simulator:
-  stage: integration_test_ios_simulator
+integration_test_ios_simulator_job:
+  tags: ["$DEV_TAG"]
+  stage: integration_test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' || $CI_COMMIT_BRANCH == 'main'
+  variables:
+    GIT_CLONE_PATH: "$DEV_PATH"
   script:
     - cd example
     - 'fvm flutter test integration_test/entry_point_integration_test.dart -d F88A2BC9-E730-49D9-9015-8245583D3877 --reporter expanded | sed -E ''s/^([0-9]{2}:[0-9]{2}) [^:]+:[^:]+: (.+)/\1 \2/'''
+    #remove build folders
+    - "cd .. && rm -rf example/build && rm -rf example/.dart_tool/flutter_build"
 
+keep_github_binaries_test_updated_job:
+  tags: ["$DEV_TAG"]
+  stage: keep_github_binaries_test_updated
+  rules:
+    # - if: $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_COMMIT_BRANCH == $UPDATE_BINARIES_BRANCH
+  # when: on_success
+  variables:
+    GIT_CLONE_PATH: "$DEV_PATH"
+  script:
+    - MAIN_BRANCH_HASH=$(curl --header "PRIVATE-TOKEN:$GITLAB_TOKEN" --url "https://gitlab.com/api/v4/projects/59713152/repository/branches/main" | jq -r '.commit.id')
+    - BINARIES_TEST_BRANCH_HASH=$(curl --header "PRIVATE-TOKEN:$GITLAB_TOKEN" --url "https://gitlab.com/api/v4/projects/59713152/repository/branches/temp" | jq -r '.commit.id')
+    - git checkout $BINARIES_TEST_BRANCH_HASH
+    - if git show-ref --quiet refs/heads/temp; then git branch -D temp; fi
+    - git branch temp
+    - git checkout temp
+    - git pull https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git temp
+    - git rebase $MAIN_BRANCH_HASH $BINARIES_TEST_BRANCH_HASH
+    - git remote add tmp_origin https://oauth2:$GITLAB_TOKEN@gitlab.com/decard/$PROJECT_NAME.git
+    - git push --set-upstream tmp_origin temp --force
+    - git remote remove tmp_origin
