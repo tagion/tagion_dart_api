@@ -4,13 +4,16 @@ import 'dart:typed_data';
 
 import 'package:tagion_dart_api/enums/tagion_error_code.dart';
 import 'package:tagion_dart_api/enums/text_format.dart';
+import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/hibon_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/module/hibon/ffi/hibon_ffi.dart';
 import 'package:tagion_dart_api/module/hibon/hibon_interface.dart';
 import 'package:tagion_dart_api/module/module.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
+import 'package:tagion_dart_api/utils/dynamic_library_loader.dart';
 
 /// Implements [Finalizable] and uses a [Finalizer] to maintain Hibon object resources.
 /// Extends [Module] to use the [scope} feature.
@@ -36,6 +39,13 @@ class Hibon extends Module implements IHibon, Finalizable {
         super(_errorMessage) {
     _finalizer.attach(this, dispose, detach: this);
   }
+
+  Hibon.init()
+      : this(
+          HibonFfi(DynamicLibraryLoader.load()),
+          ErrorMessage.init(),
+          const PointerManager(),
+        );
 
   /// Attaches the finalizer to the Hibon object.
   @override

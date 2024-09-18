@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
+import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/module/basic/basic_interface.dart';
 import 'package:tagion_dart_api/module/basic/ffi/basic_ffi.dart';
 import 'package:tagion_dart_api/enums/d_runtime_response.dart';
@@ -9,7 +10,9 @@ import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/basic_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/module/module.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
+import 'package:tagion_dart_api/utils/dynamic_library_loader.dart';
 
 /// Implements the [IBasic] interface.
 /// Extends the [Module] class.
@@ -23,6 +26,11 @@ class Basic extends Module implements IBasic {
     this._pointerManager,
     IErrorMessage _errorMessage,
   ) : super(_errorMessage);
+
+  Basic.init()
+      : _basicFfi = BasicFfi(DynamicLibraryLoader.load()),
+        _pointerManager = const PointerManager(),
+        super(ErrorMessage.init());
 
   @override
   bool startDRuntime() {

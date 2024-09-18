@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
+import 'package:tagion_dart_api/error_message/error_message.dart';
 import 'package:tagion_dart_api/module/document/document_interface.dart';
 import 'package:tagion_dart_api/module/document/element/document_element.dart';
 import 'package:tagion_dart_api/module/document/element/document_element_interface.dart';
@@ -11,7 +12,9 @@ import 'package:tagion_dart_api/error_message/error_message_interface.dart';
 import 'package:tagion_dart_api/exception/document_exception.dart';
 import 'package:tagion_dart_api/extension/char_pointer.dart';
 import 'package:tagion_dart_api/module/module.dart';
+import 'package:tagion_dart_api/pointer_manager/pointer_manager.dart';
 import 'package:tagion_dart_api/pointer_manager/pointer_manager_interface.dart';
+import 'package:tagion_dart_api/utils/dynamic_library_loader.dart';
 
 /// Document’s purpose is to read data from a serialized HiBON.
 /// Document guarantees immutability of HiBON.
@@ -36,6 +39,15 @@ class Document extends Module implements IDocument, Finalizable {
     _pointerManager.uint8ListToPointer<Uint8>(_hibonPtr, hibonBuffer); // Fill the pointer with data.
     _finalizer.attach(this, dispose, detach: this); // Attach the finalizer with a dispose function.
   }
+
+  Document.init(
+    Uint8List hibonBuffer, // The serialized HiBON.
+  ) : this(
+          DocumentFfi(DynamicLibraryLoader.load()),
+          const PointerManager(),
+          ErrorMessage.init(),
+          hibonBuffer,
+        );
 
   @override
   void dispose() {

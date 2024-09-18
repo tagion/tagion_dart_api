@@ -30,16 +30,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   //
-  late final DynamicLibrary _dyLib;
-  late final BasicFfi _basicFfi;
   late final Basic _basic;
-  final IPointerManager _pointerManager = const PointerManager();
-  late final ErrorMessageFfi _errorMessageFfi;
-  late final IErrorMessage _errorMessage;
-  //
-  late final CryptoFfi _cryptoFfi;
-  late ISecureNetVault _secureNetVault;
   late final ICrypto _crypto;
+  late ISecureNetVault _secureNetVault;
   //
   String passPhrase = 'passPhrase';
   String pinCode = 'pinCode';
@@ -90,17 +83,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     //
-    _dyLib = DynamicLibraryLoader.load();
-    _basicFfi = BasicFfi(_dyLib);
-    _errorMessageFfi = ErrorMessageFfi(_dyLib);
-    _errorMessage = ErrorMessage(_errorMessageFfi, _pointerManager);
-    _basic = Basic(_basicFfi, _pointerManager, _errorMessage);
-    //
-    _cryptoFfi = CryptoFfi(_dyLib);
-    _secureNetVault = SecureNetVault(_pointerManager);
-    _crypto = Crypto(_cryptoFfi, _pointerManager, _errorMessage);
-    //
+    _basic = Basic.init();
     _basic.startDRuntime();
+    //
+    _secureNetVault = SecureNetVault(const PointerManager());
+    _crypto = Crypto.init();
   }
 
   void generateKeypair() {
