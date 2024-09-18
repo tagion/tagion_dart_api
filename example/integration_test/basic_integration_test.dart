@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
@@ -51,6 +52,14 @@ void basicIntegrationTest(DynamicLibrary dyLib) {
     test('returned revision', () {
       final String revision = basic.tagionRevision();
       expect(revision, isNotEmpty);
+    });
+
+    test('created dart index', () {
+      final Uint8List expectedIndexBytes = base64Url.decode('OtVPyrElTZubexga9J_AQFpbIjmbsxFaWZZoImBNL_0=');
+      final Uint8List docBytes = base64Url.decode('CwEDa2V5BXZhbHVl');
+
+      final index = basic.createDartIndex(docBytes);
+      expect(index, expectedIndexBytes);
     });
   });
 }
