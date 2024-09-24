@@ -1,23 +1,23 @@
 {
-  "run_id": "11014480156",
+  "run_id": "11019060788",
   "arm64-v8a": {
-    "checksum": "2dfd5024c4288947ee18218536e42b215b3b65f8fe46128a6f89a7b976e3a32a",
+    "checksum": "5e1316eb5e38713fc02d3832f53d262bf1e2e7864db3638e1a32750179dae096",
     "path": "android/src/main/jniLibs/arm64-v8a/libtauonapi.so"
   },
   "armeabi-v7a": {
-    "checksum": "78189f983569f9520744c41f84e7ae29f9c59d3d136b74a47af1cb16fa45b239",
+    "checksum": "e7365b00e67ebae6bd354ed3f5bd42b3e25c72224eee9ce56591b718dbcf454f",
     "path": "android/src/main/jniLibs/armeabi-v7a/libtauonapi.so"
   },
   "x86-64": {
-    "checksum": "672d7d22bbfb647ba12f21c0bc30696559aeb2792ddcfaebec4588f64ccfad94",
+    "checksum": "689520e084eddca066e1760d87727590db2d411191c2cd8254c87b0bc4cfecd6",
     "path": "android/src/main/jniLibs/x86-64/libtauonapi.so"
   },
   "ios-arm64": {
-    "checksum": "7bf02b2265f22f849f86f54af5440cc2b0f927a229ceadff41ffee2816b23309",
+    "checksum": "2862b06735bf59065b77d370cb1745addcc4fafe1486a274b692d5120520de66",
     "path": "ios/libtauonapi.xcframework/ios-arm64/libtauonapi.framework/libtauonapi"
   },
   "ios-x86_64-simulator": {
-    "checksum": "257bd14a644ef0b886d37b52acb7d4b51a5132b67a52aa82a19d15f20804808e",
+    "checksum": "e7682f863cafd22e1c8c4974f8621203927842e58efc2fe1025deca46931a280",
     "path": "ios/libtauonapi.xcframework/ios-x86_64-simulator/libtauonapi.framework/libtauonapi"
   }
 }
