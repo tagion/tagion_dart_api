@@ -34,8 +34,8 @@
             "type": "shell",
             "group": "build",
             "command": [
-                "chmod +x binary_validate.sh &&",
-                "./binary_validate.sh &&",
+                "chmod +x ./bin/binary_validate.sh &&",
+                "./bin/binary_validate.sh &&",
                 "cd example &&",
                 "flutter test integration_test/entry_point_integration_test.dart --reporter expanded | sed -E 's/^([0-9]{2}:[0-9]{2}) [^:]+:[^:]+: (.+)/\\1 \\2/'",
             ]
@@ -55,8 +55,8 @@
             "type": "shell",
             "group": "build",
             "command": [
-                "chmod +x binary_validate.sh &&",
-                "./binary_validate.sh",
+                "chmod +x ./bin/binary_validate.sh &&",
+                "./bin/binary_validate.sh",
             ]
         },
         {
@@ -64,8 +64,8 @@
             "type": "shell",
             "group": "build",
             "command": [
-                "chmod +x binary_validate.sh &&",
-                "./update_checksum.sh",
+                "chmod +x ./bin/binary_validate.sh &&",
+                "./bin/update_checksum.sh",
             ]
         },
         {
@@ -73,8 +73,8 @@
             "type": "shell",
             "group": "build",
             "command": [
-                "chmod +x update_binaries_github.sh &&",
-                "./update_binaries_github.sh",
+                "chmod +x ./bin/update_binaries_github.sh &&",
+                "./bin/update_binaries_github.sh",
             ]
         },
         {
@@ -82,8 +82,8 @@
             "type": "shell",
             "group": "build",
             "command": [
-                "chmod +x update_run_id_github.sh &&",
-                "./update_run_id_github.sh",
+                "chmod +x ./bin/update_run_id_github.sh &&",
+                "./bin/update_run_id_github.sh",
             ]
         },
     ]

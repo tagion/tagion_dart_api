@@ -27,8 +27,8 @@ github_binary_test_job:
     GIT_CLONE_PATH: "$TEST_BINARIES_PATH"
   script:
     # downloads binaries into project, updates checksum.json
-    - ./update_binaries_github.sh $run_id
-    - ./binary_validate.sh
+    - ./bin/update_binaries_github.sh $run_id
+    - ./bin/binary_validate.sh
     #run integration tests
     - cd example
     - 'fvm flutter test integration_test/entry_point_integration_test.dart -d emulator-5554 --reporter expanded | sed -E ''s/^([0-9]{2}:[0-9]{2}) [^:]+:[^:]+: (.+)/\1 \2/'''
@@ -52,8 +52,8 @@ copy_binaries_from_test_to_development_job:
   variables:
     GIT_CLONE_PATH: "$DEV_PATH"
   script:
-    - "chmod +x copy_binaries_from_test_to_develop.sh"
-    - "./copy_binaries_from_test_to_develop.sh"
+    - "chmod +x ./bin/copy_binaries_from_test_to_develop.sh"
+    - "./bin/copy_binaries_from_test_to_develop.sh"
 
 validate_binaries_job:
   tags: ["$DEV_TAG"]
@@ -64,7 +64,7 @@ validate_binaries_job:
     GIT_CLONE_PATH: "$DEV_PATH"
   script:
     - echo $(pwd) - $CI_COMMIT_REF_NAME
-    - ./binary_validate.sh
+    - ./bin/binary_validate.sh
 
 unit_test_job:
   tags: ["$DEV_TAG"]

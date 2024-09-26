@@ -103,9 +103,9 @@ rm -rf $TEMP_DIR
 echo "Deleted temporary directory: $TEMP_DIR"
 
 # Step 5: Run a separate script to update the checksums in the checksum.json file
-chmod +x ./update_checksum.sh
-./update_checksum.sh
+chmod +x ./bin/update_checksum.sh
+./bin/update_checksum.sh
 
 # Step 6: Update the run_id field in the checksum.json file
-chmod +x ./update_run_id_github.sh
-./update_run_id_github.sh $RUN_ID
+chmod +x ./bin/update_run_id_github.sh
+./bin/update_run_id_github.sh $RUN_ID
