@@ -14,44 +14,6 @@ Current project is a Dart wrapper on top of the [Tagion API](https://github.com/
 
 ## Getting Started
 
-### Clone and run as a standalone project.
-
-1. Clone the [project](https://gitlab.com/decard/tagion_dart_api)
-2. Navigate to an example folder with a test app:
-
-```
-cd example
-```
-3. Launch an emulator
-
-```
-emulator -avd my_emulator
-```
-4. Connect the Emulator to Flutter
-- Run `flutter devices` to ensure that Flutter recognizes the running emulator.
-
-```
-2 connected devices:
-
-my_emulator • emulator • android-x86 • Android 11 (API 30) (emulator)
-Chrome (web) • chrome • web-javascript • Google Chrome 128.0.6613.85
-```
-5. Launch the test app by using `flutter run` command.
-
-### Run integration tests
-
-```
-/// Running emulator is needed.
-cd example
-flutter test integration_test/entry_point_integration_test.dart
-```
-
-### Run unit tests
-
-```
-/// Run it from a project root folder.
-flutter test
-```
 ## Binaries download
 
 TODO: Add a description how to download binaries.
@@ -156,3 +118,57 @@ IHiRPC hiRPC = TagionHiRPC.init();
 // This method returns a signed request as a Uint8List, ready for transmission.
 Uint8List signedRequest = hiRPC.createSignedRequest("method", secureNetPtr, docBuffer, deriver);
 ```
+
+## License compliance (Usage)
+
+1.	Keep the License: If you use this package in your project, you must include the DECARD Group AG License in your project’s documentation.
+2.	Combined Software: If you combine this package with other software, you must apply the same DECARD Group AG License to the combined software.
+3.	Further Details: For full terms, thresholds, and commercial use, please refer to the full DECARD Group AG License in LICENSE.md.
+
+
+## Contribute to the package: 
+
+### Clone and run as a standalone project.
+
+1. Clone the [project](https://gitlab.com/decard/tagion_dart_api)
+2. Navigate to an example folder with a test app:
+
+```
+cd example
+```
+3. Launch an emulator
+
+```
+emulator -avd my_emulator
+```
+4. Connect the Emulator to Flutter
+- Run `flutter devices` to ensure that Flutter recognizes the running emulator.
+
+```
+2 connected devices:
+
+my_emulator • emulator • android-x86 • Android 11 (API 30) (emulator)
+Chrome (web) • chrome • web-javascript • Google Chrome 128.0.6613.85
+```
+5. Launch the test app by using `flutter run` command.
+
+### Run integration tests
+
+```
+/// Running emulator is needed.
+cd example
+flutter test integration_test/entry_point_integration_test.dart
+```
+
+### Run unit tests
+
+```
+/// Run it from a project root folder.
+flutter test
+```
+
+### License compliance (Contribution)
+
+If you modify the code:
+• You must indicate the changes and improvements you made.
+• Publish the modified version (source code) along with a description of the changes.
