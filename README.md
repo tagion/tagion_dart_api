@@ -130,7 +130,7 @@ Uint8List signedRequest = hiRPC.createSignedRequest("method", secureNetPtr, docB
 
 ### Clone and run as a standalone project.
 
-1. Clone the [project](https://gitlab.com/decard/tagion_dart_api)
+1. Clone the project
 2. Navigate to an example folder with a test app:
 
 ```
