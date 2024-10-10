@@ -143,23 +143,25 @@ Future<void> copyBinaries(String tempDir) async {
 
   // Android binaries
   await copyFile(
-    path.join(tempDir, 'aarch64-linux-android', 'aarch64-linux-android', 'lib',
-        'libmobile.so'), // TODO: rename back to libtauonapi.so
-    path.join(androidJniLibsDirPath, 'arm64-v8a'),
-    'libtauonapi.so',
-  );
+      path.join(tempDir, 'aarch64-linux-android', 'aarch64-linux-android', 'lib',
+          'libmobile.so'), // TODO: rename back to libtauonapi.so
+      path.join(androidJniLibsDirPath, 'arm64-v8a'),
+      'libtauonapi.so',
+      createDir: true);
 
   await copyFile(
       path.join(tempDir, 'armv7a-linux-android', 'armv7a-linux-android', 'lib',
           'libmobile.so'), // TODO: rename back to libtauonapi.so
       path.join(androidJniLibsDirPath, 'armeabi-v7a'),
-      'libtauonapi.so');
+      'libtauonapi.so',
+      createDir: true);
 
   await copyFile(
       path.join(tempDir, 'x86_64-linux-android', 'x86_64-linux-android', 'lib',
           'libmobile.so'), // TODO: rename back to libtauonapi.so
       path.join(androidJniLibsDirPath, 'x86-64'),
-      'libtauonapi.so');
+      'libtauonapi.so',
+      createDir: true);
 
   // iOS binaries
   String iosFrameworkDirPath = path.join(hostedPubCacheDirPath, 'ios', 'libtauonapi.xcframework');
@@ -177,8 +179,10 @@ Future<void> copyBinaries(String tempDir) async {
   await modifyIOSBinary(path.join(iosFrameworkDirPath, 'ios-x86_64-simulator', 'libtauonapi.framework'));
 }
 
-Future<void> copyFile(String source, String destination, String fileName) async {
-  // await Directory(destination).create(recursive: true); // TODO: remove later
+Future<void> copyFile(String source, String destination, String fileName, {bool createDir = false}) async {
+  if (createDir) {
+    await Directory(destination).create(recursive: true);
+  }
   await File(source).copy('$destination/$fileName');
 }
 
