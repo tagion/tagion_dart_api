@@ -24,6 +24,11 @@ String? version;
 String? gitHash;
 bool isGitType = false;
 
+// TODO Implement the following steps:
+// 1. Parse pubspec.yaml to retrieve the version of the package.
+// 2. Compare dowloaded binaries with the checksums in the checksum.json file.
+// 3. Add function to dowload a specific release by tag.
+
 void main(List<String> arguments) async {
   final parser = ArgParser()
     ..addOption(_versionArg, help: 'Specifies the version of the release.')
@@ -37,10 +42,6 @@ void main(List<String> arguments) async {
   version = argResults[_versionArg];
   gitHash = argResults[_gitHashArg];
   isGitType = argResults[_gitTypeArg];
-
-  stdout.writeln('Version: $version');
-  stdout.writeln('Git hash: $gitHash');
-  stdout.writeln('Is Git type: $isGitType');
 
   String tempDir = await createTempDir();
   stdout.writeln("Created temporary directory: $tempDir");
@@ -64,14 +65,12 @@ void main(List<String> arguments) async {
     }
   }
 
+  stdout.writeln("Copying binaries to the pub cache directory...");
   await copyBinaries(tempDir);
+  stdout.writeln("Binaries copied successfully!");
   await deleteTempDir(tempDir);
   stdout.writeln("Deleted temporary directory: $tempDir");
-
-  // await runExternalScript("./update_checksum.sh");
-
-  // String runId = releaseData['id'].toString();
-  // await runExternalScript("./update_run_id_github.sh", [runId]);
+  stdout.writeln("All done!");
 }
 
 Future<String> createTempDir() async {
@@ -197,9 +196,4 @@ Future<void> modifyIOSBinary(String iosBinaryPath) async {
 
 Future<void> deleteTempDir(String tempDir) async {
   await Directory(tempDir).delete(recursive: true);
-}
-
-Future<void> runExternalScript(String script, [List<String>? args]) async {
-  await Process.run('chmod', ['+x', script]);
-  await Process.run(script, args ?? []);
 }
