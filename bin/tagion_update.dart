@@ -26,53 +26,51 @@ String? gitHash;
 bool isGitType = false;
 
 // TODO Implement the following steps:
-// 1. Parse pubspec.yaml to retrieve the version of the package.
-// 2. Compare dowloaded binaries with the checksums in the checksum.json file.
-// 3. Add function to dowload a specific release by tag.
+// 1. Compare dowloaded binaries with the checksums in the checksum.json file.
+// 2. Add function to dowload a specific release by tag.
 
 void main(List<String> arguments) async {
-  getCurrentVersion();
-  // final parser = ArgParser()
-  //   ..addOption(_versionArg, help: 'Specifies the version of the release.')
-  //   ..addOption(_gitHashArg, help: 'Specifies the Git hash of the release.')
-  //   ..addFlag(_gitTypeArg, negatable: false, help: 'Indicates that the release type is Git.');
+  final parser = ArgParser()
+    ..addOption(_versionArg, help: 'Specifies the version of the release.')
+    ..addOption(_gitHashArg, help: 'Specifies the Git hash of the release.')
+    ..addFlag(_gitTypeArg, negatable: false, help: 'Indicates that the release type is Git.');
 
-  // // Parse the arguments
-  // final argResults = parser.parse(arguments);
+  // Parse the arguments
+  final argResults = parser.parse(arguments);
 
-  // // Accessing the parsed arguments
-  // version = argResults[_versionArg];
-  // gitHash = argResults[_gitHashArg];
-  // isGitType = argResults[_gitTypeArg];
+  // Accessing the parsed arguments
+  version = argResults[_versionArg];
+  gitHash = argResults[_gitHashArg];
+  isGitType = argResults[_gitTypeArg];
 
-  // String tempDir = await createTempDir();
-  // stdout.writeln("Created temporary directory: $tempDir");
+  String tempDir = await createTempDir();
+  stdout.writeln("Created temporary directory: $tempDir");
 
-  // var releaseData = await getLatestReleaseData();
-  // String releaseTag = releaseData['tag_name'];
-  // stdout.writeln("Latest release: $releaseTag");
+  var releaseData = await getLatestReleaseData();
+  String releaseTag = releaseData['tag_name'];
+  stdout.writeln("Latest release: $releaseTag");
 
-  // var assets = releaseData['assets'];
+  var assets = releaseData['assets'];
 
-  // // Download and extract each artifact
-  // for (String artifactName in artifacts) {
-  //   String? downloadUrl = getDownloadUrlForArtifact(assets, artifactName);
-  //   if (downloadUrl != null) {
-  //     stdout.writeln("Downloading $artifactName from $downloadUrl...");
-  //     await downloadAndUnzipArtifact(artifactName, downloadUrl, tempDir);
-  //   } else {
-  //     stderr.writeln("Artifact $artifactName not found in the release.");
-  //     await deleteTempDir(tempDir);
-  //     exit(1);
-  //   }
-  // }
+  // Download and extract each artifact
+  for (String artifactName in artifacts) {
+    String? downloadUrl = getDownloadUrlForArtifact(assets, artifactName);
+    if (downloadUrl != null) {
+      stdout.writeln("Downloading $artifactName from $downloadUrl...");
+      await downloadAndUnzipArtifact(artifactName, downloadUrl, tempDir);
+    } else {
+      stderr.writeln("Artifact $artifactName not found in the release.");
+      await deleteTempDir(tempDir);
+      exit(1);
+    }
+  }
 
-  // stdout.writeln("Copying binaries to the pub cache directory...");
-  // await copyBinaries(tempDir);
-  // stdout.writeln("Binaries copied successfully!");
-  // await deleteTempDir(tempDir);
-  // stdout.writeln("Deleted temporary directory: $tempDir");
-  // stdout.writeln("All done!");
+  stdout.writeln("Copying binaries to the pub cache directory...");
+  await copyBinaries(tempDir);
+  stdout.writeln("Binaries copied successfully!");
+  await deleteTempDir(tempDir);
+  stdout.writeln("Deleted temporary directory: $tempDir");
+  stdout.writeln("All done!");
 }
 
 Future<String> createTempDir() async {
